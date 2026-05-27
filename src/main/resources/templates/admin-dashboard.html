@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👑 Panel Admin - NetPelis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body { background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+        .sidebar {
+            width: 260px;
+            background: rgba(30, 41, 59, 0.98);
+            border-right: 1px solid rgba(59, 130, 246, 0.2);
+            position: fixed;
+            height: 100vh;
+            padding: 1.5rem;
+        }
+        .main-content { margin-left: 260px; padding: 2rem; }
+        .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+        }
+        .card-netpelis {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body>
+<nav class="sidebar d-flex flex-column">
+    <div class="text-center mb-4">
+        <h3 class="text-white mb-0">🎬 NetPelis</h3>
+        <small class="text-muted">Panel Admin</small>
+    </div>
+    <div class="nav flex-column">
+        <a href="#" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+        <a href="#" class="nav-link"><i class="bi bi-film me-2"></i>Películas</a>
+        <a href="#" class="nav-link"><i class="bi bi-people me-2"></i>Usuarios</a>
+    </div>
+    <div class="mt-auto pt-4">
+        <form th:action="@{/cerrar-sesion}" method="post">
+            <button type="submit" class="btn btn-outline-light w-100">
+                <i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión
+            </button>
+        </form>
+    </div>
+</nav>
+
+<main class="main-content">
+    <h2 class="mb-4">📊 Panel de Control</h2>
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card card-netpelis p-4">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <small class="text-muted">Películas</small>
+                        <div class="stat-value">1,248</div>
+                    </div>
+                    <i class="bi bi-film fs-1 text-primary"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card card-netpelis p-4">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <small class="text-muted">Usuarios</small>
+                        <div class="stat-value">3,892</div>
+                    </div>
+                    <i class="bi bi-people fs-1 text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
