@@ -3,4 +3,7 @@ target/
 *.log
 .idea/
 *.iml
-application.properties
+.mvn/
+mvnw
+mvnw.cmd
+HELP.md
