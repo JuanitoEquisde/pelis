@@ -3,74 +3,662 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎟️ Mi Espacio - NetPelis</title>
+    <title>NetPelis - Explorar Películas</title>
+
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { background: #0f172a; color: #e2e8f0; min-height: 100vh; }
-        .navbar-netpelis {
-            background: rgba(30, 41, 59, 0.95);
-            border-bottom: 1px solid rgba(245, 158, 11, 0.2);
-            padding: 1rem 2rem;
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-card: #1a1a1a;
+            --accent-red: #dc2626;
+            --accent-gold: #f59e0b;
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
         }
-        .movie-card {
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            border-radius: 16px;
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background gradient */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background:
+                radial-gradient(ellipse at top, rgba(220, 38, 38, 0.15), transparent 50%),
+                radial-gradient(ellipse at bottom, rgba(245, 158, 11, 0.1), transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Navbar */
+        .navbar-netpelis {
+            background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.7) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+            padding: 1rem 3rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
             transition: all 0.3s ease;
         }
-        .movie-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px -12px rgba(245, 158, 11, 0.3);
+
+        .navbar-netpelis.scrolled {
+            background: rgba(0, 0, 0, 0.98);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
-        .btn-favorite {
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .brand-logo .material-icons {
+            color: var(--accent-red);
+            font-size: 36px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent-red);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .btn-logout {
             background: transparent;
-            border: 2px solid rgba(245, 158, 11, 0.5);
-            color: #f59e0b;
-            border-radius: 50px;
+            border: 1px solid rgba(220, 38, 38, 0.5);
+            color: var(--accent-red);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
+
+        .btn-logout:hover {
+            background: var(--accent-red);
+            color: white;
+            border-color: var(--accent-red);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 3rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .welcome-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title .material-icons {
+            color: var(--accent-red);
+            font-size: 28px;
+        }
+
+        .view-all {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.3s ease;
+        }
+
+        .view-all:hover {
+            gap: 10px;
+        }
+
+        /* Movies Grid */
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        /* Movie Card */
+        .movie-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 30px 60px -15px rgba(220, 38, 38, 0.4);
+            border-color: rgba(220, 38, 38, 0.3);
+        }
+
+        .movie-poster {
+            position: relative;
+            width: 100%;
+            height: 420px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        .movie-poster img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .movie-card:hover .movie-poster img {
+            transform: scale(1.1);
+        }
+
+        .movie-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: var(--accent-red);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .movie-rating {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--accent-gold);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+        }
+
+        .movie-info {
+            padding: 1.5rem;
+        }
+
+        .movie-category {
+            color: var(--accent-gold);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .movie-meta {
+            display: flex;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-bottom: 1rem;
+        }
+
+        .movie-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .movie-synopsis {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .movie-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-favorite {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--accent-red);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+        }
+
         .btn-favorite:hover, .btn-favorite.active {
-            background: #f59e0b;
-            color: #0f172a;
+            background: var(--accent-red);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-details {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-gold);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-details:hover {
+            background: var(--accent-gold);
+            color: black;
+            transform: translateY(-2px);
+        }
+
+        /* Loading Skeleton */
+        .skeleton {
+            background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-netpelis {
+                padding: 1rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+
+            .movie-poster {
+                height: 300px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-red);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ef4444;
         }
     </style>
 </head>
 <body>
-<nav class="navbar-netpelis d-flex justify-content-between align-items-center">
-    <h3 class="text-white mb-0">🎬 NetPelis</h3>
-    <div class="d-flex gap-3">
-        <a href="#" class="nav-link text-white">Inicio</a>
-        <a href="#" class="nav-link text-white">Favoritos</a>
-        <form th:action="@{/cerrar-sesion}" method="post" class="d-inline">
-            <button type="submit" class="btn btn-outline-light btn-sm">
-                <i class="bi bi-box-arrow-left me-2"></i>Salir
-            </button>
-        </form>
+<!-- Navbar -->
+<nav class="navbar-netpelis" id="navbar">
+    <div class="d-flex justify-content-between align-items-center">
+        <a href="#" class="brand-logo">
+            <span class="material-icons">movie</span>
+            <span>NETPELIS</span>
+        </a>
+
+        <div class="nav-menu">
+            <a href="#" class="nav-link active">Inicio</a>
+            <a href="#" class="nav-link">Películas</a>
+            <a href="#" class="nav-link">Series</a>
+            <a href="#" class="nav-link">Mis Favoritos</a>
+            <a href="#" class="nav-link">Novedades</a>
+        </div>
+
+        <div class="user-menu">
+            <div class="d-flex align-items-center gap-2">
+                <span class="material-icons" style="color: var(--accent-gold);">account_circle</span>
+                <span style="font-weight: 500;">Usuario</span>
+            </div>
+            <form th:action="@{/auth/logout}" method="post">
+                <button type="submit" class="btn-logout">
+                    <span class="material-icons">logout</span>
+                    Cerrar Sesión
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
 
-<main class="container py-4">
-    <div class="alert alert-info" style="background: rgba(245,158,11,0.1); border-color: rgba(245,158,11,0.3);">
-        <h4>¡Bienvenido! 👋</h4>
-        <p class="mb-0">Descubre y guarda tus películas favoritas.</p>
+<!-- Main Content -->
+<main class="main-content">
+    <!-- Welcome Section -->
+    <div class="welcome-section" th:if="${usuario}">
+        <h1 class="welcome-title">¡Bienvenido, <span th:text="${usuario.nombreCompleto}">Usuario</span>! 👋</h1>
+        <p class="welcome-subtitle">Descubre las mejores películas y series. Tu próximo favorito te espera.</p>
     </div>
 
-    <h4 class="mb-4 mt-4">🔥 Tendencias</h4>
-    <div class="row g-4">
-        <div class="col-6 col-md-4 col-lg-3">
-            <div class="movie-card p-3">
-                <div class="bg-secondary rounded mb-3" style="height: 200px; display: flex; align-items: center; justify-content: center; font-size: 3rem;">🎬</div>
-                <h6 class="fw-bold">El Origen</h6>
-                <small class="text-muted">2010 • Ciencia Ficción</small>
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <span class="text-warning"><i class="bi bi-star-fill"></i> 4.8</span>
-                    <button class="btn btn-favorite btn-sm"><i class="bi bi-heart"></i></button>
+    <!-- Trending Movies Section -->
+    <div class="section-header">
+        <h2 class="section-title">
+            <span class="material-icons">local_fire_department</span>
+            Tendencias Ahora
+        </h2>
+        <a href="#" class="view-all">
+            Ver todo
+            <span class="material-icons">arrow_forward</span>
+        </a>
+    </div>
+
+    <!-- Movies Grid -->
+    <div class="movies-grid">
+        <!-- Movie Card 1 -->
+        <div class="movie-card" th:each="pelicula : ${peliculas}" th:if="${pelicula.estado.name == 'PUBLICADO'}">
+            <div class="movie-poster">
+                <span class="movie-badge">SHOWS</span>
+                <div class="movie-rating">
+                    <span class="material-icons" style="font-size: 14px; color: var(--accent-gold);">star</span>
+                    <span>4.8</span>
+                </div>
+                <!-- Placeholder para poster - Reemplazar con imagen real -->
+                <img th:src="${pelicula.posterUrl != null ? pelicula.posterUrl : 'https://via.placeholder.com/300x450/1a1a1a/dc2626?text=' + ${pelicula.titulo}}"
+                     th:alt="${pelicula.titulo}"
+                     onerror="this.src='https://via.placeholder.com/300x450/1a1a1a/dc2626?text=No+Image'">
+            </div>
+
+            <div class="movie-info">
+                <div class="movie-category">SHOWS</div>
+                <h3 class="movie-title" th:text="${pelicula.titulo}">Título de la Película</h3>
+
+                <div class="movie-meta">
+                        <span>
+                            <span class="material-icons" style="font-size: 14px;">calendar_today</span>
+                            <span th:text="${pelicula.anioLanzamiento}">2024</span>
+                        </span>
+                    <span th:if="${pelicula.duracionMinutos != null}">
+                            <span class="material-icons" style="font-size: 14px;">schedule</span>
+                            <span th:text="${pelicula.duracionMinutos + ' min'}">120 min</span>
+                        </span>
+                </div>
+
+                <!-- ✅ SINOPSIS AQUÍ -->
+                <p class="movie-synopsis" th:text="${pelicula.sinopsis != null ? pelicula.sinopsis : 'Sinopsis no disponible. Esta es una película emocionante que no te puedes perder.'}">
+                    La sinopsis de la película aparece aquí. Describe la trama principal de manera concisa y atractiva para los usuarios.
+                </p>
+
+                <div class="movie-actions">
+                    <button class="btn-action btn-favorite" onclick="toggleFavorite(this)">
+                        <span class="material-icons">favorite</span>
+                        Favorito
+                    </button>
+                    <button class="btn-action btn-details">
+                        <span class="material-icons">info</span>
+                        Detalles
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Movie Card Example (si no hay películas) -->
+        <div class="movie-card" th:if="${#lists.isEmpty(peliculas)}">
+            <div class="movie-poster">
+                <span class="movie-badge">SHOWS</span>
+                <div class="movie-rating">
+                    <span class="material-icons" style="font-size: 14px; color: var(--accent-gold);">star</span>
+                    <span>4.8</span>
+                </div>
+                <img src="https://via.placeholder.com/300x450/1a1a1a/dc2626?text=El+Origen" alt="El Origen">
+            </div>
+            <div class="movie-info">
+                <div class="movie-category">SHOWS</div>
+                <h3 class="movie-title">El Origen</h3>
+                <div class="movie-meta">
+                        <span>
+                            <span class="material-icons" style="font-size: 14px;">calendar_today</span>
+                            2010
+                        </span>
+                    <span>
+                            <span class="material-icons" style="font-size: 14px;">schedule</span>
+                            148 min
+                        </span>
+                </div>
+                <p class="movie-synopsis">
+                    Un ladrón que roba secretos corporativos a través del uso de tecnología de intercambio de sueños recibe la tarea inversa de plantar una idea en la mente de un CEO.
+                </p>
+                <div class="movie-actions">
+                    <button class="btn-action btn-favorite" onclick="toggleFavorite(this)">
+                        <span class="material-icons">favorite</span>
+                        Favorito
+                    </button>
+                    <button class="btn-action btn-details">
+                        <span class="material-icons">info</span>
+                        Detalles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recently Added Section -->
+    <div class="section-header" style="margin-top: 4rem;">
+        <h2 class="section-title">
+            <span class="material-icons">new_releases</span>
+            Recién Añadidas
+        </h2>
+        <a href="#" class="view-all">
+            Ver todo
+            <span class="material-icons">arrow_forward</span>
+        </a>
+    </div>
+
+    <div class="movies-grid">
+        <!-- Additional movie cards can be added here -->
+        <div class="movie-card">
+            <div class="movie-poster">
+                <span class="movie-badge" style="background: var(--accent-gold); color: black;">NEW</span>
+                <div class="movie-rating">
+                    <span class="material-icons" style="font-size: 14px; color: var(--accent-gold);">star</span>
+                    <span>4.5</span>
+                </div>
+                <img src="https://via.placeholder.com/300x450/1a1a1a/f59e0b?text=Interstellar" alt="Interstellar">
+            </div>
+            <div class="movie-info">
+                <div class="movie-category">SHOWS</div>
+                <h3 class="movie-title">Interstellar</h3>
+                <div class="movie-meta">
+                        <span>
+                            <span class="material-icons" style="font-size: 14px;">calendar_today</span>
+                            2014
+                        </span>
+                    <span>
+                            <span class="material-icons" style="font-size: 14px;">schedule</span>
+                            169 min
+                        </span>
+                </div>
+                <p class="movie-synopsis">
+                    Un equipo de exploradores viaja a través de un agujero de gusano en el espacio en un intento de asegurar la supervivencia de la humanidad.
+                </p>
+                <div class="movie-actions">
+                    <button class="btn-action btn-favorite" onclick="toggleFavorite(this)">
+                        <span class="material-icons">favorite</span>
+                        Favorito
+                    </button>
+                    <button class="btn-action btn-details">
+                        <span class="material-icons">info</span>
+                        Detalles
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </main>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
+
+    // Toggle favorite button
+    function toggleFavorite(btn) {
+        btn.classList.toggle('active');
+        const icon = btn.querySelector('.material-icons');
+        if (btn.classList.contains('active')) {
+            icon.textContent = 'favorite';
+            btn.innerHTML = '<span class="material-icons">favorite</span> Guardado';
+        } else {
+            icon.textContent = 'favorite_border';
+            btn.innerHTML = '<span class="material-icons">favorite_border</span> Favorito';
+        }
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+</script>
 </body>
 </html>

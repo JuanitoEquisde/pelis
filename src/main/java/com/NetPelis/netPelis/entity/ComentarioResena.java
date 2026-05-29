@@ -2,12 +2,15 @@ package com.NetPelis.netPelis.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
 
 @Data
 @Entity
 @Table(name = "comentario_resena")
+@EqualsAndHashCode(exclude = {"resena", "usuario"}) // ✅ Evitar bucle infinito
 public class ComentarioResena {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

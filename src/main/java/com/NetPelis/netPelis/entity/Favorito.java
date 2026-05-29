@@ -2,6 +2,7 @@ package com.NetPelis.netPelis.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
 
 @Data
@@ -9,7 +10,9 @@ import java.time.LocalDateTime;
 @Table(name = "favorito", uniqueConstraints = {
         @UniqueConstraint(name = "uk_favorito", columnNames = {"usuario_id", "pelicula_id"})
 })
+@EqualsAndHashCode(exclude = {"usuario", "pelicula"}) // ✅ Evitar bucle infinito
 public class Favorito {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

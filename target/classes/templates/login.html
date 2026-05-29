@@ -3,107 +3,399 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎬 NetPelis - Iniciar Sesión</title>
+    <title>NetPelis - Iniciar Sesión</title>
+
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0000 50%, #2d0000 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
-        .login-card {
-            background: rgba(30, 41, 59, 0.95);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
-            max-width: 450px;
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bg-animation span {
+            position: absolute;
+            display: block;
+            width: 20px; height: 20px;
+            background: rgba(220, 38, 38, 0.1);
+            animation: float 25s infinite;
+            bottom: -150px;
+            border-radius: 50%;
+        }
+
+        .bg-animation span:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+        .bg-animation span:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+        .bg-animation span:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+        .bg-animation span:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+        .bg-animation span:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+        .bg-animation span:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+        .bg-animation span:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+        .bg-animation span:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+        .bg-animation span:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+        .bg-animation span:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
             width: 100%;
-            padding: 2.5rem;
+            max-width: 450px;
+            padding: 20px;
         }
-        .logo-netpelis {
-            font-size: 2.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, #f59e0b, #3b82f6, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+
+        .login-card {
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(220, 38, 38, 0.1),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            animation: slideUp 0.6s ease-out;
         }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-section { text-align: center; margin-bottom: 40px; }
+
+        .logo-icon {
+            font-size: 64px;
+            color: #dc2626;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .brand-name {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .brand-tagline {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+            font-weight: 300;
+        }
+
+        .form-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .material-icons { font-size: 18px; color: #dc2626; }
+
         .form-control {
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #fff;
-            padding: 0.85rem 1rem;
+            background: rgba(30, 30, 30, 0.8);
+            border: 2px solid rgba(220, 38, 38, 0.2);
+            color: #ffffff;
+            padding: 14px 18px;
             border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            margin-bottom: 24px;
         }
+
         .form-control:focus {
-            background: rgba(15, 23, 42, 1);
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
-            color: #fff;
+            background: rgba(30, 30, 30, 0.95);
+            border-color: #dc2626;
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1), 0 4px 20px rgba(220, 38, 38, 0.2);
+            color: #ffffff;
+            outline: none;
         }
-        .btn-netpelis {
-            background: linear-gradient(90deg, #3b82f6, #6366f1);
+
+        .form-control::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+        .btn-login {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
             border: none;
-            padding: 0.85rem;
+            color: #ffffff;
+            padding: 16px;
             border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
             width: 100%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
         }
-        .btn-netpelis:hover {
+
+        .btn-login:hover {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
+        }
+
+        .alert-custom {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            color: #fca5a5;
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            animation: shake 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.3);
+            color: #86efac;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .divider span { padding: 0 15px; }
+
+        .footer-text {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            margin-top: 30px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.4);
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover { color: #dc2626; }
+
+        .input-wrapper { position: relative; }
+
+        @media (max-width: 576px) {
+            .login-card { padding: 40px 25px; }
+            .brand-name { font-size: 28px; }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="login-card" data-aos="zoom-in">
-        <div class="text-center mb-4">
-            <div class="fs-1 mb-3">🎬</div>
-            <h1 class="logo-netpelis">NetPelis</h1>
-            <p class="text-muted">Tu plataforma de películas favoritas</p>
+<!-- Background Animation -->
+<div class="bg-animation">
+    <span></span><span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span><span></span>
+</div>
+
+<!-- Login Container -->
+<div class="login-container">
+    <div class="login-card">
+        <!-- Logo Section -->
+        <div class="logo-section">
+            <span class="material-icons logo-icon">movie</span>
+            <h1 class="brand-name">NetPelis</h1>
+            <p class="brand-tagline">Tu cine en casa</p>
         </div>
 
-        <div th:if="${param.error}" class="alert alert-danger mb-3">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            Credenciales incorrectas
+        <!-- Error Messages - ✅ CORREGIDO: notación de corchetes para parámetros con guion -->
+        <div th:if="${param.error}" class="alert-custom">
+            <span class="material-icons" style="font-size: 20px;">error</span>
+            <span>Credenciales incorrectas. Verifica tu email y contraseña.</span>
         </div>
 
-        <div th:if="${param.logout}" class="alert alert-success mb-3">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            Sesión cerrada correctamente
+        <div th:if="${param['logout']}" class="alert-custom alert-success">
+            <span class="material-icons" style="font-size: 20px;">check_circle</span>
+            <span>Sesión cerrada correctamente.</span>
         </div>
 
-        <form th:action="@{/procesar-login}" method="post">
+        <div th:if="${param['acceso-denegado']}" class="alert-custom">
+            <span class="material-icons" style="font-size: 20px;">lock</span>
+            <span>No tienes permisos para acceder a esta sección.</span>
+        </div>
+
+        <!-- Login Form -->
+        <form th:action="@{/auth/login-procesar}" method="post" id="loginForm">
+            <!-- Email Field -->
             <div class="mb-3">
-                <label class="form-label text-white-50">
-                    <i class="bi bi-envelope-fill me-2"></i>Correo electrónico
+                <label class="form-label">
+                    <span class="material-icons">email</span>
+                    Correo Electrónico
                 </label>
-                <input type="email" class="form-control" name="email"
-                       placeholder="ejemplo@netpelis.com" required autofocus>
+                <input
+                        type="email"
+                        class="form-control"
+                        name="email"
+                        placeholder="tu@email.com"
+                        required
+                        autofocus
+                        autocomplete="email"
+                >
             </div>
 
+            <!-- Password Field -->
             <div class="mb-4">
-                <label class="form-label text-white-50">
-                    <i class="bi bi-lock-fill me-2"></i>Contraseña
+                <label class="form-label">
+                    <span class="material-icons">lock</span>
+                    Contraseña
                 </label>
-                <input type="password" class="form-control" name="contrasena"
-                       placeholder="••••••••" required>
+                <div class="input-wrapper">
+                    <input
+                            type="password"
+                            class="form-control"
+                            name="password"
+                            id="passwordInput"
+                            placeholder="••••••••"
+                            required
+                            autocomplete="current-password"
+                    >
+                    <span class="password-toggle" onclick="togglePassword()">
+                            <span class="material-icons" id="toggleIcon">visibility</span>
+                        </span>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-netpelis text-white">
-                <i class="bi bi-box-arrow-in-right me-2"></i>Ingresar
+            <!-- Remember Me & Forgot Password -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="rememberMe"
+                           style="background: rgba(30,30,30,0.8); border-color: rgba(220,38,38,0.3);">
+                    <label class="form-check-label" for="rememberMe"
+                           style="color: rgba(255,255,255,0.6); font-size: 13px;">
+                        Recordarme
+                    </label>
+                </div>
+                <a href="#" style="color: #dc2626; text-decoration: none; font-size: 13px; font-weight: 500;">
+                    ¿Olvidaste tu contraseña?
+                </a>
+            </div>
+
+            <!-- Login Button -->
+            <button type="submit" class="btn btn-login">
+                <span class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">login</span>
+                Iniciar Sesión
             </button>
         </form>
+
+        <!-- Divider -->
+        <div class="divider">
+            <span>Acceso seguro</span>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-text">
+            <span class="material-icons" style="font-size: 14px; vertical-align: middle; margin-right: 5px;">security</span>
+            Conexión encriptada y protegida
+        </div>
     </div>
 </div>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-<script>AOS.init({ once: true });</script>
+
+<!-- Custom JS -->
+<script>
+    // Toggle password visibility
+    function togglePassword() {
+        const passwordInput = document.getElementById('passwordInput');
+        const toggleIcon = document.getElementById('toggleIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.textContent = 'visibility_off';
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.textContent = 'visibility';
+        }
+    }
+
+    // Add loading state on form submit
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const btn = document.querySelector('.btn-login');
+        btn.innerHTML = '<span class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 8px; animation: spin 1s linear infinite;">progress_activity</span> Verificando...';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+    });
+
+    // Add spin animation for loading
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Add input focus effects
+    document.querySelectorAll('.form-control').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+</script>
 </body>
 </html>

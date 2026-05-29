@@ -2,6 +2,7 @@ package com.NetPelis.netPelis.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -10,7 +11,9 @@ import java.time.LocalDateTime;
 @Table(name = "resena", uniqueConstraints = {
         @UniqueConstraint(name = "uk_resena_usuario_pelicula", columnNames = {"usuario_id", "pelicula_id"})
 })
+@EqualsAndHashCode(exclude = {"usuario", "pelicula"}) // ✅ Evitar bucle infinito
 public class Resena {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +26,7 @@ public class Resena {
     @JoinColumn(name = "pelicula_id", nullable = false)
     private Pelicula pelicula;
 
-    // ✅ FIX: BigDecimal es el estándar JPA para DECIMAL en MySQL
+    // ✅ BigDecimal para DECIMAL(3,1) en MySQL
     @Column(name = "puntuacion", precision = 3, scale = 1, columnDefinition = "DECIMAL(3,1)")
     private BigDecimal puntuacion;
 

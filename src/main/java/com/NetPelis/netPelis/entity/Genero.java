@@ -2,13 +2,16 @@ package com.NetPelis.netPelis.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "genero")
+@EqualsAndHashCode(exclude = {"peliculas"}) // ✅ Excluir relación bidireccional
 public class Genero {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

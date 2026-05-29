@@ -2,6 +2,7 @@ package com.NetPelis.netPelis.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,8 +10,11 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "pelicula")
+@EqualsAndHashCode(exclude = {"generos"}) // ✅ Excluir relación bidireccional
 public class Pelicula {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)

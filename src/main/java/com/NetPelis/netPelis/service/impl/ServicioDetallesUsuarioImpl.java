@@ -22,7 +22,8 @@ public class ServicioDetallesUsuarioImpl implements ServicioDetallesUsuario {
         Usuario usuario = repositorioUsuario.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
-        String rolConPrefijo = "ROLE_" + usuario.getRol();
+        // ✅ CORRECCIÓN: Usar .name() para obtener el string del enum
+        String rolConPrefijo = "ROLE_" + usuario.getRol().name();
 
         return new org.springframework.security.core.userdetails.User(
                 usuario.getEmail(),

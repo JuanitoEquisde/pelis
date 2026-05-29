@@ -22,7 +22,7 @@ public class SeguridadConfig {
     }
 
     @Bean
-    public PasswordEncoder codificadorContraseña() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -32,30 +32,33 @@ public class SeguridadConfig {
     }
 
     @Bean
-    public SecurityFilterChain cadenaSeguridad(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/css/**", "/js/**", "/imagenes/**").permitAll()
-                        .requestMatchers("/admin/**", "/admin-dashboard").hasRole("ADMIN")
-                        .requestMatchers("/cliente/**", "/cliente-dashboard").hasRole("CLIENTE")
+                        .requestMatchers("/auth/**", "/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/cliente/**").hasRole("CLIENTE")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/")
-                        .loginProcessingUrl("/procesar-login")
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/login-procesar")
                         .usernameParameter("email")
-                        .passwordParameter("contrasena")
+                        .passwordParameter("password")
                         .defaultSuccessUrl("/redireccionar-segun-rol", true)
-                        .failureUrl("/?error=true")
+                        .failureUrl("/auth/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/cerrar-sesion")
-                        .logoutSuccessUrl("/?logout=true")
+                        .logoutUrl("/auth/logout")
+                        .logoutSuccessUrl("/auth/login?logout=true")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll()
+                )
+                .exceptionHandling(ex -> ex
+                        .accessDeniedPage("/auth/login?acceso-denegado=true")
                 );
 
         return http.build();
