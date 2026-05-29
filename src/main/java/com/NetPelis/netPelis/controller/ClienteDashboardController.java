@@ -1,6 +1,7 @@
 package com.NetPelis.netPelis.controller;
 
 import com.NetPelis.netPelis.entity.EstadoPelicula;
+import com.NetPelis.netPelis.entity.Pelicula;
 import com.NetPelis.netPelis.entity.Usuario;
 import com.NetPelis.netPelis.repository.RepositorioFavorito;
 import com.NetPelis.netPelis.repository.RepositorioPelicula;
@@ -33,55 +34,38 @@ public class ClienteDashboardController {
     @GetMapping("/dashboard")
     public String dashboardCliente(Model model) {
         try {
-            // Obtener usuario autenticado
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String email = auth.getName();
 
-            // Buscar usuario por email
             Usuario usuario = repositorioUsuario.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + email));
 
-            // Estadísticas del cliente
-            long totalFavoritos = repositorioFavorito.countByUsuarioId(usuario.getId());
-            long totalResenasUsuario = repositorioResena.countByUsuarioId(usuario.getId());
-            long totalPeliculasDisponibles = repositorioPelicula.countByEstado(EstadoPelicula.PUBLICADO);
-
-            // Películas publicadas disponibles
-            List<com.NetPelis.netPelis.entity.Pelicula> peliculasDisponibles =
+            // ✅ Query simple y directa
+            List<com.NetPelis.netPelis.entity.Pelicula> peliculas =
                     repositorioPelicula.findByEstado(EstadoPelicula.PUBLICADO);
 
-            // Películas favoritas del usuario
-            List<com.NetPelis.netPelis.entity.Favorito> misFavoritos =
-                    repositorioFavorito.findByUsuarioId(usuario.getId());
+            // ✅ Logs obligatorios para debug
+            System.out.println("🎬 DEBUG - Usuario: " + usuario.getNombreCompleto());
+            System.out.println("🎬 DEBUG - Películas PUBLICADO: " + peliculas.size());
+            for (var p : peliculas) {
+                System.out.println("   - [" + p.getId() + "] " + p.getTitulo() + " | Estado: " + p.getEstado());
+            }
 
-            // Últimas reseñas del usuario
-            List<com.NetPelis.netPelis.entity.Resena> misResenas =
-                    repositorioResena.findByUsuarioIdOrderByFechaCreacionDesc(usuario.getId());
-
-            // Agregar atributos al modelo
+            // ✅ NOMBRE EXACTO: "peliculas" (case-sensitive)
+            model.addAttribute("peliculas", peliculas);
             model.addAttribute("usuario", usuario);
-            model.addAttribute("totalFavoritos", totalFavoritos);
-            model.addAttribute("totalResenasUsuario", totalResenasUsuario);
-            model.addAttribute("totalPeliculasDisponibles", totalPeliculasDisponibles);
-            model.addAttribute("peliculasDisponibles", peliculasDisponibles);
-            model.addAttribute("misFavoritos", misFavoritos);
-            model.addAttribute("misResenas", misResenas);
+            model.addAttribute("totalFavoritos", repositorioFavorito.countByUsuarioId(usuario.getId()));
+            model.addAttribute("totalResenasUsuario", repositorioResena.countByUsuarioId(usuario.getId()));
 
-            System.out.println("✅ Dashboard Cliente cargado:");
-            System.out.println("   - Usuario: " + usuario.getNombreCompleto());
-            System.out.println("   - Películas disponibles: " + totalPeliculasDisponibles);
-            System.out.println("   - Favoritos: " + totalFavoritos);
-            System.out.println("   - Reseñas: " + totalResenasUsuario);
+            return "cliente-dashboard";
 
         } catch (Exception e) {
-            System.err.println("❌ Error cargando dashboard cliente: " + e.getMessage());
+            System.err.println("❌ ERROR en dashboard: " + e.getMessage());
             e.printStackTrace();
-            model.addAttribute("error", "No se pudo cargar el dashboard");
+            model.addAttribute("peliculas", List.of());
+            return "cliente-dashboard";
         }
-
-        return "cliente-dashboard";
     }
-
     /**
      * Página de películas disponibles para ver
      */
@@ -94,9 +78,11 @@ public class ClienteDashboardController {
             model.addAttribute("peliculas", peliculas);
             model.addAttribute("titulo", "Catálogo de Películas");
 
-            return "cliente/peliculas"; // Vista: cliente/peliculas.html
+            System.out.println("✅ Página de películas cargada: " + peliculas.size() + " películas");
+            return "cliente/peliculas";
         } catch (Exception e) {
             System.err.println("Error cargando películas: " + e.getMessage());
+            e.printStackTrace();
             return "redirect:/cliente/dashboard";
         }
     }
@@ -119,7 +105,7 @@ public class ClienteDashboardController {
             model.addAttribute("favoritos", favoritos);
             model.addAttribute("titulo", "Mis Películas Favoritas");
 
-            return "cliente/favoritos"; // Vista: cliente/favoritos.html
+            return "cliente/favoritos";
         } catch (Exception e) {
             System.err.println("Error cargando favoritos: " + e.getMessage());
             return "redirect:/cliente/dashboard";
@@ -144,7 +130,7 @@ public class ClienteDashboardController {
             model.addAttribute("resenas", resenas);
             model.addAttribute("titulo", "Mis Reseñas");
 
-            return "cliente/mis-resenas"; // Vista: cliente/mis-resenas.html
+            return "cliente/mis-resenas";
         } catch (Exception e) {
             System.err.println("Error cargando reseñas: " + e.getMessage());
             return "redirect:/cliente/dashboard";

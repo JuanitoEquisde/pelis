@@ -5,11 +5,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+/**
+ * Controller para redirecciones inteligentes post-login
+ * RUTAS: / y /redireccionar-segun-rol
+ */
 @Controller
 public class ControladorAutenticacion {
 
     /**
-     * Página de inicio: redirige al login o al dashboard según autenticación
+     * Página de inicio: redirige según estado de autenticación
+     * RUTA: GET /
      */
     @GetMapping("/")
     public String paginaInicio() {
@@ -24,6 +29,7 @@ public class ControladorAutenticacion {
 
     /**
      * Redirección inteligente según el rol del usuario
+     * RUTA: GET /redireccionar-segun-rol
      */
     @GetMapping("/redireccionar-segun-rol")
     public String redireccionarSegunRol() {
@@ -46,8 +52,4 @@ public class ControladorAutenticacion {
 
         return "redirect:/auth/login?error=rol-invalido";
     }
-
-    // ❌ ELIMINA ESTOS MÉTODOS - Ya existen en otros controllers:
-    // - dashboardAdmin() → Ahora en AdminDashboardController
-    // - dashboardCliente() → Debería estar en ClienteDashboardController
 }

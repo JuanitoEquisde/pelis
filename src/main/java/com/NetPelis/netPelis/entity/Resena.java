@@ -43,4 +43,7 @@ public class Resena {
 
     @Column(name = "fecha_actualizacion")
     private LocalDateTime fechaActualizacion;
+
+
+
 }

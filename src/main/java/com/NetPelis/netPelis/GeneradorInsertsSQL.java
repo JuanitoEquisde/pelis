@@ -3,45 +3,62 @@ package com.NetPelis.netPelis;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
- * Clase utilitaria para generar INSERTs de prueba con contraseñas encriptadas en BCrypt.
+ * Genera INSERTs SQL para 20 usuarios de prueba con contraseñas encriptadas en BCrypt.
  * Ejecútala como aplicación Java normal (clic derecho -> Run).
  */
 public class GeneradorInsertsSQL {
+
     public static void main(String[] args) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        // 1️⃣ Datos ADMIN
-        String adminNombre = "Administrador NetPelis";
-        String adminEmail  = "admin@netpelis.com";
-        String adminPass   = "admin123";
-        String adminHash   = encoder.encode(adminPass);
+        System.out.println("\n🔐 === GENERANDO 20 USUARIOS DE PRUEBA ===\n");
+        System.out.println("-- ============================================");
+        System.out.println("-- COPIA Y EJECUTA ESTOS INSERTS EN MYSQL");
+        System.out.println("-- ============================================\n");
 
-        // 2️⃣ Datos CLIENTE
-        String clienteNombre = "Usuario Demo";
-        String clienteEmail  = "cliente@netpelis.com";
-        String clientePass   = "cliente123";
-        String clienteHash   = encoder.encode(clientePass);
+        // Generar 20 usuarios
+        for (int i = 1; i <= 20; i++) {
+            String nombre = "Usuario " + i;
+            String email = "usuario" + i + "@netpelis.com";
+            String password = "usuario" + i + "123";
+            String hash = encoder.encode(password);
 
-        // 🖨️ Generar INSERTs compatibles con tu tabla 'usuario'
-        String insertAdmin = String.format(
-                "INSERT INTO usuario (nombre_completo, email, contrasena_hash, rol, activo) VALUES ('%s', '%s', '%s', 'ADMIN', TRUE);",
-                adminNombre, adminEmail, adminHash
-        );
+            // Los primeros 3 son ADMIN, el resto CLIENTE
+            String rol = (i <= 3) ? "ADMIN" : "CLIENTE";
 
-        String insertCliente = String.format(
-                "INSERT INTO usuario (nombre_completo, email, contrasena_hash, rol, activo) VALUES ('%s', '%s', '%s', 'CLIENTE', TRUE);",
-                clienteNombre, clienteEmail, clienteHash
-        );
+            String insert = String.format(
+                    "INSERT INTO usuario (nombre_completo, email, contrasena_hash, rol, activo) " +
+                            "VALUES ('%s', '%s', '%s', '%s', TRUE);",
+                    nombre, email, hash, rol
+            );
 
-        // 📤 Imprimir resultado listo para copiar
-        System.out.println("\n🔐 === COPIA Y EJECUTA EN TU CLIENTE MYSQL ===\n");
-        System.out.println("--  Usuario Administrador");
-        System.out.println(insertAdmin);
-        System.out.println("\n-- 🎟️ Usuario Cliente");
-        System.out.println(insertCliente);
-        System.out.println("\n✅ Credenciales de prueba:");
-        System.out.println("   ADMIN:   " + adminEmail + " | " + adminPass);
-        System.out.println("   CLIENTE: " + clienteEmail + " | " + clientePass);
-        System.out.println("==================================================\n");
+            System.out.println("-- Usuario " + i + " (" + rol + ")");
+            System.out.println(insert);
+            System.out.println();
+        }
+
+        // Imprimir credenciales
+        System.out.println("\n✅ ============================================");
+        System.out.println("✅ CREDENCIALES DE PRUEBA");
+        System.out.println("✅ ============================================");
+        System.out.println();
+        System.out.println("📋 ADMINISTRADORES (3):");
+        for (int i = 1; i <= 3; i++) {
+            System.out.println("   Email:    usuario" + i + "@netpelis.com");
+            System.out.println("   Password: usuario" + i + "123");
+            System.out.println();
+        }
+
+        System.out.println("📋 CLIENTES (17):");
+        for (int i = 4; i <= 20; i++) {
+            System.out.println("   Email:    usuario" + i + "@netpelis.com");
+            System.out.println("   Password: usuario" + i + "123");
+            if (i <= 6) System.out.println(); // Solo mostrar primeros 3 clientes
+        }
+        System.out.println("   ... (y 14 más)");
+
+        System.out.println("\n✅ ============================================");
+        System.out.println("✅ Total: 20 usuarios generados");
+        System.out.println("✅ ============================================\n");
     }
 }

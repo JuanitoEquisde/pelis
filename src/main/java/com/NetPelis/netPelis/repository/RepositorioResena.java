@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RepositorioResena extends JpaRepository<Resena, Long> {
@@ -21,4 +22,5 @@ public interface RepositorioResena extends JpaRepository<Resena, Long> {
     List<Resena> findByUsuarioIdOrderByFechaCreacionDesc(Long usuarioId);
 
     List<Resena> findByPeliculaIdOrderByFechaCreacionDesc(Long peliculaId);
+    Optional<Resena> findByUsuarioIdAndPeliculaId(Long usuarioId, Long peliculaId);
 }
