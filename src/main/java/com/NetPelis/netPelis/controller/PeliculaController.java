@@ -2,8 +2,10 @@ package com.NetPelis.netPelis.controller;
 
 import com.NetPelis.netPelis.entity.Pelicula;
 import com.NetPelis.netPelis.entity.EstadoPelicula;
+import com.NetPelis.netPelis.entity.Genero;
 import com.NetPelis.netPelis.service.PeliculaService;
 import com.NetPelis.netPelis.service.ArchivoStorageService;
+import com.NetPelis.netPelis.repository.RepositorioGenero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -13,9 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin/peliculas")
@@ -24,14 +24,15 @@ public class PeliculaController {
 
     private final PeliculaService peliculaService;
     private final ArchivoStorageService archivoStorageService;
+    private final RepositorioGenero repositorioGenero;
 
     /**
      * Lista todas las películas (vista administrativa)
      */
     @GetMapping
-    public String listarPeliculas(Model model) {
-        model.addAttribute("peliculas", peliculaService.obtenerTodas());
-        return "admin/peliculas-lista";
+    public String listarPeliculas() {
+        // Redirigir al dashboard en lugar de buscar un template que no existe
+        return "redirect:/admin/dashboard";
     }
 
     /**
@@ -60,6 +61,7 @@ public class PeliculaController {
             @RequestParam(value = "trailerUrl", required = false) String trailerUrl,
             @RequestParam(value = "posterUrl", required = false) String posterUrl,
             @RequestParam(value = "estado", required = false) String estado,
+            @RequestParam(value = "generos", required = false) List<Long> generosIds,  // ✅ NUEVO: IDs de géneros
             @RequestParam(value = "posterFile", required = false) MultipartFile posterFile,
             RedirectAttributes redirectAttributes) {
 
@@ -96,6 +98,15 @@ public class PeliculaController {
                 pelicula.setEstado(EstadoPelicula.valueOf(estado.trim().toUpperCase()));
             } else {
                 pelicula.setEstado(EstadoPelicula.PUBLICADO);
+            }
+
+            // ✅ Asignar géneros si se proporcionaron
+            if (generosIds != null && !generosIds.isEmpty()) {
+                Set<Genero> generosSet = new HashSet<>();
+                for (Long generoId : generosIds) {
+                    repositorioGenero.findById(generoId).ifPresent(generosSet::add);
+                }
+                pelicula.setGeneros(generosSet);
             }
 
             // Guardar en base de datos (con manejo de imagen)

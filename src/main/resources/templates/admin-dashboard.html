@@ -4,32 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - NetPelis</title>
-
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Material Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #141414;
-            --bg-sidebar: #0f0f0f;
-            --bg-card: #1a1a1a;
+            --bg-primary: #080810;
+            --bg-secondary: #0f0f1a;
+            --bg-sidebar: #0a0a14;
+            --bg-card: #12121e;
+            --bg-card-hover: #16162a;
+            --bg-glass: rgba(255,255,255,0.03);
             --accent-red: #dc2626;
+            --accent-red-glow: rgba(220,38,38,0.18);
+            --accent-red-soft: rgba(220,38,38,0.08);
             --accent-gold: #f59e0b;
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --text-muted: rgba(255, 255, 255, 0.5);
-            --border-color: rgba(220, 38, 38, 0.2);
+            --accent-gold-soft: rgba(245,158,11,0.08);
+            --text-primary: #f1f1f8;
+            --text-secondary: rgba(241,241,248,0.65);
+            --text-muted: rgba(241,241,248,0.38);
+            --border: rgba(255,255,255,0.07);
+            --border-red: rgba(220,38,38,0.22);
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --shadow-card: 0 0 0 1px var(--border), 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-hover: 0 0 0 1px var(--border-red), 0 20px 48px rgba(220,38,38,0.12);
+            --sidebar-w: 260px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'DM Sans', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
@@ -38,624 +45,526 @@
 
         body::before {
             content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background:
-                radial-gradient(ellipse at top, rgba(220, 38, 38, 0.1), transparent 50%),
-                radial-gradient(ellipse at bottom, rgba(245, 158, 11, 0.05), transparent 50%);
-            z-index: -1;
-            pointer-events: none;
+                radial-gradient(ellipse 70% 50% at 10% 0%, rgba(220,38,38,0.08) 0%, transparent 55%),
+                radial-gradient(ellipse 50% 40% at 90% 100%, rgba(245,158,11,0.05) 0%, transparent 55%);
+            z-index: -1; pointer-events: none;
         }
 
-        /* Sidebar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(220,38,38,0.35); border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+
+        /* ══════════════════════════════════════
+           SIDEBAR
+        ══════════════════════════════════════ */
         .sidebar {
-            width: 280px;
+            width: var(--sidebar-w);
             background: var(--bg-sidebar);
-            border-right: 1px solid var(--border-color);
-            position: fixed;
-            height: 100vh;
-            padding: 2rem 1.5rem;
-            z-index: 1000;
-            overflow-y: auto;
-            transition: all 0.3s ease;
+            border-right: 1px solid var(--border);
+            position: fixed; top: 0; left: 0; height: 100vh;
+            padding: 0; z-index: 1000; display: flex; flex-direction: column;
+            transition: transform 0.3s ease;
         }
 
+        .sidebar-brand {
+            padding: 1.5rem 1.25rem 1.25rem;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
         .brand-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 3rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
+            display: flex; align-items: center; gap: 10px;
+            font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800;
+            color: var(--text-primary); text-decoration: none; letter-spacing: 0.3px;
+        }
+        .brand-logo .logo-icon {
+            width: 32px; height: 32px; border-radius: 8px;
+            background: var(--accent-red);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .brand-logo .logo-icon .material-icons { font-size: 17px; color: white; }
+        .brand-logo .logo-text span { color: var(--accent-red); }
+
+        .menu-toggle {
+            display: none; background: transparent; border: none;
+            color: var(--text-muted); cursor: pointer; padding: 0.3rem;
+            border-radius: 7px; transition: all 0.2s; line-height: 1;
+        }
+        .menu-toggle:hover { background: var(--accent-red-soft); color: var(--text-primary); }
+        .menu-toggle .material-icons { font-size: 20px; }
+
+        .sidebar-nav {
+            flex: 1; overflow-y: auto; padding: 1.25rem 0.875rem;
+            display: flex; flex-direction: column; gap: 0.125rem;
         }
 
-        .brand-logo .material-icons {
-            color: var(--accent-red);
-            font-size: 32px;
-        }
-
-        .nav-section {
-            margin-bottom: 2rem;
-        }
-
-        .nav-section-title {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-            padding-left: 0.75rem;
+        .nav-section-label {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--text-muted);
+            padding: 0.75rem 0.875rem 0.4rem; margin-top: 0.375rem;
         }
 
         .nav-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-secondary);
-            text-decoration: none;
-            padding: 0.875rem 1rem;
-            border-radius: 12px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-            font-weight: 500;
+            display: flex; align-items: center; gap: 10px;
+            color: var(--text-muted); text-decoration: none;
+            padding: 0.7rem 0.875rem; border-radius: var(--radius-sm);
+            font-weight: 500; font-size: 13.5px;
+            transition: all 0.22s; position: relative;
         }
-
-        .nav-link:hover, .nav-link.active {
-            background: linear-gradient(135deg, rgba(220, 38, 38, 0.2) 0%, rgba(220, 38, 38, 0.05) 100%);
-            color: var(--text-primary);
-            border: 1px solid rgba(220, 38, 38, 0.3);
-            transform: translateX(5px);
+        .nav-link .material-icons { font-size: 18px; flex-shrink: 0; }
+        .nav-link:hover {
+            color: var(--text-primary); background: var(--bg-glass);
+            transform: translateX(3px);
         }
-
         .nav-link.active {
-            background: linear-gradient(135deg, var(--accent-red) 0%, #991b1b 100%);
-            border-color: var(--accent-red);
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+            background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(220,38,38,0.06));
+            color: var(--text-primary);
+            border: 1px solid var(--border-red);
+            box-shadow: 0 2px 12px rgba(220,38,38,0.1);
         }
-
-        .nav-link .material-icons {
-            font-size: 20px;
+        .nav-link.active .material-icons { color: var(--accent-red); }
+        .nav-badge {
+            margin-left: auto; background: var(--accent-red);
+            color: white; font-size: 10px; font-weight: 700;
+            padding: 1px 7px; border-radius: 99px; flex-shrink: 0;
         }
+        .sidebar-divider { height: 1px; background: var(--border); margin: 0.75rem 0.5rem; }
 
-        .nav-link .badge {
-            margin-left: auto;
-            background: var(--accent-red);
-            color: white;
-            font-size: 11px;
-            padding: 2px 8px;
-            border-radius: 10px;
+        .sidebar-footer {
+            padding: 1rem 0.875rem 1.25rem;
+            border-top: 1px solid var(--border); flex-shrink: 0;
         }
-
-        .user-profile {
-            margin-top: auto;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border-color);
+        .user-info-row {
+            display: flex; align-items: center; gap: 10px;
+            padding: 0.75rem; border-radius: var(--radius-sm);
+            background: var(--bg-glass); border: 1px solid var(--border);
+            margin-bottom: 0.75rem;
         }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 1rem;
-        }
-
         .user-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
+            width: 34px; height: 34px; border-radius: 50%;
             background: linear-gradient(135deg, var(--accent-red), var(--accent-gold));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px; color: white; flex-shrink: 0;
         }
-
-        .user-details h6 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .user-details small {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-
+        .user-details { overflow: hidden; }
+        .user-details h6 { margin: 0; font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-details small { color: var(--text-muted); font-size: 11px; }
         .btn-logout {
-            width: 100%;
-            background: transparent;
-            border: 1px solid rgba(220, 38, 38, 0.4);
-            color: var(--accent-red);
-            padding: 0.75rem;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            width: 100%; background: transparent; font-family: inherit;
+            border: 1px solid var(--border-red); color: var(--accent-red);
+            padding: 0.55rem; border-radius: var(--radius-sm); font-weight: 600;
+            font-size: 13px; cursor: pointer; transition: all 0.25s;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
         }
+        .btn-logout:hover { background: var(--accent-red); color: white; border-color: var(--accent-red); }
+        .btn-logout .material-icons { font-size: 16px; }
 
-        .btn-logout:hover {
-            background: var(--accent-red);
-            color: white;
-            transform: translateY(-2px);
+        /* ══════════════════════════════════════
+           LAYOUT
+        ══════════════════════════════════════ */
+        .sidebar-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.6); z-index: 999;
         }
+        .sidebar-overlay.active { display: block; }
 
-        /* Main Content */
         .main-content {
-            margin-left: 280px;
-            padding: 2rem 3rem;
-            min-height: 100vh;
+            margin-left: var(--sidebar-w); min-height: 100vh;
+            padding: 2rem 2.25rem 3rem;
+            transition: margin-left 0.3s ease;
         }
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid var(--border-color);
+        /* ══════════════════════════════════════
+           TOP BAR
+        ══════════════════════════════════════ */
+        .topbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 2rem;
         }
-
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
         .page-title {
-            font-size: 32px;
-            font-weight: 700;
+            font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800;
             background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
-        .btn-primary-netpelis {
-            background: linear-gradient(135deg, var(--accent-red) 0%, #991b1b 100%);
-            border: none;
-            color: white;
-            padding: 0.875rem 2rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        /* ✅ FIX: botón usa data-bs-toggle para abrir modal de forma nativa */
+        .btn-new {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: linear-gradient(135deg, var(--accent-red), #991b1b);
+            color: white; border: none; font-family: inherit;
+            padding: 0.65rem 1.25rem; border-radius: var(--radius-sm);
+            font-weight: 700; font-size: 13.5px; cursor: pointer;
+            transition: all 0.25s; box-shadow: 0 4px 18px rgba(220,38,38,0.3);
         }
+        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(220,38,38,0.4); color: white; }
+        .btn-new .material-icons { font-size: 17px; }
 
-        .btn-primary-netpelis:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
-        }
-
-        /* Stats Grid */
+        /* ══════════════════════════════════════
+           STATS
+        ══════════════════════════════════════ */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem; margin-bottom: 1.75rem;
         }
-
         .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.75rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            background: var(--bg-card); border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card); padding: 1.375rem 1.25rem;
+            transition: transform 0.25s, box-shadow 0.25s;
+            position: relative; overflow: hidden;
         }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 4px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--accent-red), var(--accent-gold));
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .stat-card::after {
+            content: ''; position: absolute; inset: 0 auto 0 0;
+            width: 3px; border-radius: 99px 0 0 99px; opacity: 0;
+            transition: opacity 0.25s;
         }
+        .stat-card:hover::after { opacity: 1; }
+        .stat-card.c1::after { background: var(--accent-red); }
+        .stat-card.c2::after { background: var(--accent-gold); }
+        .stat-card.c3::after { background: #10b981; }
+        .stat-card.c4::after { background: #3b82f6; }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(220, 38, 38, 0.4);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        .stat-card:hover::before {
-            opacity: 1;
-        }
-
-        .stat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
+        .stat-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
         .stat-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(220, 38, 38, 0.1);
+            width: 42px; height: 42px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
         }
+        .stat-icon .material-icons { font-size: 21px; }
+        .stat-icon.red   { background: rgba(220,38,38,0.1);  } .stat-icon.red   .material-icons { color: var(--accent-red); }
+        .stat-icon.gold  { background: rgba(245,158,11,0.1); } .stat-icon.gold  .material-icons { color: var(--accent-gold); }
+        .stat-icon.green { background: rgba(16,185,129,0.1); } .stat-icon.green .material-icons { color: #10b981; }
+        .stat-icon.blue  { background: rgba(59,130,246,0.1); } .stat-icon.blue  .material-icons { color: #3b82f6; }
 
-        .stat-icon .material-icons {
-            font-size: 28px;
-            color: var(--accent-red);
+        .stat-badge {
+            font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 99px;
         }
-
-        .stat-change {
-            font-size: 12px;
-            font-weight: 600;
-            color: #10b981;
-            padding: 4px 10px;
-            background: rgba(16, 185, 129, 0.1);
-            border-radius: 20px;
-        }
-
-        .stat-change.negative {
-            color: var(--accent-red);
-            background: rgba(220, 38, 38, 0.1);
-        }
+        .stat-badge.up   { background: rgba(16,185,129,0.12); color: #10b981; }
+        .stat-badge.down { background: rgba(220,38,38,0.12);  color: var(--accent-red); }
 
         .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800;
+            line-height: 1; margin-bottom: 4px;
         }
+        .stat-label { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
 
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
+        /* ══════════════════════════════════════
+           CONTENT CARDS
+        ══════════════════════════════════════ */
+        .content-card {
+            background: var(--bg-card); border-radius: var(--radius-md);
+            box-shadow: var(--shadow-card); margin-bottom: 1.5rem; overflow: hidden;
         }
-
-        /* Content Sections */
-        .content-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 2rem;
+        .cc-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
         }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
+        .cc-title {
+            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px;
+            display: flex; align-items: center; gap: 8px;
         }
-
-        .section-title {
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .cc-title .material-icons { font-size: 18px; color: var(--accent-red); }
+        .btn-viewall {
+            font-size: 12px; font-weight: 600; color: var(--accent-gold);
+            background: var(--accent-gold-soft); border: 1px solid rgba(245,158,11,0.15);
+            border-radius: 99px; padding: 0.3rem 0.875rem; text-decoration: none;
+            transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px;
         }
+        .btn-viewall:hover { background: var(--accent-gold); color: #000; }
+        .btn-viewall .material-icons { font-size: 13px; }
 
-        .section-title .material-icons {
-            color: var(--accent-red);
-            font-size: 24px;
+        /* ── TABLE ── */
+        .table-wrap { overflow-x: auto; }
+        .tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .tbl thead th {
+            background: rgba(220,38,38,0.06); color: var(--text-muted);
+            font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em;
+            padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--border); white-space: nowrap;
         }
-
-        /* Table */
-        .table-container {
-            overflow-x: auto;
+        .tbl tbody td {
+            padding: 0.875rem 1.25rem; vertical-align: middle; font-size: 13.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
         }
+        .tbl tbody tr:last-child td { border-bottom: none; }
+        .tbl tbody tr { transition: background 0.18s; }
+        .tbl tbody tr:hover { background: rgba(220,38,38,0.04); }
 
-        .table-netpelis {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .table-netpelis thead th {
-            background: rgba(220, 38, 38, 0.1);
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 1rem;
-            border: none;
-        }
-
-        .table-netpelis thead th:first-child {
-            border-radius: 10px 0 0 0;
-        }
-
-        .table-netpelis thead th:last-child {
-            border-radius: 0 10px 0 0;
-        }
-
-        .table-netpelis tbody tr {
-            background: var(--bg-card);
-            transition: all 0.2s ease;
-        }
-
-        .table-netpelis tbody tr:hover {
-            background: rgba(220, 38, 38, 0.05);
-            transform: scale(1.01);
-        }
-
-        .table-netpelis tbody td {
-            padding: 1.25rem 1rem;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: middle;
-        }
-
-        .table-netpelis tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .movie-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
+        .movie-cell { display: flex; align-items: center; gap: 12px; }
         .movie-thumb {
-            width: 50px;
-            height: 75px;
-            border-radius: 8px;
-            object-fit: cover;
-            border: 2px solid var(--border-color);
-            background: var(--bg-secondary);
+            width: 38px; height: 56px; border-radius: 7px; object-fit: cover;
+            background: var(--bg-secondary); border: 1px solid var(--border); flex-shrink: 0;
         }
+        .movie-cell-title { font-weight: 600; font-size: 13.5px; margin-bottom: 2px; }
+        .movie-cell-sub { font-size: 11.5px; color: var(--text-muted); }
 
-        .movie-info h6 {
-            margin: 0;
-            font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 4px;
+        .badge-np {
+            padding: 4px 10px; border-radius: 7px;
+            font-weight: 700; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em;
         }
+        .badge-np.success { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-np.warning { background: rgba(245,158,11,0.15); color: var(--accent-gold); border: 1px solid rgba(245,158,11,0.25); }
+        .badge-np.danger  { background: rgba(220,38,38,0.15);  color: var(--accent-red);  border: 1px solid rgba(220,38,38,0.25); }
 
-        .movie-info small {
-            color: var(--text-muted);
-            font-size: 12px;
+        .tbl-btn {
+            background: transparent; border: none; color: var(--text-muted);
+            padding: 5px 7px; border-radius: 7px; cursor: pointer;
+            transition: all 0.18s; line-height: 1;
         }
+        .tbl-btn:hover { background: var(--accent-red-soft); color: var(--accent-red); }
+        .tbl-btn .material-icons { font-size: 17px; vertical-align: middle; }
 
-        .badge-netpelis {
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        /* ── ACTIVITY ── */
+        .activity-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1.25rem 1.5rem; }
+        .act-item {
+            background: var(--bg-secondary); border-radius: var(--radius-sm);
+            padding: 1rem; border-left: 2.5px solid var(--accent-red);
+            transition: transform 0.2s;
         }
+        .act-item:hover { transform: translateX(3px); }
+        .act-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+        .act-user { font-weight: 600; font-size: 13px; }
+        .act-date { font-size: 11px; color: var(--text-muted); }
+        .act-title { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+        .act-score { font-size: 11.5px; color: var(--accent-gold); font-weight: 600; }
+        .act-empty { text-align: center; padding: 2.5rem; color: var(--text-muted); grid-column: 1/-1; }
 
-        .badge-success {
-            background: rgba(16, 185, 129, 0.2);
-            color: #10b981;
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .badge-warning {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--accent-gold);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .badge-danger {
-            background: rgba(220, 38, 38, 0.2);
-            color: var(--accent-red);
-            border: 1px solid rgba(220, 38, 38, 0.3);
-        }
-
-        .btn-action {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 6px 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-action:hover {
-            background: rgba(220, 38, 38, 0.1);
-            color: var(--accent-red);
-        }
-
-        /* Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-red);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ef4444;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.active {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 1.5rem;
-            }
-        }
-
-        /* Modal Animations */
-        .modal.fade .modal-dialog {
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
-            transform: translateY(-20px);
-            opacity: 0;
-        }
-
-        .modal.show .modal-dialog {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
+        /* ══════════════════════════════════════
+           MODAL
+        ══════════════════════════════════════ */
         .modal-content {
-            animation: modalSlideIn 0.4s ease-out;
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius-lg) !important;
+            color: var(--text-primary);
+        }
+        .modal-header-np {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            background: rgba(220,38,38,0.06);
+            border-bottom: 1px solid var(--border);
+        }
+        .modal-header-np .modal-title-np {
+            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .modal-header-np .modal-title-np .material-icons { color: var(--accent-red); font-size: 18px; }
+        .btn-close-dark {
+            background: transparent; border: none; color: var(--text-muted);
+            cursor: pointer; padding: 0.3rem; border-radius: 6px;
+            transition: all 0.2s; line-height: 1;
+        }
+        .btn-close-dark:hover { background: var(--accent-red-soft); color: var(--text-primary); }
+        .btn-close-dark .material-icons { font-size: 18px; }
+
+        /* ✅ MODAL FIX: cadena flex completa para que footer siempre sea visible */
+        #modalPelicula .modal-dialog {
+            max-height: 90vh;
+            margin-top: 5vh;
+            margin-bottom: 5vh;
+            display: flex;
+            flex-direction: column;
+        }
+        #modalPelicula .modal-content {
+            display: flex !important;
+            flex-direction: column !important;
+            max-height: 88vh !important;
+            overflow: hidden !important;
+        }
+        #modalPelicula form {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+            overflow: hidden;
+            min-height: 0;
+        }
+        .modal-body-np {
+            padding: 1.5rem; background: var(--bg-card);
+            overflow-y: auto;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+        .modal-footer-np {
+            display: flex !important;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            flex-shrink: 0 !important;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
         }
 
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95) translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+        .form-label-np {
+            display: block; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.07em;
+            color: var(--text-muted); margin-bottom: 5px;
         }
-
-        /* Form Controls Focus */
-        .form-control:focus, .form-select:focus {
-            background: var(--bg-secondary) !important;
+        .form-ctrl {
+            width: 100%; background: var(--bg-secondary) !important;
+            border: 1px solid var(--border) !important; border-radius: var(--radius-sm) !important;
+            color: var(--text-primary) !important; padding: 0.575rem 0.875rem;
+            font-size: 13.5px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-ctrl:focus {
+            outline: none;
             border-color: var(--accent-red) !important;
-            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15) !important;
-            color: var(--text-primary) !important;
+            box-shadow: 0 0 0 3px rgba(220,38,38,0.14) !important;
         }
+        .form-ctrl option { background: #1a1a2e; }
 
-        /* Poster Preview Animation */
-        #posterPreview {
-            transition: all 0.3s ease;
-            animation: fadeIn 0.3s ease;
+        /* ✅ FIX: área de imagen — pointer-events correctos */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            background: var(--bg-secondary); border-radius: var(--radius-sm);
+            padding: 2rem 1rem; text-align: center; cursor: pointer;
+            transition: all 0.25s; position: relative;
         }
+        .upload-zone:hover { border-color: var(--accent-red); background: var(--accent-red-soft); }
+        .upload-zone .material-icons { font-size: 36px; color: var(--accent-red); display: block; margin-bottom: 0.5rem; }
+        .upload-zone p { font-size: 13px; color: var(--text-secondary); margin: 0; }
+        .upload-zone small { color: var(--text-muted); font-size: 11px; }
+        /* ✅ input oculto SIN pointer-events none — se activa por JS en click del zone */
+        #posterFile { display: none; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        .poster-preview-img {
+            width: 100%; border-radius: var(--radius-sm);
+            border: 1px solid var(--border); object-fit: cover; max-height: 260px;
         }
-
-        /* Button Hover Effects */
-        .btn:hover {
-            transform: translateY(-2px);
-            transition: all 0.2s ease;
+        .btn-remove-img {
+            background: rgba(220,38,38,0.1); border: 1px solid var(--border-red);
+            color: var(--accent-red); border-radius: 7px; padding: 0.35rem 0.75rem;
+            font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 4px; font-family: inherit; margin-top: 0.5rem;
         }
+        .btn-remove-img:hover { background: var(--accent-red); color: white; }
+        .btn-remove-img .material-icons { font-size: 14px; }
 
-        /* Loading State */
-        .btn:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none !important;
+        .genres-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem;
+            max-height: 180px; overflow-y: auto;
+            background: var(--bg-secondary); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); padding: 0.75rem;
         }
-
-        /* Toast Animation */
-        .toast {
-            animation: slideInRight 0.3s ease-out;
+        .genre-label {
+            display: flex; align-items: center; gap: 7px;
+            font-size: 12.5px; color: var(--text-secondary); cursor: pointer;
         }
+        .genre-label input[type="checkbox"] { accent-color: var(--accent-red); cursor: pointer; }
 
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
+        .btn-cancel {
+            background: transparent; border: 1px solid var(--border);
+            color: var(--text-muted); font-family: inherit;
+            padding: 0.575rem 1.25rem; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s;
         }
-
-        /* Input Placeholder */
-        .form-control::placeholder, .form-select::placeholder {
-            color: var(--text-muted);
-            opacity: 1;
+        .btn-cancel:hover { background: var(--bg-glass); color: var(--text-primary); }
+        .btn-save {
+            background: linear-gradient(135deg, var(--accent-red), #991b1b);
+            border: none; color: white; font-family: inherit;
+            padding: 0.575rem 1.375rem; border-radius: var(--radius-sm);
+            font-weight: 700; font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: all 0.2s; box-shadow: 0 4px 16px rgba(220,38,38,0.28);
         }
+        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(220,38,38,0.38); }
+        .btn-save .material-icons { font-size: 15px; }
 
-        /* Border Dashed for Upload Area */
-        .border-dashed {
-            border-style: dashed !important;
-            border-width: 2px !important;
-            transition: all 0.3s ease;
+        /* ── TOAST ── */
+        .toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
+        .toast-item {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: var(--radius-md); padding: 0.875rem 1.25rem;
+            display: flex; align-items: center; gap: 0.75rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5); min-width: 280px;
+            animation: slideUp 0.3s ease;
         }
+        .toast-item .material-icons { font-size: 20px; }
+        .toast-item.success .material-icons { color: #10b981; }
+        .toast-item.error   .material-icons { color: var(--accent-red); }
+        .toast-item.info    .material-icons { color: #3b82f6; }
+        .toast-msg { font-size: 13.5px; font-weight: 500; }
 
-        .border-dashed:hover {
-            border-color: var(--accent-red) !important;
-            background: rgba(220, 38, 38, 0.05) !important;
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE
+        ══════════════════════════════════════ */
+        @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 1024px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content { margin-left: 0; }
+            .menu-toggle { display: flex; align-items: center; }
+            .activity-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .main-content { padding: 1.25rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+            .topbar { flex-wrap: wrap; gap: 0.75rem; }
+        }
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-<!-- Sidebar -->
-<nav class="sidebar">
-    <div class="brand-logo">
-        <span class="material-icons">movie</span>
-        <span>NETPELIS</span>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <a href="/admin/dashboard" class="brand-logo">
+            <span class="logo-icon"><span class="material-icons">movie</span></span>
+            <span class="logo-text">NET<span>PELIS</span></span>
+        </a>
+        <button class="menu-toggle" id="menuClose">
+            <span class="material-icons">close</span>
+        </button>
     </div>
 
-    <div class="nav-section">
-        <div class="nav-section-title">Principal</div>
+    <div class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
         <a href="/admin/dashboard" class="nav-link active">
-            <span class="material-icons">dashboard</span>
-            Dashboard
+            <span class="material-icons">dashboard</span>Dashboard
         </a>
         <a href="/admin/peliculas" class="nav-link">
-            <span class="material-icons">movie</span>
-            Películas
-            <span class="badge" th:text="${totalPeliculas ?: 0}">0</span>
+            <span class="material-icons">movie</span>Películas
+            <span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span>
         </a>
         <a href="/admin/usuarios" class="nav-link">
-            <span class="material-icons">people</span>
-            Usuarios
-            <span class="badge" th:text="${totalUsuarios ?: 0}">0</span>
+            <span class="material-icons">people</span>Usuarios
+            <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
         </a>
-    </div>
 
-    <div class="nav-section">
-        <div class="nav-section-title">Contenido</div>
+        <span class="nav-section-label">Contenido</span>
         <a href="/admin/revisiones" class="nav-link">
-            <span class="material-icons">rate_review</span>
-            Reseñas
-            <span class="badge" th:text="${totalResenas ?: 0}">0</span>
+            <span class="material-icons">rate_review</span>Reseñas
+            <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
         </a>
         <a href="/admin/comentarios" class="nav-link">
-            <span class="material-icons">chat</span>
-            Comentarios
+            <span class="material-icons">chat</span>Comentarios
         </a>
         <a href="/admin/generos" class="nav-link">
-            <span class="material-icons">category</span>
-            Géneros
+            <span class="material-icons">category</span>Géneros
         </a>
-    </div>
 
-    <div class="nav-section">
-        <div class="nav-section-title">Sistema</div>
+        <div class="sidebar-divider"></div>
+        <span class="nav-section-label">Sistema</span>
         <a href="/admin/configuracion" class="nav-link">
-            <span class="material-icons">settings</span>
-            Configuración
+            <span class="material-icons">settings</span>Configuración
         </a>
         <a href="/admin/logs" class="nav-link">
-            <span class="material-icons">receipt_long</span>
-            Logs
+            <span class="material-icons">receipt_long</span>Logs
         </a>
     </div>
 
-    <div class="user-profile">
-        <div class="user-info">
+    <div class="sidebar-footer">
+        <div class="user-info-row">
             <div class="user-avatar">A</div>
             <div class="user-details">
                 <h6>Administrador</h6>
@@ -664,150 +573,121 @@
         </div>
         <form th:action="@{/auth/logout}" method="post">
             <button type="submit" class="btn-logout">
-                <span class="material-icons">logout</span>
-                Cerrar Sesión
+                <span class="material-icons">logout</span>Cerrar Sesión
             </button>
         </form>
     </div>
 </nav>
 
-<!-- Main Content -->
+<!-- ══ MAIN ══ -->
 <main class="main-content">
-    <!-- Page Header -->
-    <div class="page-header">
-        <h1 class="page-title">Panel de Control</h1>
-        <a href="javascript:abrirModalNueva()" class="btn btn-primary-netpelis" id="btnNuevaPelicula">
-            <span class="material-icons">add</span>
-            Nueva Película
-        </a>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle d-lg-none" id="menuOpen">
+                <span class="material-icons">menu</span>
+            </button>
+            <h1 class="page-title">Panel de Control</h1>
+        </div>
+        <!--
+          ✅ FIX MODAL: data-bs-toggle="modal" + data-bs-target es el método más robusto
+          en Thymeleaf/Spring porque no depende de JS ejecutándose después del renderizado.
+        -->
+        <button type="button" class="btn-new"
+                data-bs-toggle="modal" data-bs-target="#modalPelicula"
+                onclick="prepararModalNueva()">
+            <span class="material-icons">add</span>Nueva Película
+        </button>
     </div>
 
-    <!-- Stats Grid -->
+    <!-- Stats -->
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon">
-                    <span class="material-icons">movie</span>
-                </div>
-                <span class="stat-change">+12%</span>
+        <div class="stat-card c1">
+            <div class="stat-top">
+                <div class="stat-icon red"><span class="material-icons">movie</span></div>
+                <span class="stat-badge up">+12%</span>
             </div>
             <div class="stat-value" th:text="${totalPeliculas ?: 0}">0</div>
             <div class="stat-label">Total Películas</div>
         </div>
-
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1);">
-                    <span class="material-icons" style="color: var(--accent-gold);">people</span>
-                </div>
-                <span class="stat-change">+8%</span>
+        <div class="stat-card c2">
+            <div class="stat-top">
+                <div class="stat-icon gold"><span class="material-icons">people</span></div>
+                <span class="stat-badge up">+8%</span>
             </div>
             <div class="stat-value" th:text="${totalUsuarios ?: 0}">0</div>
             <div class="stat-label">Usuarios Activos</div>
         </div>
-
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1);">
-                    <span class="material-icons" style="color: #10b981;">rate_review</span>
-                </div>
-                <span class="stat-change">+24%</span>
+        <div class="stat-card c3">
+            <div class="stat-top">
+                <div class="stat-icon green"><span class="material-icons">rate_review</span></div>
+                <span class="stat-badge up">+24%</span>
             </div>
             <div class="stat-value" th:text="${totalResenas ?: 0}">0</div>
             <div class="stat-label">Reseñas este mes</div>
         </div>
-
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1);">
-                    <span class="material-icons" style="color: #3b82f6;">favorite</span>
-                </div>
-                <span class="stat-change negative">-3%</span>
+        <div class="stat-card c4">
+            <div class="stat-top">
+                <div class="stat-icon blue"><span class="material-icons">favorite</span></div>
+                <span class="stat-badge down">-3%</span>
             </div>
             <div class="stat-value" th:text="${totalFavoritos ?: 0}">0</div>
             <div class="stat-label">Favoritos totales</div>
         </div>
     </div>
 
-    <!-- Recent Movies -->
-    <div class="content-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <span class="material-icons">movie</span>
-                Películas Recientes
-            </h2>
-            <a href="/admin/peliculas" class="btn btn-outline-light btn-sm">
-                Ver todas
-            </a>
+    <!-- Películas Recientes -->
+    <div class="content-card">
+        <div class="cc-header">
+            <span class="cc-title"><span class="material-icons">movie</span>Películas Recientes</span>
+            <a href="/admin/peliculas" class="btn-viewall">Ver todas <span class="material-icons">arrow_forward</span></a>
         </div>
-
-        <div class="table-container">
-            <table class="table-netpelis">
+        <div class="table-wrap">
+            <table class="tbl">
                 <thead>
                 <tr>
-                    <th>Película</th>
-                    <th>Año</th>
-                    <th>Género</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
+                    <th>Película</th><th>Año</th><th>Género</th><th>Estado</th><th>Fecha</th><th>Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="pelicula : ${peliculasRecientes}" th:if="${peliculasRecientes != null and !#lists.isEmpty(peliculasRecientes)}">
                     <td>
                         <div class="movie-cell">
-                            <!-- ✅ CORRECCIÓN CRÍTICA: Imagen con fallback seguro -->
-                            <img th:src="${pelicula.posterUrl != null and !pelicula.posterUrl.isEmpty() ? pelicula.posterUrl : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2275%22%3E%3Crect fill=%22%23dc2626%22 width=%2250%22 height=%2275%22/%3E%3C/svg%3E'}"
-                                 class="movie-thumb"
-                                 th:alt="${pelicula.titulo}"
-                                 onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2250%22 height=%2275%22%3E%3Crect fill=%22%231a1a1a%22 width=%2250%22 height=%2275%22/%3E%3Ctext x=%2225%22 y=%2240%22 fill=%22%23666%22 font-size=%228%22 text-anchor=%22middle%22%3ENo+Img%3C/text%3E%3C/svg%3E';">
-                            <div class="movie-info">
-                                <h6 th:text="${pelicula.titulo}">Título</h6>
-                                <small th:text="${pelicula.director != null ? pelicula.director : 'Sin director'}">Director</small>
+                            <img th:src="${pelicula.posterUrl != null and !pelicula.posterUrl.isEmpty() ? pelicula.posterUrl : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 38 56%22%3E%3Crect fill=%22%231a1a2e%22 width=%2238%22 height=%2256%22/%3E%3C/svg%3E'}"
+                                 class="movie-thumb" th:alt="${pelicula.titulo}"
+                                 onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 38 56%22%3E%3Crect fill=%22%231a1a2e%22 width=%2238%22 height=%2256%22/%3E%3C/svg%3E'">
+                            <div>
+                                <div class="movie-cell-title" th:text="${pelicula.titulo}">Título</div>
+                                <div class="movie-cell-sub" th:text="${pelicula.director != null ? pelicula.director : 'Sin director'}">Director</div>
                             </div>
                         </div>
                     </td>
                     <td th:text="${pelicula.anioLanzamiento}">2024</td>
                     <td>
-                        <!-- Mostrar primer género -->
-                        <span th:each="genero, iterStat : ${pelicula.generos}"
-                              th:if="${iterStat.index == 0}"
-                              th:text="${genero.nombre}"
-                              class="badge badge-netpelis badge-warning">
-                        </span>
-                        <!-- Mostrar contador de géneros adicionales -->
+                        <span th:each="genero, s : ${pelicula.generos}" th:if="${s.index == 0}"
+                              th:text="${genero.nombre}" class="badge-np warning"></span>
                         <span th:if="${#lists.size(pelicula.generos) > 1}"
-                              th:text="'+' + ${#lists.size(pelicula.generos) - 1}"
-                              class="badge badge-netpelis badge-warning"
-                              style="margin-left: 4px;">
-                        </span>
+                              th:text="'+' + ${#lists.size(pelicula.generos) - 1}" class="badge-np warning" style="margin-left:3px;"></span>
                     </td>
                     <td>
-                        <span th:class="'badge badge-netpelis ' +
-                            (${pelicula.estado.name == 'PUBLICADO'} ? 'badge-success' :
-                            (${pelicula.estado.name == 'BORRADOR'} ? 'badge-warning' : 'badge-danger'))"
-                              th:text="${pelicula.estado.name}">
-                        </span>
+                        <span th:class="'badge-np ' + (${pelicula.estado.name == 'PUBLICADO'} ? 'success' : (${pelicula.estado.name == 'BORRADOR'} ? 'warning' : 'danger'))"
+                              th:text="${pelicula.estado.name}"></span>
                     </td>
                     <td th:text="${#temporals.format(pelicula.fechaCreacion, 'dd/MM/yyyy')}">01/01/2024</td>
                     <td>
-                        <button class="btn-action" th:onclick="'editarPelicula(' + ${pelicula.id} + ')'">
-                            <span class="material-icons" style="font-size: 18px;">edit</span>
+                        <button class="tbl-btn" th:onclick="'editarPelicula(' + ${pelicula.id} + ')'">
+                            <span class="material-icons">edit</span>
                         </button>
-                        <button class="btn-action" th:onclick="'eliminarPelicula(' + ${pelicula.id} + ')'">
-                            <span class="material-icons" style="font-size: 18px; color: var(--accent-red);">delete</span>
+                        <button class="tbl-btn" th:onclick="'eliminarPelicula(' + ${pelicula.id} + ')'">
+                            <span class="material-icons" style="color:var(--accent-red)">delete</span>
                         </button>
                     </td>
                 </tr>
                 <tr th:if="${peliculasRecientes == null or #lists.isEmpty(peliculasRecientes)}">
-                    <td colspan="6" class="text-center py-4 text-muted">
-                        <span class="material-icons" style="font-size: 48px; opacity: 0.3;">movie</span>
-                        <p class="mt-2">No hay películas registradas</p>
-                        <a href="javascript:abrirModalNueva()" class="btn btn-primary-netpelis btn-sm mt-2">
-                            <span class="material-icons" style="font-size: 16px;">add</span>
-                            Agregar primera película
-                        </a>
+                    <td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);">
+                        <span class="material-icons" style="font-size:40px;opacity:.25;display:block;margin-bottom:.75rem;">movie</span>
+                        No hay películas registradas
                     </td>
                 </tr>
                 </tbody>
@@ -815,176 +695,137 @@
         </div>
     </div>
 
-    <!-- Recent Activity -->
-    <div class="content-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <span class="material-icons">activity</span>
-                Actividad Reciente
-            </h2>
+    <!-- Actividad Reciente -->
+    <div class="content-card">
+        <div class="cc-header">
+            <span class="cc-title"><span class="material-icons">rate_review</span>Actividad Reciente</span>
         </div>
-        <div class="row">
-            <div class="col-md-6 mb-3" th:each="resena : ${resenasRecientes}" th:if="${resenasRecientes != null and !#lists.isEmpty(resenasRecientes)}">
-                <div style="background: var(--bg-sidebar); padding: 1rem; border-radius: 12px; border-left: 3px solid var(--accent-red);">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <strong th:text="${resena.usuario.nombreCompleto}">Usuario</strong>
-                        <small class="text-muted" th:text="${#temporals.format(resena.fechaCreacion, 'dd/MM HH:mm')}">Fecha</small>
-                    </div>
-                    <p class="mb-1" style="font-size: 13px;" th:text="${resena.titulo}">Título de reseña</p>
-                    <small class="text-muted" th:text="'Puntuación: ' + ${resena.puntuacion} + '/10'">Puntuación</small>
+        <div class="activity-grid">
+            <div class="act-item" th:each="resena : ${resenasRecientes}" th:if="${resenasRecientes != null and !#lists.isEmpty(resenasRecientes)}">
+                <div class="act-top">
+                    <span class="act-user" th:text="${resena.usuario.nombreCompleto}">Usuario</span>
+                    <span class="act-date" th:text="${#temporals.format(resena.fechaCreacion, 'dd/MM HH:mm')}">Fecha</span>
                 </div>
+                <div class="act-title" th:text="${resena.titulo}">Título de reseña</div>
+                <div class="act-score" th:text="'★ ' + ${resena.puntuacion} + '/10'">★ 8/10</div>
             </div>
-            <div class="col-12" th:if="${resenasRecientes == null or #lists.isEmpty(resenasRecientes)}">
-                <p class="text-muted text-center mb-0">No hay actividad reciente</p>
+            <div class="act-empty" th:if="${resenasRecientes == null or #lists.isEmpty(resenasRecientes)}">
+                No hay actividad reciente
             </div>
         </div>
     </div>
+
 </main>
 
-<!-- ============================================
-     🎬 MODAL: AGREGAR/EDITAR PELÍCULA
-     ============================================ -->
+<!-- ══ MODAL PELÍCULA ══ -->
 <div class="modal fade" id="modalPelicula" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content" style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px;">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header" style="border-bottom: 1px solid var(--border-color); padding: 1.5rem 2rem;">
-                <h5 class="modal-title" id="modalTitle" style="font-weight: 700; font-size: 20px;">
-                    <span class="material-icons" style="vertical-align: middle; color: var(--accent-red); margin-right: 8px;">movie</span>
-                    <span id="modalActionText">Nueva Película</span>
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+            <div class="modal-header-np">
+                <div class="modal-title-np">
+                    <span class="material-icons">movie</span>
+                    <span id="modalTitleText">Nueva Película</span>
+                </div>
+                <button type="button" class="btn-close-dark" data-bs-dismiss="modal">
+                    <span class="material-icons">close</span>
+                </button>
             </div>
 
-            <!-- Modal Body -->
             <form id="formPelicula" th:action="@{/admin/peliculas/guardar}" method="post" enctype="multipart/form-data">
-                <div class="modal-body" style="padding: 2rem;">
+                <div class="modal-body-np">
                     <input type="hidden" id="peliculaId" name="peliculaId">
+                    <div class="row g-3">
 
-                    <div class="row g-4">
-                        <!-- Columna Izquierda: Datos Principales -->
+                        <!-- Col izquierda -->
                         <div class="col-lg-8">
-                            <!-- Título -->
                             <div class="mb-3">
-                                <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">
-                                    Título <span style="color: var(--accent-red);">*</span>
-                                </label>
-                                <input type="text" class="form-control" id="titulo" name="titulo"
-                                       style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                       placeholder="Nombre de la película" required>
+                                <label class="form-label-np">Título <span style="color:var(--accent-red)">*</span></label>
+                                <input type="text" class="form-ctrl" id="titulo" name="titulo" placeholder="Nombre de la película" required>
                             </div>
-
-                            <!-- Sinopsis -->
                             <div class="mb-3">
-                                <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">Sinopsis</label>
-                                <textarea class="form-control" id="sinopsis" name="sinopsis" rows="4"
-                                          style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary); resize: vertical;"
-                                          placeholder="Describe la trama de la película..."></textarea>
+                                <label class="form-label-np">Sinopsis</label>
+                                <textarea class="form-ctrl" id="sinopsis" name="sinopsis" rows="4" placeholder="Describe la trama..." style="resize:vertical;"></textarea>
                             </div>
-
-                            <!-- Fila: Año y Duración -->
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">
-                                        Año de Lanzamiento <span style="color: var(--accent-red);">*</span>
-                                    </label>
-                                    <input type="number" class="form-control" id="anioLanzamiento" name="anioLanzamiento"
-                                           style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                           placeholder="2025" min="1900" max="2030" required>
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label-np">Año <span style="color:var(--accent-red)">*</span></label>
+                                    <input type="number" class="form-ctrl" id="anioLanzamiento" name="anioLanzamiento" placeholder="2025" min="1900" max="2030" required>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">Duración (minutos)</label>
-                                    <input type="number" class="form-control" id="duracionMinutos" name="duracionMinutos"
-                                           style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                           placeholder="120" min="1">
+                                <div class="col-6">
+                                    <label class="form-label-np">Duración (min)</label>
+                                    <input type="number" class="form-ctrl" id="duracionMinutos" name="duracionMinutos" placeholder="120" min="1">
                                 </div>
                             </div>
-
-                            <!-- Fila: Clasificación y Director -->
-                            <div class="row g-3 mt-2">
-                                <div class="col-md-6">
-                                    <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">Clasificación</label>
-                                    <input type="text" class="form-control" id="clasificacion" name="clasificacion"
-                                           style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                           placeholder="PG-13, R, G...">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label-np">Clasificación</label>
+                                    <input type="text" class="form-ctrl" id="clasificacion" name="clasificacion" placeholder="PG-13, R, G...">
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">Director</label>
-                                    <input type="text" class="form-control" id="director" name="director"
-                                           style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                           placeholder="Nombre del director">
+                                <div class="col-6">
+                                    <label class="form-label-np">Director</label>
+                                    <input type="text" class="form-ctrl" id="director" name="director" placeholder="Nombre del director">
                                 </div>
                             </div>
-
-                            <!-- Trailer URL -->
-                            <div class="mb-3 mt-3">
-                                <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">URL del Trailer</label>
-                                <input type="url" class="form-control" id="trailerUrl" name="trailerUrl"
-                                       style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                       placeholder="https://youtube.com/watch?v=...">
-                            </div>
-
-                            <!-- Estado -->
                             <div class="mb-3">
-                                <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">Estado</label>
-                                <select class="form-select" id="estado" name="estado"
-                                        style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);">
+                                <label class="form-label-np">URL Trailer</label>
+                                <input type="url" class="form-ctrl" id="trailerUrl" name="trailerUrl" placeholder="https://youtube.com/watch?v=...">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label-np">Estado</label>
+                                <select class="form-ctrl" id="estado" name="estado">
                                     <option value="PUBLICADO">Publicado</option>
                                     <option value="BORRADOR">Borrador</option>
                                     <option value="OCULTO">Oculto</option>
                                 </select>
                             </div>
+                            <div class="mb-0">
+                                <label class="form-label-np">Géneros</label>
+                                <div class="genres-grid">
+                                    <label class="genre-label" th:each="genero : ${todosLosGeneros}">
+                                        <input type="checkbox" name="generos" th:value="${genero.id}">
+                                        <span th:text="${genero.nombre}">Género</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- Columna Derecha: Poster -->
+                        <!-- Col derecha — poster -->
                         <div class="col-lg-4">
-                            <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">Portada</label>
+                            <label class="form-label-np">Portada</label>
 
-                            <!-- Upload Area -->
-                            <div class="border border-dashed rounded-3 p-4 text-center mb-3"
-                                 style="border-color: var(--border-color) !important; background: var(--bg-secondary); cursor: pointer;"
-                                 onclick="document.getElementById('posterFile').click()">
-                                <span class="material-icons" style="font-size: 40px; color: var(--accent-red); margin-bottom: 10px;">add_photo_alternate</span>
-                                <p class="mb-1" style="color: var(--text-primary); font-weight: 500;">Subir imagen</p>
-                                <small style="color: var(--text-muted);">JPG, PNG - Máx 10MB</small>
-                                <input type="file" id="posterFile" name="posterFile" accept="image/*"
-                                       style="display: none;" onchange="previewPoster(this)">
+                            <!--
+                              ✅ FIX IMAGEN: el click del zone dispara el input file via JS.
+                              input#posterFile está oculto con display:none (no pointer-events:none)
+                              para que el FileReader pueda leerlo normalmente.
+                            -->
+                            <div class="upload-zone" id="uploadZone">
+                                <span class="material-icons">add_photo_alternate</span>
+                                <p>Haz clic para subir imagen</p>
+                                <small>JPG, PNG — Máx 10MB</small>
                             </div>
+                            <input type="file" id="posterFile" name="posterFile" accept="image/*">
 
-                            <!-- Poster Preview -->
-                            <div id="posterPreviewContainer" class="text-center" style="display: none;">
-                                <img id="posterPreview" class="rounded-3 mb-2"
-                                     style="max-width: 100%; height: auto; border: 2px solid var(--border-color); box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-                                <button type="button" class="btn btn-sm btn-outline-danger" onclick="removePoster()">
-                                    <span class="material-icons" style="font-size: 16px; vertical-align: middle;">close</span>
-                                    Eliminar
+                            <div id="posterPreviewContainer" style="display:none; margin-top:0.75rem;">
+                                <img id="posterPreview" class="poster-preview-img" alt="Preview">
+                                <button type="button" class="btn-remove-img" onclick="removePoster()">
+                                    <span class="material-icons">close</span>Eliminar
                                 </button>
                             </div>
 
-                            <!-- URL Alternativa -->
-                            <div class="mt-4">
-                                <label class="form-label" style="color: var(--text-secondary); font-weight: 500;">O usar URL de imagen</label>
-                                <input type="url" class="form-control" id="posterUrl" name="posterUrl"
-                                       style="background: var(--bg-secondary); border-color: var(--border-color); color: var(--text-primary);"
-                                       placeholder="https://.../poster.jpg" onchange="previewFromUrl(this.value)">
-                                <small style="color: var(--text-muted); display: block; margin-top: 5px;">
-                                    Ej: https://image.tmdb.org/t/p/w500/xxx.jpg
-                                </small>
+                            <div style="margin-top:1rem;">
+                                <label class="form-label-np">O pega una URL de imagen</label>
+                                <input type="url" class="form-ctrl" id="posterUrl" name="posterUrl" placeholder="https://.../poster.jpg">
+                                <small style="color:var(--text-muted);font-size:11px;display:block;margin-top:4px;">Ej: https://image.tmdb.org/t/p/w500/xxx.jpg</small>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Modal Footer -->
-                <div class="modal-footer" style="border-top: 1px solid var(--border-color); padding: 1.5rem 2rem;">
-                    <button type="button" class="btn" data-bs-dismiss="modal"
-                            style="background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color);">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn" id="btnGuardar"
-                            style="background: linear-gradient(135deg, var(--accent-red) 0%, #991b1b 100%); color: white; border: none; font-weight: 600;">
-                        <span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 6px;">save</span>
+                <div class="modal-footer-np">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-save" id="btnGuardar">
+                        <span class="material-icons">save</span>
                         <span id="btnGuardarText">Guardar Película</span>
                     </button>
                 </div>
@@ -993,238 +834,134 @@
     </div>
 </div>
 
-<!-- Toast para notificaciones -->
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
-    <div id="toastNotificacion" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true"
-         style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px;">
-        <div class="toast-header" style="background: var(--bg-secondary); border-bottom: 1px solid var(--border-color);">
-            <span class="material-icons me-2" id="toastIcon" style="color: var(--accent-gold);">check_circle</span>
-            <strong class="me-auto" id="toastTitle">Éxito</strong>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body" id="toastMessage" style="color: var(--text-primary);">
-            Operación completada exitosamente.
-        </div>
-    </div>
-</div>
+<!-- Toast -->
+<div class="toast-wrap" id="toastWrap"></div>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- JavaScript Optimizado -->
 <script>
-    // ============================================
-    // 🎬 FUNCIONES DEL MODAL DE PELÍCULAS
-    // ============================================
+    /* ── Sidebar ── */
+    const sidebar  = document.getElementById('sidebar');
+    const overlay  = document.getElementById('sidebarOverlay');
+    const menuOpen = document.getElementById('menuOpen');
+    const menuClose= document.getElementById('menuClose');
+    function openSidebar()  { sidebar.classList.add('active');    overlay.classList.add('active');    document.body.style.overflow='hidden'; }
+    function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
+    menuOpen?.addEventListener('click', openSidebar);
+    menuClose?.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
 
-    // ✅ CORRECCIÓN: Manejo seguro de errores de imagen
-    function handleImageError(img) {
-        // Evitar bucle infinito
-        if (img.dataset.errorHandled === 'true') return;
-
-        img.dataset.errorHandled = 'true';
-
-        // Placeholder simple que SIEMPRE funciona (sin texto para evitar problemas de encoding)
-        const placeholder = 'https://via.placeholder.com/50x75/dc2626/ffffff';
-
-        if (img.src !== placeholder) {
-            img.src = placeholder;
-        } else {
-            // Si incluso el placeholder falla, usar data URI
-            img.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="75"%3E%3Crect fill="%231a1a1a" width="50" height="75"/%3E%3Ctext x="25" y="40" fill="%23666" font-size="10" text-anchor="middle"%3ENo+Img%3C/text%3E%3C/svg%3E';
-        }
+    /* ── Modal helpers ── */
+    function prepararModalNueva() {
+        document.getElementById('formPelicula').reset();
+        document.getElementById('peliculaId').value = '';
+        document.getElementById('modalTitleText').textContent = 'Nueva Película';
+        document.getElementById('btnGuardarText').textContent  = 'Guardar Película';
+        removePoster();
+        document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = false);
     }
 
-    // Preview de imagen al seleccionar archivo
-    function previewPoster(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById('posterPreview');
-                const container = document.getElementById('posterPreviewContainer');
-                preview.src = e.target.result;
-                container.style.display = 'block';
-                document.querySelector('.border-dashed').style.display = 'none';
-                document.getElementById('posterUrl').value = '';
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
+    /* ── ✅ FIX IMAGEN: click en zone → dispara input file ── */
+    document.getElementById('uploadZone').addEventListener('click', function() {
+        document.getElementById('posterFile').click();
+    });
 
-    // Preview desde URL
-    function previewFromUrl(url) {
-        if (url && url.trim() !== '') {
-            const preview = document.getElementById('posterPreview');
-            const container = document.getElementById('posterPreviewContainer');
-            preview.src = url;
-            preview.onerror = function() {
-                showToast('Error', 'La URL de la imagen no es válida', 'error');
-            };
-            container.style.display = 'block';
-            document.querySelector('.border-dashed').style.display = 'none';
+    document.getElementById('posterFile').addEventListener('change', function() {
+        if (!this.files || !this.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => showPreview(e.target.result);
+        reader.readAsDataURL(this.files[0]);
+        document.getElementById('posterUrl').value = '';
+    });
+
+    document.getElementById('posterUrl').addEventListener('blur', function() {
+        if (this.value.trim()) {
+            showPreview(this.value.trim());
             document.getElementById('posterFile').value = '';
         }
+    });
+
+    function showPreview(src) {
+        document.getElementById('posterPreview').src = src;
+        document.getElementById('posterPreviewContainer').style.display = 'block';
+        document.getElementById('uploadZone').style.display = 'none';
     }
 
-    // Eliminar poster seleccionado
     function removePoster() {
-        const preview = document.getElementById('posterPreview');
-        const container = document.getElementById('posterPreviewContainer');
-        const uploadArea = document.querySelector('.border-dashed');
-        preview.src = '';
-        container.style.display = 'none';
-        uploadArea.style.display = 'block';
+        document.getElementById('posterPreview').src = '';
+        document.getElementById('posterPreviewContainer').style.display = 'none';
+        document.getElementById('uploadZone').style.display = 'block';
         document.getElementById('posterFile').value = '';
-        document.getElementById('posterUrl').value = '';
+        document.getElementById('posterUrl').value  = '';
     }
 
-    // Abrir modal para nueva película
-    function abrirModalNueva() {
-        document.getElementById('modalTitle').innerHTML =
-            '<span class="material-icons" style="vertical-align: middle; color: var(--accent-red); margin-right: 8px;">movie</span>Nueva Película';
-        document.getElementById('modalActionText').textContent = 'Nueva Película';
-        document.getElementById('btnGuardarText').textContent = 'Guardar Película';
-        document.getElementById('peliculaId').value = '';
-        document.getElementById('formPelicula').reset();
-        removePoster();
-        const modal = new bootstrap.Modal(document.getElementById('modalPelicula'));
-        modal.show();
-    }
-
-    // Abrir modal para editar película (vía API)
+    /* ── Editar ── */
     function editarPelicula(id) {
         fetch('/admin/api/peliculas/' + id)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('modalTitle').innerHTML =
-                    '<span class="material-icons" style="vertical-align: middle; color: var(--accent-red); margin-right: 8px;">edit</span>Editar Película';
-                document.getElementById('modalActionText').textContent = 'Editar Película';
-                document.getElementById('btnGuardarText').textContent = 'Actualizar';
-                document.getElementById('peliculaId').value = data.id;
-                document.getElementById('titulo').value = data.titulo || '';
-                document.getElementById('sinopsis').value = data.sinopsis || '';
-                document.getElementById('anioLanzamiento').value = data.anioLanzamiento || '';
-                document.getElementById('duracionMinutos').value = data.duracionMinutos || '';
-                document.getElementById('clasificacion').value = data.clasificacion || '';
-                document.getElementById('director').value = data.director || '';
-                document.getElementById('trailerUrl').value = data.trailerUrl || '';
-                document.getElementById('estado').value = data.estado || 'PUBLICADO';
-                if (data.posterUrl) {
-                    document.getElementById('posterUrl').value = data.posterUrl;
-                    previewFromUrl(data.posterUrl);
+            .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(d => {
+                prepararModalNueva();
+                document.getElementById('modalTitleText').textContent = 'Editar Película';
+                document.getElementById('btnGuardarText').textContent  = 'Actualizar';
+                document.getElementById('peliculaId').value        = d.id;
+                document.getElementById('titulo').value            = d.titulo           || '';
+                document.getElementById('sinopsis').value          = d.sinopsis         || '';
+                document.getElementById('anioLanzamiento').value   = d.anioLanzamiento  || '';
+                document.getElementById('duracionMinutos').value   = d.duracionMinutos  || '';
+                document.getElementById('clasificacion').value     = d.clasificacion    || '';
+                document.getElementById('director').value          = d.director         || '';
+                document.getElementById('trailerUrl').value        = d.trailerUrl       || '';
+                document.getElementById('estado').value            = d.estado           || 'PUBLICADO';
+                if (d.posterUrl) { document.getElementById('posterUrl').value = d.posterUrl; showPreview(d.posterUrl); }
+                if (d.generos) {
+                    const ids = d.generos.map(g => g.id);
+                    document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = ids.includes(parseInt(c.value)));
                 }
-                const modal = new bootstrap.Modal(document.getElementById('modalPelicula'));
-                modal.show();
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('modalPelicula')).show();
             })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Error', 'No se pudo cargar la película', 'error');
-            });
+            .catch(e => showToast('No se pudo cargar la película: ' + e.message, 'error'));
     }
 
-    // Eliminar película con confirmación
+    /* ── Eliminar ── */
     function eliminarPelicula(id) {
-        if (confirm('¿Estás seguro de eliminar esta película? Esta acción no se puede deshacer.')) {
-            fetch('/admin/peliculas/' + id + '/eliminar', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(response => {
-                if (response.ok) {
-                    showToast('Éxito', 'Película eliminada correctamente', 'success');
-                    setTimeout(() => location.reload(), 1500);
+        if (!confirm('¿Eliminar esta película? Esta acción no se puede deshacer.')) return;
+        fetch('/admin/peliculas/' + id + '/eliminar', { method: 'POST' })
+            .then(r => r.ok ? (showToast('Película eliminada', 'success'), setTimeout(() => location.reload(), 1400)) : showToast('No se pudo eliminar', 'error'))
+            .catch(() => showToast('Error de conexión', 'error'));
+    }
+
+    /* ── Formulario ── */
+    document.getElementById('formPelicula').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnGuardar');
+        btn.disabled = true;
+        document.getElementById('btnGuardarText').textContent = 'Guardando...';
+        fetch(this.action, { method: 'POST', body: new FormData(this) })
+            .then(r => {
+                if (r.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalPelicula'))?.hide();
+                    showToast('Película guardada correctamente', 'success');
+                    setTimeout(() => location.reload(), 1400);
                 } else {
-                    showToast('Error', 'No se pudo eliminar la película', 'error');
+                    return r.text().then(t => { throw new Error(t); });
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                showToast('Error', 'Error de conexión', 'error');
+            .catch(e => {
+                showToast('Error: ' + e.message, 'error');
+                btn.disabled = false;
+                document.getElementById('btnGuardarText').textContent = 'Guardar Película';
             });
-        }
-    }
-
-    // Mostrar toast de notificación
-    function showToast(title, message, type = 'success') {
-        const toast = document.getElementById('toastNotificacion');
-        const toastTitle = document.getElementById('toastTitle');
-        const toastMessage = document.getElementById('toastMessage');
-        const toastIcon = document.getElementById('toastIcon');
-        toastTitle.textContent = title;
-        toastMessage.textContent = message;
-        if (type === 'success') {
-            toastIcon.textContent = 'check_circle';
-            toastIcon.style.color = '#10b981';
-        } else if (type === 'error') {
-            toastIcon.textContent = 'error';
-            toastIcon.style.color = 'var(--accent-red)';
-        } else {
-            toastIcon.textContent = 'info';
-            toastIcon.style.color = '#3b82f6';
-        }
-        const bsToast = new bootstrap.Toast(toast);
-        bsToast.show();
-    }
-
-    // Submit del formulario con validación
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('formPelicula');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const btn = document.getElementById('btnGuardar');
-                const originalText = btn.innerHTML;
-                btn.disabled = true;
-                btn.innerHTML = '<span class="material-icons" style="vertical-align: middle; font-size: 18px; margin-right: 6px; animation: spin 1s linear infinite;">progress_activity</span>Guardando...';
-                if (!document.getElementById('spin-style')) {
-                    const style = document.createElement('style');
-                    style.id = 'spin-style';
-                    style.textContent = '@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }';
-                    document.head.appendChild(style);
-                }
-                const formData = new FormData(this);
-                fetch(this.action, { method: 'POST', body: formData })
-                .then(response => {
-                    if (response.ok) {
-                        showToast('Éxito', 'Película guardada correctamente', 'success');
-                        setTimeout(() => location.reload(), 1500);
-                    } else {
-                        return response.text().then(text => { throw new Error(text); });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showToast('Error', 'No se pudo guardar: ' + error.message, 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = originalText;
-                });
-            });
-        }
-
-        // Event listener para el botón "Nueva Película" - SOLO UNA VEZ
-        const btnNueva = document.getElementById('btnNuevaPelicula');
-        if (btnNueva) {
-            btnNueva.addEventListener('click', function(e) {
-                e.preventDefault();
-                abrirModalNueva();
-            });
-        }
-
-        // ✅ Debugging: Verificar imágenes cargadas
-        setTimeout(function() {
-            const images = document.querySelectorAll('.movie-thumb');
-            console.log(`🎬 Verificando ${images.length} imágenes...`);
-            images.forEach((img, i) => {
-                console.log(`Imagen ${i+1}:`, {
-                    src: img.src,
-                    alt: img.alt,
-                    loaded: img.complete,
-                    naturalWidth: img.naturalWidth
-                });
-            });
-        }, 2000);
     });
-</script>
 
+    /* ── Toast ── */
+    function showToast(msg, type = 'success') {
+        const icons = { success: 'check_circle', error: 'error', info: 'info' };
+        const wrap = document.getElementById('toastWrap');
+        const el = document.createElement('div');
+        el.className = 'toast-item ' + type;
+        el.innerHTML = `<span class="material-icons">${icons[type] || 'info'}</span><span class="toast-msg">${msg}</span>`;
+        wrap.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+    }
+</script>
 </body>
 </html>

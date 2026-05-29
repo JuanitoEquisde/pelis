@@ -5,50 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9afa2d3a-1f5e-49a4-8473-f243b7ec3263" name="Changes" comment="Initial commit: NetPelis - Spring Boot + MySQL + Security">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/config/WebConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/LoginController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioFavorito.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/service/ArchivoStorageService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/service/PeliculaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/service/impl/ArchivoStorageServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/service/impl/PeliculaServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/config/SeguridadConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/config/SeguridadConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ControladorAutenticacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ControladorAutenticacion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/data/InicializadorDatos.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/data/InicializadorDatos.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/ComentarioResena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/ComentarioResena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Favorito.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Favorito.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Genero.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Genero.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Pelicula.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Pelicula.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Resena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Resena.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/entity/Usuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioPelicula.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioPelicula.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioUsuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioUsuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/service/impl/ServicioDetallesUsuarioImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/service/impl/ServicioDetallesUsuarioImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin-dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/cliente-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/cliente-dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/config/SeguridadConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/config/SeguridadConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/controller/ControladorAutenticacion.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/controller/ControladorAutenticacion.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/data/InicializadorDatos.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/data/InicializadorDatos.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/ComentarioResena.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/ComentarioResena.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Favorito.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Favorito.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Genero.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Genero.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Pelicula.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Pelicula.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Resena.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Resena.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/entity/Usuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/repository/RepositorioPelicula.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/repository/RepositorioPelicula.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/repository/RepositorioUsuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/repository/RepositorioUsuario.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/service/impl/ServicioDetallesUsuarioImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/NetPelis/netPelis/service/impl/ServicioDetallesUsuarioImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/admin-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/admin-dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/cliente-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/cliente-dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -189,7 +152,23 @@
       <option name="project" value="LOCAL" />
       <updated>1779899495717</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Initial commit: NetPelis - Spring Boot + MySQL + Security">
+      <option name="closed" value="true" />
+      <created>1780036190049</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1780036190049</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Initial commit: NetPelis - Spring Boot + MySQL + Security">
+      <option name="closed" value="true" />
+      <created>1780036198430</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1780036198430</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
