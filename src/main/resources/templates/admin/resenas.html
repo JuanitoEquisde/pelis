@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Usuarios - NetPelis Admin</title>
+    <title>Gestión de Reseñas - NetPelis Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -58,9 +58,6 @@
         .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
         .topbar-left { display: flex; align-items: center; gap: 1rem; }
         .page-title { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-new { display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(135deg, var(--accent-red), #991b1b); color: white; border: none; font-family: inherit; padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 13.5px; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 18px rgba(220,38,38,0.3); }
-        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(220,38,38,0.4); color: white; }
-        .btn-new .material-icons { font-size: 17px; }
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
         .stat-card { background: var(--bg-card); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 1.375rem 1.25rem; transition: transform 0.25s, box-shadow 0.25s; position: relative; overflow: hidden; }
         .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
@@ -83,9 +80,6 @@
         .cc-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
         .cc-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
         .cc-title .material-icons { font-size: 18px; color: var(--accent-red); }
-        .btn-viewall { font-size: 12px; font-weight: 600; color: var(--accent-gold); background: var(--accent-gold-soft); border: 1px solid rgba(245,158,11,0.15); border-radius: 99px; padding: 0.3rem 0.875rem; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
-        .btn-viewall:hover { background: var(--accent-gold); color: #000; }
-        .btn-viewall .material-icons { font-size: 13px; }
         .table-wrap { overflow-x: auto; }
         .tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
         .tbl thead th { background: rgba(220,38,38,0.06); color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
@@ -93,21 +87,22 @@
         .tbl tbody tr:last-child td { border-bottom: none; }
         .tbl tbody tr { transition: background 0.18s; }
         .tbl tbody tr:hover { background: rgba(220,38,38,0.04); }
-        .movie-cell { display: flex; align-items: center; gap: 12px; }
-        .movie-thumb { width: 38px; height: 56px; border-radius: 7px; object-fit: cover; background: var(--bg-secondary); border: 1px solid var(--border); flex-shrink: 0; }
-        .movie-cell-title { font-weight: 600; font-size: 13.5px; margin-bottom: 2px; }
-        .movie-cell-sub { font-size: 11.5px; color: var(--text-muted); }
+        .resena-cell { display: flex; flex-direction: column; gap: 4px; }
+        .resena-titulo { font-weight: 600; font-size: 14px; }
+        .resena-texto { font-size: 12px; color: var(--text-secondary); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
         .badge-np { padding: 4px 10px; border-radius: 7px; font-weight: 700; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; }
         .badge-np.success { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
         .badge-np.warning { background: rgba(245,158,11,0.15); color: var(--accent-gold); border: 1px solid rgba(245,158,11,0.25); }
         .badge-np.danger { background: rgba(220,38,38,0.15); color: var(--accent-red); border: 1px solid rgba(220,38,38,0.25); }
+        .badge-np.info { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.25); }
+        .rating-stars { color: var(--accent-gold); font-size: 14px; }
         .tbl-btn { background: transparent; border: none; color: var(--text-muted); padding: 5px 7px; border-radius: 7px; cursor: pointer; transition: all 0.18s; line-height: 1; }
         .tbl-btn:hover { background: var(--accent-red-soft); color: var(--accent-red); }
         .tbl-btn .material-icons { font-size: 17px; vertical-align: middle; }
         .form-label-np { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 5px; }
         .form-ctrl { width: 100%; background: var(--bg-secondary) !important; border: 1px solid var(--border) !important; border-radius: var(--radius-sm) !important; color: var(--text-primary) !important; padding: 0.575rem 0.875rem; font-size: 13.5px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
         .form-ctrl:focus { outline: none; border-color: var(--accent-red) !important; box-shadow: 0 0 0 3px rgba(220,38,38,0.14) !important; }
-        .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: inherit; padding: 0.575rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+        .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: inherit; padding: 0.575rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-flex; align-items: center; }
         .btn-cancel:hover { background: var(--bg-glass); color: var(--text-primary); }
         .btn-save { background: linear-gradient(135deg, var(--accent-red), #991b1b); border: none; color: white; font-family: inherit; padding: 0.575rem 1.375rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; box-shadow: 0 4px 16px rgba(220,38,38,0.28); }
         .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(220,38,38,0.38); }
@@ -121,9 +116,7 @@
         .toast-msg { font-size: 13.5px; font-weight: 500; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ══════════════════════════════════════
-           🎬 PAGINACIÓN ESTILO STREAMING
-        ══════════════════════════════════════ */
+        /* PAGINACIÓN */
         .streaming-pagination {
             display: flex; align-items: center; justify-content: space-between;
             padding: 1rem 1.25rem; background: var(--bg-secondary);
@@ -198,8 +191,10 @@
     </style>
 </head>
 <body>
+
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
+<!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
     <div class="sidebar-brand">
         <a href="/admin/dashboard" class="brand-logo">
@@ -276,59 +271,121 @@
         </form>
     </div>
 </nav>
+
+<!-- MAIN CONTENT -->
 <main class="main-content">
     <div class="topbar">
         <div class="topbar-left">
             <button class="menu-toggle d-lg-none" id="menuOpen"><span class="material-icons">menu</span></button>
-            <h1 class="page-title">Gestión de Usuarios</h1>
+            <h1 class="page-title">Gestión de Reseñas</h1>
         </div>
-        <button type="button" class="btn-new" onclick="abrirModalNuevoUsuario()">
-            <span class="material-icons">person_add</span>Nuevo Usuario
-        </button>
     </div>
+
+    <!-- Stats -->
     <div class="stats-grid">
-        <div class="stat-card c1"><div class="stat-top"><div class="stat-icon red"><span class="material-icons">movie</span></div><span class="stat-badge up">+12%</span></div><div class="stat-value" th:text="${totalPeliculas ?: 0}">0</div><div class="stat-label">Total Películas</div></div>
-        <div class="stat-card c2"><div class="stat-top"><div class="stat-icon gold"><span class="material-icons">people</span></div><span class="stat-badge up">+8%</span></div><div class="stat-value" th:text="${totalUsuarios ?: 0}">0</div><div class="stat-label">Usuarios Activos</div></div>
-        <div class="stat-card c3"><div class="stat-top"><div class="stat-icon green"><span class="material-icons">rate_review</span></div><span class="stat-badge up">+24%</span></div><div class="stat-value" th:text="${totalResenas ?: 0}">0</div><div class="stat-label">Reseñas este mes</div></div>
-        <div class="stat-card c4"><div class="stat-top"><div class="stat-icon blue"><span class="material-icons">favorite</span></div><span class="stat-badge down">-3%</span></div><div class="stat-value" th:text="${totalFavoritos ?: 0}">0</div><div class="stat-label">Favoritos totales</div></div>
+        <div class="stat-card c1"><div class="stat-top"><div class="stat-icon red"><span class="material-icons">movie</span></div><span class="stat-badge up">+12%</span></div><div class="stat-value" th:text="${totalPeliculas}">0</div><div class="stat-label">Total Películas</div></div>
+        <div class="stat-card c2"><div class="stat-top"><div class="stat-icon gold"><span class="material-icons">people</span></div><span class="stat-badge up">+8%</span></div><div class="stat-value" th:text="${totalUsuarios}">0</div><div class="stat-label">Usuarios Activos</div></div>
+        <div class="stat-card c3"><div class="stat-top"><div class="stat-icon green"><span class="material-icons">rate_review</span></div><span class="stat-badge up">+24%</span></div><div class="stat-value" th:text="${totalResenas}">0</div><div class="stat-label">Reseñas Totales</div></div>
+        <div class="stat-card c4"><div class="stat-top"><div class="stat-icon blue"><span class="material-icons">star</span></div><span class="stat-badge down">-3%</span></div><div class="stat-value">4.5</div><div class="stat-label">Promedio</div></div>
     </div>
+
+    <!-- Tabla de Reseñas -->
     <div class="content-card">
-        <div class="cc-header"><span class="cc-title"><span class="material-icons">people</span>Lista de Usuarios</span></div>
-        <form th:action="@{/admin/usuarios}" method="get" class="card mb-3" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);">
+        <div class="cc-header"><span class="cc-title"><span class="material-icons">rate_review</span>Lista de Reseñas</span></div>
+
+        <!-- Filtros -->
+        <form th:action="@{/admin/resenas}" method="get" class="card mb-3" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);">
             <div class="card-body p-3">
                 <div class="row g-2">
-                    <div class="col-md-2"><label class="form-label-np">ID</label><input type="number" class="form-ctrl" name="id" th:value="${filtroId}" placeholder="Buscar por ID"></div>
-                    <div class="col-md-3"><label class="form-label-np">Nombre</label><input type="text" class="form-ctrl" name="nombre" th:value="${filtroNombre}" placeholder="Nombre completo"></div>
-                    <div class="col-md-3"><label class="form-label-np">Email</label><input type="email" class="form-ctrl" name="email" th:value="${filtroEmail}" placeholder="correo@ejemplo.com"></div>
-                    <div class="col-md-2"><label class="form-label-np">Rol</label><select class="form-ctrl" name="rol"><option value="">Todos</option><option value="ADMIN" th:selected="${filtroRol} == 'ADMIN'">Admin</option><option value="CLIENTE" th:selected="${filtroRol} == 'CLIENTE'">Cliente</option></select></div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Usuario</label>
+                        <input type="text" class="form-ctrl" name="usuario" th:value="${filtroUsuario}" placeholder="Nombre o email">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Película</label>
+                        <input type="text" class="form-ctrl" name="pelicula" th:value="${filtroPelicula}" placeholder="Título">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Desde</label>
+                        <input type="date" class="form-ctrl" name="desde" th:value="${filtroDesde}">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Hasta</label>
+                        <input type="date" class="form-ctrl" name="hasta" th:value="${filtroHasta}">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Min. Puntuación</label>
+                        <input type="number" class="form-ctrl" name="minPuntuacion" th:value="${minPuntuacion}" min="0" max="10" step="0.1" placeholder="0">
+                    </div>
                     <div class="col-md-2 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn-save" style="padding:0.5rem 1rem;font-size:12px;"><span class="material-icons" style="font-size:14px">search</span></button>
-                        <a th:href="@{/admin/usuarios}" class="btn-cancel" style="padding:0.5rem 1rem;font-size:12px;text-decoration:none;">Limpiar</a>
+                        <div class="form-check" style="margin-bottom:0;">
+                            <input class="form-check-input" type="checkbox" name="recomendadas" id="soloRecomendadas" th:checked="${soloRecomendadas}" style="accent-color:var(--accent-red);">
+                            <label class="form-check-label" for="soloRecomendadas" style="color:var(--text-secondary);font-size:12px;">Solo recomendadas</label>
+                        </div>
+                        <button type="submit" class="btn-save" style="padding:0.5rem 1rem;font-size:12px;">
+                            <span class="material-icons" style="font-size:14px">search</span>
+                        </button>
+                        <a th:href="@{/admin/resenas}" class="btn-cancel" style="padding:0.5rem 1rem;font-size:12px;">Limpiar</a>
                     </div>
                 </div>
             </div>
         </form>
+
+        <!-- Tabla -->
         <div class="table-wrap">
             <table class="tbl">
-                <thead><tr><th>ID</th><th>Usuario</th><th>Email</th><th>Rol</th><th>Estado</th><th>Registro</th><th>Acciones</th></tr></thead>
-                <tbody id="tablaUsuariosBody">
-                <tr th:each="usuario : ${usuarios}" class="usuario-row" th:data-usuario="${usuario.id}">
-                    <td style="font-family:monospace;font-size:12px;color:var(--text-muted)" th:text="'#'+${usuario.id}">#1</td>
-                    <td><div style="font-weight:600;font-size:13.5px" th:text="${usuario.nombreCompleto}">Nombre</div></td>
-                    <td style="color:var(--text-secondary);font-size:13px" th:text="${usuario.email}">email@ejemplo.com</td>
-                    <td><span class="badge-np" th:classappend="${usuario.rol.name == 'ADMIN' ? 'danger' : 'warning'}" th:text="${usuario.rol.name}">CLIENTE</span></td>
-                    <td><span class="badge-np" th:classappend="${usuario.activo ? 'success' : 'danger'}" th:text="${usuario.activo ? 'Activo' : 'Inactivo'}">Activo</span></td>
-                    <td style="color:var(--text-muted);font-size:12px" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy')}">01/01/2024</td>
-                    <td><button class="tbl-btn" title="Editar"><span class="material-icons">edit</span></button><button class="tbl-btn" title="Eliminar"><span class="material-icons" style="color:var(--accent-red)">delete</span></button></td>
+                <thead><tr><th>ID</th><th>Usuario</th><th>Película</th><th>Puntuación</th><th>Título</th><th>Recomendada</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                <tbody id="tablaResenasBody">
+                <tr th:each="resena : ${resenas}" class="resena-row" th:data-resena="${resena.id}">
+                    <td style="font-family:monospace;font-size:12px;color:var(--text-muted)" th:text="'#'+${resena.id}">#1</td>
+                    <td>
+                        <div style="font-weight:600;font-size:13.5px" th:text="${resena.usuario.nombreCompleto}">Nombre</div>
+                        <div style="font-size:11px;color:var(--text-muted)" th:text="${resena.usuario.email}">email</div>
+                    </td>
+                    <td>
+                        <div style="font-weight:600;font-size:13.5px" th:text="${resena.pelicula.titulo}">Título</div>
+                        <div style="font-size:11px;color:var(--text-muted)" th:text="'Año: ' + ${resena.pelicula.anioLanzamiento}">2024</div>
+                    </td>
+                    <td>
+                        <div style="display:flex;align-items:center;gap:4px;">
+                            <span class="material-icons rating-stars" style="font-size:16px;">star</span>
+                            <span style="font-weight:700;color:var(--accent-gold);" th:text="${resena.puntuacion}">8.5</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="resena-cell">
+                            <div class="resena-titulo" th:text="${resena.titulo}">Título Reseña</div>
+                            <div class="resena-texto" th:text="${resena.texto}">Texto de la reseña...</div>
+                        </div>
+                    </td>
+                    <td>
+                        <span th:if="${resena.esRecomendada}" class="badge-np success">Sí</span>
+                        <span th:unless="${resena.esRecomendada}" class="badge-np danger">No</span>
+                    </td>
+                    <td style="color:var(--text-muted);font-size:12px" th:text="${#temporals.format(resena.fechaCreacion, 'dd/MM/yyyy HH:mm')}">01/01/2024</td>
+                    <td>
+                        <button class="tbl-btn" th:attr="onclick='verDetalleResena(' + ${resena.id} + ')'" title="Ver detalles">
+                            <span class="material-icons">visibility</span>
+                        </button>
+                        <button class="tbl-btn" th:attr="onclick='eliminarResena(' + ${resena.id} + ')'" title="Eliminar">
+                            <span class="material-icons" style="color:var(--accent-red)">delete</span>
+                        </button>
+                    </td>
                 </tr>
-                <tr th:if="${#lists.isEmpty(usuarios)}"><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);"><span class="material-icons" style="font-size:40px;opacity:.25;display:block;margin-bottom:.75rem;">people</span>No se encontraron usuarios con esos filtros</td></tr>
+                <tr th:if="${#lists.isEmpty(resenas)}">
+                    <td colspan="8" style="text-align:center; padding:3rem; color:var(--text-muted);">
+                        <span class="material-icons" style="font-size:40px;opacity:.25;display:block;margin-bottom:.75rem;">rate_review</span>
+                        No se encontraron reseñas con esos filtros
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
-        <!-- ✅ PAGINACIÓN CORREGIDA: "Mostrando X de Y" -->
+
+        <!-- Paginación -->
         <div class="streaming-pagination" id="streamingPagination">
             <div class="pagination-info">
-                <span>Mostrando</span><strong id="cantidadPagina">0</strong><span>de</span><strong id="totalRegistros">0</strong><span>usuarios</span>
+                <span>Mostrando</span><strong id="cantidadPagina">0</strong><span>de</span><strong id="totalRegistros">0</strong><span>reseñas</span>
             </div>
             <div class="pagination-controls">
                 <button class="page-nav-btn prev" id="btnPrev" onclick="cambiarPagina(paginaActual - 1)" disabled><span class="material-icons">chevron_left</span><span class="d-none d-sm-inline">Anterior</span></button>
@@ -344,27 +401,88 @@
         </div>
     </div>
 </main>
+
+<!-- Modal Detalle Reseña -->
+<div class="modal fade" id="modalDetalleResena" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);">
+            <div class="modal-header" style="border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;">
+                <h5 class="modal-title" style="font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;">
+                    <span class="material-icons" style="color:var(--accent-gold);font-size:18px">rate_review</span>
+                    <span id="modalDetalleTitulo">Detalle de Reseña</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:invert(1);background:transparent;border:none;color:var(--text-muted);font-size:24px;cursor:pointer;"></button>
+            </div>
+            <div class="modal-body" style="padding:1.5rem;">
+                <div style="display:grid;grid-template-columns:1fr 2fr;gap:2rem;">
+                    <div>
+                        <img id="modalPoster" src="" alt="Poster" style="width:100%;border-radius:var(--radius-sm);object-fit:cover;border:1px solid var(--border);">
+                    </div>
+                    <div>
+                        <h6 style="margin:0 0 1rem 0;font-family:'Outfit',sans-serif;font-weight:700;font-size:18px;" id="modalResenaTitulo">Título Reseña</h6>
+                        <div style="margin-bottom:1rem;">
+                            <div style="display:flex;align-items:center;gap:0.5rem;margin-bottom:0.5rem;">
+                                <span class="material-icons" style="color:var(--accent-gold);font-size:20px;">star</span>
+                                <span style="font-size:24px;font-weight:800;color:var(--accent-gold);" id="modalPuntuacion">8.5</span>
+                                <span style="color:var(--text-muted);font-size:14px;">/ 10</span>
+                            </div>
+                            <span id="modalRecomendada" class="badge-np success">Recomendada</span>
+                        </div>
+                        <div style="margin-bottom:1rem;">
+                            <p style="margin:0.25rem 0;color:var(--text-secondary);font-size:13px;">
+                                <strong>Película:</strong> <span id="modalPelicula">Título Película</span>
+                            </p>
+                            <p style="margin:0.25rem 0;color:var(--text-secondary);font-size:13px;">
+                                <strong>Usuario:</strong> <span id="modalUsuario">Nombre Usuario</span>
+                            </p>
+                            <p style="margin:0.25rem 0;color:var(--text-secondary);font-size:13px;">
+                                <strong>Email:</strong> <span id="modalEmail">email@ejemplo.com</span>
+                            </p>
+                            <p style="margin:0.25rem 0;color:var(--text-secondary);font-size:13px;">
+                                <strong>Fecha:</strong> <span id="modalFecha">01/01/2024 12:00</span>
+                            </p>
+                        </div>
+                        <div style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;">
+                            <h6 style="margin:0 0 0.5rem 0;font-weight:600;font-size:13px;color:var(--text-muted);">OPINIÓN:</h6>
+                            <p style="margin:0;color:var(--text-primary);font-size:14px;line-height:1.6;" id="modalTexto">Texto completo de la reseña...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-top:1px solid var(--border);padding:1rem 1.5rem;display:flex;justify-content:flex-end;gap:0.75rem;">
+                <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn-save" id="btnEliminarModal" style="background:var(--accent-red);border:none;color:white;">
+                    <span class="material-icons">delete</span>Eliminar Reseña
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
 <div class="toast-wrap" id="toastWrap"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Sidebar
     const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
+
+    // Toast
     function showToast(msg,type='success'){const icons={success:'check_circle',error:'error',info:'info'},w=document.getElementById('toastWrap'),el=document.createElement('div');el.className='toast-item '+type;el.innerHTML=`<span class="material-icons">${icons[type]||'info'}</span><span class="toast-msg">${msg}</span>`;w.appendChild(el);setTimeout(()=>el.remove(),3500);}
 
-    // ══════════════════════════════════════
-    // 🎬 PAGINACIÓN ESTILO STREAMING - CORREGIDA
-    // ══════════════════════════════════════
-    let paginaActual = 1; let itemsPorPagina = 10; let usuariosTotales = [];
+    // Paginación
+    let paginaActual = 1; let itemsPorPagina = 10; let resenasTotales = [];
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('✅ Página de usuarios cargada');
-        const filas = document.querySelectorAll('#tablaUsuariosBody tr.usuario-row');
-        usuariosTotales = Array.from(filas).filter(fila => fila.dataset.usuario);
+        console.log('✅ Página de reseñas cargada');
+        const filas = document.querySelectorAll('#tablaResenasBody tr.resena-row');
+        resenasTotales = Array.from(filas).filter(fila => fila.dataset.resena);
         inicializarPaginacionStreaming();
     });
     function inicializarPaginacionStreaming() {
-        const total = usuariosTotales.length;
+        const total = resenasTotales.length;
         const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina));
         if (paginaActual > totalPaginas) paginaActual = totalPaginas;
         if (paginaActual < 1) paginaActual = 1;
@@ -374,7 +492,6 @@
         document.getElementById('streamingPagination').style.display = 'flex';
     }
     function actualizarInfoPaginacion(total, totalPaginas) {
-        // ✅ CORREGIDO: Mostrar cantidad real en página actual
         const inicio = (paginaActual - 1) * itemsPorPagina;
         const fin = Math.min(paginaActual * itemsPorPagina, total);
         const cantidadEnPaginaActual = fin - inicio;
@@ -395,11 +512,65 @@
     }
     function crearNumeroPagina(num, isActive = false) { const btn = document.createElement('button'); btn.className = `page-number${isActive ? ' active' : ''}`; btn.textContent = num; btn.onclick = (e) => { e.preventDefault(); cambiarPagina(num); }; btn.type = 'button'; btn.setAttribute('aria-label', `Página ${num}`); return btn; }
     function crearEllipsis() { const span = document.createElement('span'); span.className = 'page-number ellipsis'; span.textContent = '…'; span.setAttribute('aria-hidden', 'true'); return span; }
-    function cambiarPagina(numPagina) { const total = usuariosTotales.length; const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina)); if (numPagina < 1 || numPagina > totalPaginas) return; paginaActual = numPagina; mostrarPaginaStreaming(paginaActual); actualizarInfoPaginacion(total, totalPaginas); generarControlesStreaming(totalPaginas); document.querySelector('.content-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    function mostrarPaginaStreaming(numPagina) { const inicio = (numPagina - 1) * itemsPorPagina; const fin = inicio + itemsPorPagina; usuariosTotales.forEach((fila, index) => { fila.style.display = (index >= inicio && index < fin) ? '' : 'none'; }); }
+    function cambiarPagina(numPagina) { const total = resenasTotales.length; const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina)); if (numPagina < 1 || numPagina > totalPaginas) return; paginaActual = numPagina; mostrarPaginaStreaming(paginaActual); actualizarInfoPaginacion(total, totalPaginas); generarControlesStreaming(totalPaginas); document.querySelector('.content-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    function mostrarPaginaStreaming(numPagina) { const inicio = (numPagina - 1) * itemsPorPagina; const fin = inicio + itemsPorPagina; resenasTotales.forEach((fila, index) => { fila.style.display = (index >= inicio && index < fin) ? '' : 'none'; }); }
     function cambiarItemsPorPagina(nuevoValor) { itemsPorPagina = parseInt(nuevoValor); paginaActual = 1; inicializarPaginacionStreaming(); }
-    document.addEventListener('keydown', function(e) { if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; const total = usuariosTotales.length; const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina)); if (e.key === 'ArrowLeft' && paginaActual > 1) { e.preventDefault(); cambiarPagina(paginaActual - 1); } else if (e.key === 'ArrowRight' && paginaActual < totalPaginas) { e.preventDefault(); cambiarPagina(paginaActual + 1); } });
-    function abrirModalNuevoUsuario() { showToast('Función de nuevo usuario - Implementar modal', 'info'); }
+
+    // Modal y funciones
+    let resenaSeleccionadaId = null;
+
+    function verDetalleResena(id) {
+        resenaSeleccionadaId = id;
+        fetch('/admin/resenas/api/' + id)
+            .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(d => {
+                document.getElementById('modalDetalleTitulo').textContent = 'Reseña #' + d.id;
+                document.getElementById('modalResenaTitulo').textContent = d.titulo || 'Sin título';
+                document.getElementById('modalPuntuacion').textContent = d.puntuacion;
+                document.getElementById('modalPoster').src = d.pelicula.posterUrl || 'https://via.placeholder.com/200x300/12121e/dc2626?text=NP';
+                document.getElementById('modalPelicula').textContent = d.pelicula.titulo;
+                document.getElementById('modalUsuario').textContent = d.usuario.nombreCompleto;
+                document.getElementById('modalEmail').textContent = d.usuario.email;
+                document.getElementById('modalFecha').textContent = formatearFecha(d.fechaCreacion);
+                document.getElementById('modalTexto').textContent = d.texto;
+
+                const badgeRecomendada = document.getElementById('modalRecomendada');
+                if (d.esRecomendada) {
+                    badgeRecomendada.textContent = 'Recomendada';
+                    badgeRecomendada.className = 'badge-np success';
+                } else {
+                    badgeRecomendada.textContent = 'No recomendada';
+                    badgeRecomendada.className = 'badge-np danger';
+                }
+
+                document.getElementById('btnEliminarModal').onclick = () => eliminarResena(id, true);
+                const modal = new bootstrap.Modal(document.getElementById('modalDetalleResena'));
+                modal.show();
+            })
+            .catch(e => showToast('No se pudo cargar: ' + e.message, 'error'));
+    }
+
+    function formatearFecha(fechaStr) {
+        if (!fechaStr) return '-';
+        const fecha = new Date(fechaStr);
+        return fecha.toLocaleDateString('es-ES') + ' ' + fecha.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
+    }
+
+    function eliminarResena(id, desdeModal = false) {
+        if (!confirm('¿Eliminar esta reseña?')) return;
+        fetch('/admin/resenas/' + id + '/eliminar', { method: 'POST' })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) {
+                    showToast(d.message, 'success');
+                    if (desdeModal) bootstrap.Modal.getInstance(document.getElementById('modalDetalleResena'))?.hide();
+                    setTimeout(() => location.reload(), 1400);
+                } else {
+                    showToast(d.error || 'Error', 'error');
+                }
+            })
+            .catch(() => showToast('Error de conexión', 'error'));
+    }
 </script>
 </body>
 </html>

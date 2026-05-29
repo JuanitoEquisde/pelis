@@ -4,12 +4,9 @@ import com.NetPelis.netPelis.entity.Favorito;
 import com.NetPelis.netPelis.entity.Pelicula;
 import com.NetPelis.netPelis.entity.EstadoPelicula;
 import com.NetPelis.netPelis.entity.Genero;
-import com.NetPelis.netPelis.repository.RepositorioFavorito;
-import com.NetPelis.netPelis.repository.RepositorioUsuario;
+import com.NetPelis.netPelis.repository.*;
 import com.NetPelis.netPelis.service.PeliculaService;
 import com.NetPelis.netPelis.service.ArchivoStorageService;
-import com.NetPelis.netPelis.repository.RepositorioGenero;
-import com.NetPelis.netPelis.repository.RepositorioPelicula;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -37,6 +34,8 @@ public class PeliculaController {
     private final RepositorioGenero repositorioGenero;
     private final RepositorioPelicula repositorioPelicula;
     private final RepositorioFavorito repositorioFavorito;
+    private final RepositorioResena repositorioResena;  // ✅ AGREGAR ESTE CAMPO
+
     /**
      * ✅ Lista todas las películas CON FILTROS Y PAGINACIÓN
      * RUTA: GET /admin/peliculas
@@ -50,41 +49,40 @@ public class PeliculaController {
             Model model) {
 
         try {
-            // Buscar películas con filtros
             List<Pelicula> peliculas = peliculaService.buscar(titulo, anio, estado);
 
-            // Mantener valores de filtros en el modelo
             model.addAttribute("filtroTitulo", titulo);
             model.addAttribute("filtroAnio", anio);
             model.addAttribute("filtroEstado", estado != null ? estado.name() : null);
 
-            // Stats para el sidebar
+            // ✅ CORRECCIÓN: Obtener valores REALES de la BD
             model.addAttribute("totalPeliculas", repositorioPelicula.count());
-            model.addAttribute("totalUsuarios", 0L);
-            model.addAttribute("totalResenas", 0L);
-            model.addAttribute("totalFavoritos", 0L);
+            model.addAttribute("totalUsuarios", repositorioUsuario.countByActivoTrue());  // ✅ Si tienes este método
+            model.addAttribute("totalResenas", repositorioResena.count());                // ✅ AGREGADO
+            model.addAttribute("totalFavoritos", repositorioFavorito.count());            // ✅ AGREGADO
 
-            // Lista de películas filtradas
             model.addAttribute("peliculas", peliculas);
-
-            // Todos los géneros para el modal
             model.addAttribute("todosLosGeneros", repositorioGenero.findAll());
 
-            System.out.println("✅ Página de películas cargada con filtros:");
-            System.out.println("   - titulo=" + titulo + ", anio=" + anio + ", estado=" + estado);
-            System.out.println("   - Resultados: " + peliculas.size() + " películas");
+            System.out.println("✅ Página de películas cargada:");
+            System.out.println("   - Películas: " + peliculas.size());
+            System.out.println("   - Usuarios: " + repositorioUsuario.countByActivoTrue());
+            System.out.println("   - Reseñas: " + repositorioResena.count());
+            System.out.println("   - Favoritos: " + repositorioFavorito.count());
 
         } catch (Exception e) {
-            System.err.println("❌ Error cargando películas: " + e.getMessage());
+            System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("peliculas", List.of());
-            model.addAttribute("filtroTitulo", null);
-            model.addAttribute("filtroAnio", null);
-            model.addAttribute("filtroEstado", null);
+            model.addAttribute("totalPeliculas", 0);
+            model.addAttribute("totalUsuarios", 0);
+            model.addAttribute("totalResenas", 0);
+            model.addAttribute("totalFavoritos", 0);
         }
 
-        return "admin/peliculas";  // ✅ Busca: templates/admin/peliculas.html
+        return "admin/peliculas";
     }
+
 
     /**
      * API REST: Obtiene una película por ID en formato JSON (para el modal de edición)

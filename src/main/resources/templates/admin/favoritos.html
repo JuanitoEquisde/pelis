@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* === MISMO CSS QUE EL DASHBOARD ADMIN === */
         :root {
             --bg-primary: #080810; --bg-secondary: #0f0f1a; --bg-sidebar: #0a0a14;
             --bg-card: #12121e; --bg-card-hover: #16162a; --bg-glass: rgba(255,255,255,0.03);
@@ -59,9 +58,6 @@
         .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
         .topbar-left { display: flex; align-items: center; gap: 1rem; }
         .page-title { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .btn-new { display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(135deg, var(--accent-red), #991b1b); color: white; border: none; font-family: inherit; padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 13.5px; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 18px rgba(220,38,38,0.3); }
-        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(220,38,38,0.4); color: white; }
-        .btn-new .material-icons { font-size: 17px; }
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
         .stat-card { background: var(--bg-card); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 1.375rem 1.25rem; transition: transform 0.25s, box-shadow 0.25s; position: relative; overflow: hidden; }
         .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
@@ -84,9 +80,6 @@
         .cc-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
         .cc-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
         .cc-title .material-icons { font-size: 18px; color: var(--accent-red); }
-        .btn-viewall { font-size: 12px; font-weight: 600; color: var(--accent-gold); background: var(--accent-gold-soft); border: 1px solid rgba(245,158,11,0.15); border-radius: 99px; padding: 0.3rem 0.875rem; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
-        .btn-viewall:hover { background: var(--accent-gold); color: #000; }
-        .btn-viewall .material-icons { font-size: 13px; }
         .table-wrap { overflow-x: auto; }
         .tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
         .tbl thead th { background: rgba(220,38,38,0.06); color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
@@ -123,9 +116,7 @@
         .toast-msg { font-size: 13.5px; font-weight: 500; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ══════════════════════════════════════
-           🎬 PAGINACIÓN ESTILO STREAMING
-        ══════════════════════════════════════ */
+        /* PAGINACIÓN */
         .streaming-pagination {
             display: flex; align-items: center; justify-content: space-between;
             padding: 1rem 1.25rem; background: var(--bg-secondary);
@@ -210,35 +201,77 @@
             <span class="logo-icon"><span class="material-icons">movie</span></span>
             <span class="logo-text">NET<span>PELIS</span></span>
         </a>
-        <button class="menu-toggle" id="menuClose"><span class="material-icons">close</span></button>
+        <button class="menu-toggle" id="menuClose">
+            <span class="material-icons">close</span>
+        </button>
     </div>
+
     <div class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
-        <a href="/admin/dashboard" class="nav-link"><span class="material-icons">dashboard</span>Dashboard</a>
-        <a href="/admin/peliculas" class="nav-link"><span class="material-icons">movie</span>Películas<span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span></a>
-        <a href="/admin/usuarios" class="nav-link"><span class="material-icons">people</span>Usuarios<span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span></a>
-        <a href="/admin/favoritos" class="nav-link active"><span class="material-icons">favorite</span>Favoritos<span class="nav-badge">●</span></a>
+
+        <a href="/admin/dashboard" class="nav-link active">
+            <span class="material-icons">dashboard</span>Dashboard
+        </a>
+
+        <a href="/admin/peliculas" class="nav-link">
+            <span class="material-icons">movie</span>Películas
+            <span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/usuarios" class="nav-link">
+            <span class="material-icons">people</span>Usuarios
+            <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/favoritos" class="nav-link">
+            <span class="material-icons">favorite</span>Favoritos
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>  <!-- ✅ CORREGIDO -->
+        </a>
+
         <span class="nav-section-label">Contenido</span>
-        <a href="/admin/revisiones" class="nav-link"><span class="material-icons">rate_review</span>Reseñas<span class="nav-badge" th:text="${totalResenas ?: 0}">0</span></a>
-        <a href="/admin/comentarios" class="nav-link"><span class="material-icons">chat</span>Comentarios</a>
-        <a href="/admin/generos" class="nav-link"><span class="material-icons">category</span>Géneros</a>
+
+        <a href="/admin/resenas" class="nav-link">
+            <span class="material-icons">rate_review</span>Reseñas
+            <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/comentarios" class="nav-link">
+            <span class="material-icons">chat</span>Comentarios
+            <!-- Opcional: agregar badge si tienes contador -->
+        </a>
+
+        <a href="/admin/generos" class="nav-link">
+            <span class="material-icons">category</span>Géneros
+        </a>
+
         <div class="sidebar-divider"></div>
         <span class="nav-section-label">Sistema</span>
-        <a href="/admin/configuracion" class="nav-link"><span class="material-icons">settings</span>Configuración</a>
-        <a href="/admin/logs" class="nav-link"><span class="material-icons">receipt_long</span>Logs</a>
+
+        <a href="/admin/configuracion" class="nav-link">
+            <span class="material-icons">settings</span>Configuración
+        </a>
+
+        <a href="/admin/logs" class="nav-link">
+            <span class="material-icons">receipt_long</span>Logs
+        </a>
     </div>
+
     <div class="sidebar-footer">
         <div class="user-info-row">
             <div class="user-avatar">A</div>
-            <div class="user-details"><h6>Administrador</h6><small>admin@netpelis.com</small></div>
+            <div class="user-details">
+                <h6>Administrador</h6>
+                <small>admin@netpelis.com</small>
+            </div>
         </div>
         <form th:action="@{/auth/logout}" method="post">
-            <button type="submit" class="btn-logout"><span class="material-icons">logout</span>Cerrar Sesión</button>
+            <button type="submit" class="btn-logout">
+                <span class="material-icons">logout</span>Cerrar Sesión
+            </button>
         </form>
     </div>
 </nav>
-
-<!-- ══ MAIN CONTENT ══ -->
+<!-- MAIN CONTENT -->
 <main class="main-content">
     <div class="topbar">
         <div class="topbar-left">
@@ -249,17 +282,17 @@
 
     <!-- Stats -->
     <div class="stats-grid">
-        <div class="stat-card c1"><div class="stat-top"><div class="stat-icon red"><span class="material-icons">movie</span></div><span class="stat-badge up">+12%</span></div><div class="stat-value" th:text="${totalPeliculas ?: 0}">0</div><div class="stat-label">Total Películas</div></div>
-        <div class="stat-card c2"><div class="stat-top"><div class="stat-icon gold"><span class="material-icons">people</span></div><span class="stat-badge up">+8%</span></div><div class="stat-value" th:text="${totalUsuarios ?: 0}">0</div><div class="stat-label">Usuarios Activos</div></div>
-        <div class="stat-card c3"><div class="stat-top"><div class="stat-icon green"><span class="material-icons">favorite</span></div><span class="stat-badge up">+24%</span></div><div class="stat-value" th:text="${#lists.size(favoritos)}">0</div><div class="stat-label">Favoritos Totales</div></div>
+        <div class="stat-card c1"><div class="stat-top"><div class="stat-icon red"><span class="material-icons">movie</span></div><span class="stat-badge up">+12%</span></div><div class="stat-value" th:text="${totalPeliculas}">0</div><div class="stat-label">Total Películas</div></div>
+        <div class="stat-card c2"><div class="stat-top"><div class="stat-icon gold"><span class="material-icons">people</span></div><span class="stat-badge up">+8%</span></div><div class="stat-value" th:text="${totalUsuarios}">0</div><div class="stat-label">Usuarios Activos</div></div>
+        <div class="stat-card c3"><div class="stat-top"><div class="stat-icon green"><span class="material-icons">favorite</span></div><span class="stat-badge up">+24%</span></div><div class="stat-value" th:text="${totalFavoritos}">0</div><div class="stat-label">Favoritos Totales</div></div>
         <div class="stat-card c4"><div class="stat-top"><div class="stat-icon blue"><span class="material-icons">trending_up</span></div><span class="stat-badge down">-3%</span></div><div class="stat-value">●</div><div class="stat-label">Actividad</div></div>
     </div>
 
-    <!-- Tabla de Favoritos CON FILTROS Y PAGINACIÓN -->
+    <!-- Tabla de Favoritos -->
     <div class="content-card">
         <div class="cc-header"><span class="cc-title"><span class="material-icons">favorite</span>Lista de Favoritos</span></div>
 
-        <!-- ✅ FILTROS: Formulario que hace submit GET -->
+        <!-- Filtros -->
         <form th:action="@{/admin/favoritos}" method="get" class="card mb-3" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);">
             <div class="card-body p-3">
                 <div class="row g-2">
@@ -291,7 +324,7 @@
             </div>
         </form>
 
-        <!-- Tabla (renderizada con Thymeleaf) -->
+        <!-- Tabla -->
         <div class="table-wrap">
             <table class="tbl">
                 <thead><tr><th>ID</th><th>Usuario</th><th>Email</th><th>Película</th><th>Año</th><th>Fecha Agregado</th><th>Acciones</th></tr></thead>
@@ -316,10 +349,10 @@
                     <td th:text="${fav.pelicula.anioLanzamiento}">2024</td>
                     <td style="color:var(--text-muted);font-size:12px" th:text="${#temporals.format(fav.fechaAgregado, 'dd/MM/yyyy HH:mm')}">01/01/2024</td>
                     <td>
-                        <button class="tbl-btn" th:onclick="'verDetalleFavorito(' + ${fav.id} + ')'" title="Ver detalles">
+                        <button class="tbl-btn" th:attr="onclick='verDetalleFavorito(' + ${fav.id} + ')'" title="Ver detalles">
                             <span class="material-icons">visibility</span>
                         </button>
-                        <button class="tbl-btn" th:onclick="'eliminarFavorito(' + ${fav.id} + ')'" title="Eliminar">
+                        <button class="tbl-btn" th:attr="onclick='eliminarFavorito(' + ${fav.id} + ')'" title="Eliminar">
                             <span class="material-icons" style="color:var(--accent-red)">delete</span>
                         </button>
                     </td>
@@ -334,7 +367,7 @@
             </table>
         </div>
 
-        <!-- ✅ PAGINACIÓN ESTILO STREAMING -->
+        <!-- Paginación -->
         <div class="streaming-pagination" id="streamingPagination">
             <div class="pagination-info">
                 <span>Mostrando</span><strong id="cantidadPagina">0</strong><span>de</span><strong id="totalRegistros">0</strong><span>favoritos</span>
@@ -354,7 +387,7 @@
     </div>
 </main>
 
-<!-- ══ MODAL DETALLE FAVORITO ══ -->
+<!-- Modal Detalle Favorito -->
 <div class="modal fade" id="modalDetalleFavorito" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);color:var(--text-primary);">
@@ -367,11 +400,9 @@
             </div>
             <div class="modal-body" style="padding:1.5rem;">
                 <div style="display:flex;gap:1.5rem;align-items:flex-start;">
-                    <!-- Poster de la película -->
                     <img id="modalPoster" src="" alt="Poster" style="width:120px;height:180px;border-radius:var(--radius-sm);object-fit:cover;border:1px solid var(--border);">
-                    <!-- Información -->
                     <div style="flex:1;">
-                        <h6 style="margin:0 0 0.5rem 0;font-family:'Outfit',sans-serif;font-weight:700;" th:text="${fav.pelicula.titulo}">Título Película</h6>
+                        <h6 style="margin:0 0 0.5rem 0;font-family:'Outfit',sans-serif;font-weight:700;">Título Película</h6>
                         <p style="margin:0.25rem 0;color:var(--text-secondary);font-size:13px;">
                             <strong>Año:</strong> <span id="modalAnio">2024</span>
                         </p>
@@ -402,18 +433,16 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // === Sidebar ===
+    // Sidebar
     const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
 
-    // === Toast ===
+    // Toast
     function showToast(msg,type='success'){const icons={success:'check_circle',error:'error',info:'info'},w=document.getElementById('toastWrap'),el=document.createElement('div');el.className='toast-item '+type;el.innerHTML=`<span class="material-icons">${icons[type]||'info'}</span><span class="toast-msg">${msg}</span>`;w.appendChild(el);setTimeout(()=>el.remove(),3500);}
 
-    // ══════════════════════════════════════
-    // 🎬 PAGINACIÓN ESTILO STREAMING
-    // ══════════════════════════════════════
+    // Paginación
     let paginaActual = 1; let itemsPorPagina = 10; let favoritosTotales = [];
     document.addEventListener('DOMContentLoaded', function() {
         console.log('✅ Página de favoritos cargada');
@@ -456,7 +485,7 @@
     function mostrarPaginaStreaming(numPagina) { const inicio = (numPagina - 1) * itemsPorPagina; const fin = inicio + itemsPorPagina; favoritosTotales.forEach((fila, index) => { fila.style.display = (index >= inicio && index < fin) ? '' : 'none'; }); }
     function cambiarItemsPorPagina(nuevoValor) { itemsPorPagina = parseInt(nuevoValor); paginaActual = 1; inicializarPaginacionStreaming(); }
 
-    // === Modal de detalle de favorito ===
+    // Modal y funciones
     let favoritoSeleccionadoId = null;
 
     function verDetalleFavorito(id) {
@@ -470,14 +499,11 @@
                 document.getElementById('modalUsuario').textContent = d.usuario.nombreCompleto;
                 document.getElementById('modalEmail').textContent = d.usuario.email;
                 document.getElementById('modalFecha').textContent = formatearFecha(d.fechaAgregado);
-
-                // Configurar botón eliminar
                 document.getElementById('btnEliminarModal').onclick = () => eliminarFavorito(id, true);
-
                 const modal = new bootstrap.Modal(document.getElementById('modalDetalleFavorito'));
                 modal.show();
             })
-            .catch(e => showToast('No se pudo cargar el favorito: ' + e.message, 'error'));
+            .catch(e => showToast('No se pudo cargar: ' + e.message, 'error'));
     }
 
     function formatearFecha(fechaStr) {
@@ -487,19 +513,16 @@
     }
 
     function eliminarFavorito(id, desdeModal = false) {
-        if (!confirm('¿Eliminar este favorito? Esta acción no se puede deshacer.')) return;
-
+        if (!confirm('¿Eliminar este favorito?')) return;
         fetch('/admin/favoritos/' + id + '/eliminar', { method: 'POST' })
             .then(r => r.json())
             .then(d => {
                 if (d.success) {
                     showToast(d.message, 'success');
-                    if (desdeModal) {
-                        bootstrap.Modal.getInstance(document.getElementById('modalDetalleFavorito'))?.hide();
-                    }
+                    if (desdeModal) bootstrap.Modal.getInstance(document.getElementById('modalDetalleFavorito'))?.hide();
                     setTimeout(() => location.reload(), 1400);
                 } else {
-                    showToast(d.error || 'Error al eliminar', 'error');
+                    showToast(d.error || 'Error', 'error');
                 }
             })
             .catch(() => showToast('Error de conexión', 'error'));

@@ -3,22 +3,18 @@ package com.NetPelis.netPelis.controller;
 import com.NetPelis.netPelis.entity.Favorito;
 import com.NetPelis.netPelis.repository.RepositorioFavorito;
 import com.NetPelis.netPelis.repository.RepositorioPelicula;
+import com.NetPelis.netPelis.repository.RepositorioResena;
 import com.NetPelis.netPelis.repository.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-/**
- * Controller para gestión de FAVORITOS en panel ADMIN
- * RUTAS: /admin/favoritos/*
- */
 @Controller
 @RequestMapping("/admin/favoritos")
 @RequiredArgsConstructor
@@ -27,11 +23,11 @@ public class AdminFavoritoController {
     private final RepositorioFavorito repositorioFavorito;
     private final RepositorioPelicula repositorioPelicula;
     private final RepositorioUsuario repositorioUsuario;
+    private final RepositorioResena repositorioResena;
 
     /**
-     * Lista todos los favoritos con información de usuario y película
+     * Lista todos los favoritos
      * RUTA: GET /admin/favoritos
-     * TEMPLATE: templates/admin/favoritos.html
      */
     @GetMapping
     public String listarFavoritos(
@@ -42,10 +38,9 @@ public class AdminFavoritoController {
             Model model) {
 
         try {
-            // Obtener todos los favoritos con JOIN para traer usuario y película
             List<Favorito> favoritos = repositorioFavorito.findAllWithUsuarioAndPelicula();
 
-            // Aplicar filtros si existen
+            // Aplicar filtros
             if (filtroUsuario != null && !filtroUsuario.trim().isEmpty()) {
                 favoritos = favoritos.stream()
                         .filter(f -> f.getUsuario().getNombreCompleto().toLowerCase().contains(filtroUsuario.toLowerCase()) ||
@@ -59,7 +54,6 @@ public class AdminFavoritoController {
                         .collect(Collectors.toList());
             }
 
-            // Filtros por fecha (opcional)
             if (filtroDesde != null && !filtroDesde.trim().isEmpty()) {
                 LocalDateTime desde = LocalDateTime.parse(filtroDesde + "T00:00:00");
                 favoritos = favoritos.stream()
@@ -74,56 +68,54 @@ public class AdminFavoritoController {
                         .collect(Collectors.toList());
             }
 
-            // Mantener valores de filtros en el modelo
+            model.addAttribute("favoritos", favoritos);
+            model.addAttribute("totalPeliculas", repositorioPelicula.count());
+            model.addAttribute("totalUsuarios", repositorioUsuario.count());
+            model.addAttribute("totalFavoritos", favoritos.size());
+            model.addAttribute("totalResenas", repositorioResena.count());
             model.addAttribute("filtroUsuario", filtroUsuario);
             model.addAttribute("filtroPelicula", filtroPelicula);
             model.addAttribute("filtroDesde", filtroDesde);
             model.addAttribute("filtroHasta", filtroHasta);
 
-            // Stats para sidebar (reutilizar existentes)
-            model.addAttribute("totalPeliculas", repositorioPelicula.count());
-            model.addAttribute("totalUsuarios", repositorioUsuario.count());
-
-            // Lista de favoritos filtrados
-            model.addAttribute("favoritos", favoritos);
-
-            System.out.println("✅ Página de favoritos admin cargada: " + favoritos.size() + " registros");
+            System.out.println("✅ Favoritos cargados: " + favoritos.size());
 
         } catch (Exception e) {
-            System.err.println("❌ Error cargando favoritos admin: " + e.getMessage());
+            System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("favoritos", List.of());
+            model.addAttribute("totalPeliculas", 0);
+            model.addAttribute("totalUsuarios", 0);
+            model.addAttribute("totalFavoritos", 0);
         }
 
-        return "admin/favoritos";  // Busca: templates/admin/favoritos.html
+        return "admin/favoritos";
     }
 
     /**
-     * Eliminar un favorito (ADMIN) - AJAX
-     * RUTA: POST /admin/favoritos/{id}/eliminar
+     * Eliminar favorito (AJAX)
      */
     @PostMapping("/{id}/eliminar")
     @ResponseBody
-    public ResponseEntity<?> eliminarFavoritoAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<?> eliminarFavorito(@PathVariable Long id) {
         try {
             Optional<Favorito> favoritoOpt = repositorioFavorito.findById(id);
             if (favoritoOpt.isPresent()) {
                 repositorioFavorito.delete(favoritoOpt.get());
                 return ResponseEntity.ok(Map.of("success", true, "message", "Favorito eliminado"));
             }
-            return ResponseEntity.badRequest().body(Map.of("error", "Favorito no encontrado"));
+            return ResponseEntity.badRequest().body(Map.of("error", "No encontrado"));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
 
     /**
-     * API: Obtener favorito por ID (para modal de edición/ver)
-     * RUTA: GET /admin/favoritos/api/{id}
+     * API: Obtener favorito por ID
      */
     @GetMapping("/api/{id}")
     @ResponseBody
-    public ResponseEntity<?> obtenerFavoritoApi(@PathVariable Long id) {
+    public ResponseEntity<?> obtenerFavorito(@PathVariable Long id) {
         try {
             Optional<Favorito> favoritoOpt = repositorioFavorito.findByIdWithUsuarioAndPelicula(id);
             if (favoritoOpt.isPresent()) {

@@ -16,6 +16,7 @@ public interface RepositorioPelicula extends JpaRepository<Pelicula, Long> {
     // Buscar por estado
     List<Pelicula> findByEstado(EstadoPelicula estado);
 
+
     // Buscar por título (búsqueda parcial, case-insensitive)
     List<Pelicula> findByTituloContainingIgnoreCase(String titulo);
 

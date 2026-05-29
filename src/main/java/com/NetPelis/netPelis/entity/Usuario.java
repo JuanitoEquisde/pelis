@@ -28,7 +28,7 @@ public class Usuario {
     @Column(nullable = false)
     private RolUsuario rol = RolUsuario.CLIENTE;
 
-    private boolean activo = true;
+    private Boolean activo = true;
 
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro = LocalDateTime.now();

@@ -206,32 +206,73 @@
             <span class="logo-icon"><span class="material-icons">movie</span></span>
             <span class="logo-text">NET<span>PELIS</span></span>
         </a>
-        <button class="menu-toggle" id="menuClose"><span class="material-icons">close</span></button>
+        <button class="menu-toggle" id="menuClose">
+            <span class="material-icons">close</span>
+        </button>
     </div>
+
     <div class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
-        <a href="/admin/dashboard" class="nav-link"><span class="material-icons">dashboard</span>Dashboard</a>
-        <a href="/admin/peliculas" class="nav-link active"><span class="material-icons">movie</span>Películas<span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span></a>
-        <a href="/admin/usuarios" class="nav-link"><span class="material-icons">people</span>Usuarios<span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span></a>
-        <!-- En la sección de sidebar-nav -->
-        <a href="/admin/favoritos" class="nav-link"><span class="material-icons">favorite</span>Favoritos<span class="nav-badge">●</span></a>
+
+        <a href="/admin/dashboard" class="nav-link active">
+            <span class="material-icons">dashboard</span>Dashboard
+        </a>
+
+        <a href="/admin/peliculas" class="nav-link">
+            <span class="material-icons">movie</span>Películas
+            <span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/usuarios" class="nav-link">
+            <span class="material-icons">people</span>Usuarios
+            <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/favoritos" class="nav-link">
+            <span class="material-icons">favorite</span>Favoritos
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>  <!-- ✅ CORREGIDO -->
+        </a>
+
         <span class="nav-section-label">Contenido</span>
 
-        <a href="/admin/revisiones" class="nav-link"><span class="material-icons">rate_review</span>Reseñas<span class="nav-badge" th:text="${totalResenas ?: 0}">0</span></a>
-        <a href="/admin/comentarios" class="nav-link"><span class="material-icons">chat</span>Comentarios</a>
-        <a href="/admin/generos" class="nav-link"><span class="material-icons">category</span>Géneros</a>
+        <a href="/admin/resenas" class="nav-link">
+            <span class="material-icons">rate_review</span>Reseñas
+            <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/comentarios" class="nav-link">
+            <span class="material-icons">chat</span>Comentarios
+            <!-- Opcional: agregar badge si tienes contador -->
+        </a>
+
+        <a href="/admin/generos" class="nav-link">
+            <span class="material-icons">category</span>Géneros
+        </a>
+
         <div class="sidebar-divider"></div>
         <span class="nav-section-label">Sistema</span>
-        <a href="/admin/configuracion" class="nav-link"><span class="material-icons">settings</span>Configuración</a>
-        <a href="/admin/logs" class="nav-link"><span class="material-icons">receipt_long</span>Logs</a>
+
+        <a href="/admin/configuracion" class="nav-link">
+            <span class="material-icons">settings</span>Configuración
+        </a>
+
+        <a href="/admin/logs" class="nav-link">
+            <span class="material-icons">receipt_long</span>Logs
+        </a>
     </div>
+
     <div class="sidebar-footer">
         <div class="user-info-row">
             <div class="user-avatar">A</div>
-            <div class="user-details"><h6>Administrador</h6><small>admin@netpelis.com</small></div>
+            <div class="user-details">
+                <h6>Administrador</h6>
+                <small>admin@netpelis.com</small>
+            </div>
         </div>
         <form th:action="@{/auth/logout}" method="post">
-            <button type="submit" class="btn-logout"><span class="material-icons">logout</span>Cerrar Sesión</button>
+            <button type="submit" class="btn-logout">
+                <span class="material-icons">logout</span>Cerrar Sesión
+            </button>
         </form>
     </div>
 </nav>
