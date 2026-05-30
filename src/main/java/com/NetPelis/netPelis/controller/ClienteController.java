@@ -146,7 +146,7 @@ public class ClienteController {
             Optional<Pelicula> peliculaOpt = repositorioPelicula.findById(peliculaId);
             if (peliculaOpt.isEmpty()) {
                 redirectAttributes.addFlashAttribute("error", "Película no encontrada");
-                return "redirect:/cliente/dashboard";
+                return "cliente-dashboard";
             }
 
             // ✅ Convertir String a BigDecimal
@@ -154,7 +154,7 @@ public class ClienteController {
             if (puntuacionDecimal.compareTo(BigDecimal.ZERO) < 0 || puntuacionDecimal.compareTo(new BigDecimal("10")) > 0) {
                 redirectAttributes.addFlashAttribute("error", "La puntuación debe estar entre 0 y 10");
                 redirectAttributes.addFlashAttribute("tipoMensaje", "danger");
-                return "redirect:/cliente/dashboard";
+                return "cliente-dashboard";
             }
 
             // Verificar si ya existe reseña
@@ -194,7 +194,7 @@ public class ClienteController {
             redirectAttributes.addFlashAttribute("tipoMensaje", "danger");
         }
 
-        return "redirect:/cliente/dashboard";
+        return "cliente-dashboard";
     }
 
     /**

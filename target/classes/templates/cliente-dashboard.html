@@ -272,7 +272,8 @@
         <p>Descubre las mejores películas y series. Tu próximo favorito te espera hoy.</p>
         <div class="hero-stats">
             <div class="hs-item">
-                <div class="hs-value"><span th:text="${#lists.size(peliculas)}">0</span></div>
+                <!-- ✅ CORREGIDO: Manejo seguro de lista null -->
+                <div class="hs-value"><span th:text="${peliculas != null ? #lists.size(peliculas) : 0}">0</span></div>
                 <div class="hs-key">Disponibles</div>
             </div>
             <div class="hs-item">
@@ -299,11 +300,10 @@
     <div class="section-divider"></div>
 
     <!-- GRID DE PELÍCULAS -->
-    <!-- GRID DE PELÍCULAS - VERSIÓN CORREGIDA -->
     <div class="movies-grid">
         <!-- ✅ LOOP Thymeleaf con th:attr para onclick (CORREGIDO) -->
         <div class="movie-card"
-             th:each="pelicula : ${peliculas}"
+             th:each="pelicula : ${peliculas != null ? peliculas : T(java.util.Collections).emptyList()}"
              th:if="${pelicula.estado != null and pelicula.estado.name == 'PUBLICADO'}"
              th:data-pelicula-id="${pelicula.id}">
 
@@ -311,8 +311,8 @@
                 <div class="poster-top">
                     <span class="badge-category">SHOW</span>
                     <span class="badge-rating">
-                    <span class="material-icons">star</span>4.8
-                </span>
+                        <span class="material-icons">star</span>4.8
+                    </span>
                 </div>
                 <img th:src="${pelicula.posterUrl != null and !pelicula.posterUrl.isEmpty() ? pelicula.posterUrl : 'https://via.placeholder.com/300x450/12121e/dc2626?text=' + pelicula.titulo}"
                      th:alt="${pelicula.titulo}"
@@ -325,14 +325,14 @@
                 <div class="movie-cat-label">PELÍCULA</div>
                 <div class="movie-title" th:text="${pelicula.titulo}">Título</div>
                 <div class="movie-meta">
-                <span class="movie-meta-item">
-                    <span class="material-icons">calendar_today</span>
-                    <span th:text="${pelicula.anioLanzamiento}">2024</span>
-                </span>
+                    <span class="movie-meta-item">
+                        <span class="material-icons">calendar_today</span>
+                        <span th:text="${pelicula.anioLanzamiento}">2024</span>
+                    </span>
                     <span class="movie-meta-item" th:if="${pelicula.duracionMinutos != null}">
-                    <span class="material-icons">schedule</span>
-                    <span th:text="${pelicula.duracionMinutos + ' min'}">120 min</span>
-                </span>
+                        <span class="material-icons">schedule</span>
+                        <span th:text="${pelicula.duracionMinutos + ' min'}">120 min</span>
+                    </span>
                 </div>
                 <p class="movie-synopsis" th:text="${pelicula.sinopsis != null and !pelicula.sinopsis.isEmpty() ? pelicula.sinopsis : 'Sinopsis no disponible.'}">Sinopsis</p>
                 <div class="movie-divider"></div>
@@ -496,11 +496,10 @@
     // FAVORITOS - Funcionalidad AJAX
     // ══════════════════════════════════════
 
-    // Verificar estado de favoritos al cargar la página
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('.btn-fav').forEach(btn => {
             const peliculaId = btn.getAttribute('data-pelicula-id');
-            if (peliculaId && peliculaId !== '999' && peliculaId !== '998') { // Ignorar ejemplos estáticos
+            if (peliculaId && peliculaId !== '999' && peliculaId !== '998') {
                 checkFavoritoStatus(peliculaId, btn);
             }
         });
@@ -538,7 +537,6 @@
                     btn.innerHTML = '<span class="material-icons">favorite_border</span>Favorito';
                     showToast('Eliminado de favoritos', 'info');
                 }
-                // Actualizar contador de favoritos en el hero
                 actualizarContadorFavoritos();
             } else {
                 showToast(data.error || 'Error al actualizar favoritos', 'error');
@@ -575,10 +573,7 @@
         modal.show();
     }
 
-    // Manejar submit del formulario de reseña
     document.getElementById('formResena')?.addEventListener('submit', function(e) {
-        // El form ya tiene action="/cliente/resenas/crear" y method="post"
-        // Solo mostramos un toast de "Enviando..."
         showToast('Publicando reseña...', 'info');
     });
 
@@ -588,21 +583,11 @@
 
     function showToast(message, type = 'info') {
         const toastContainer = document.getElementById('toastContainer');
-
         const toast = document.createElement('div');
         toast.className = `toast-item-np ${type}`;
 
-        const icons = {
-            success: 'check_circle',
-            error: 'error',
-            info: 'info'
-        };
-
-        const colors = {
-            success: '#10b981',
-            error: 'var(--accent-red)',
-            info: '#3b82f6'
-        };
+        const icons = { success: 'check_circle', error: 'error', info: 'info' };
+        const colors = { success: '#10b981', error: 'var(--accent-red)', info: '#3b82f6' };
 
         toast.innerHTML = `
             <span class="material-icons" style="color: ${colors[type]}">${icons[type]}</span>
@@ -610,8 +595,6 @@
         `;
 
         toastContainer.appendChild(toast);
-
-        // Auto-remover después de 3.5 segundos
         setTimeout(() => {
             toast.style.opacity = '0';
             toast.style.transform = 'translateY(-20px)';
@@ -619,9 +602,8 @@
         }, 3500);
     }
 
-    // Mostrar mensajes flash del servidor (si existen)
+    // Mostrar mensajes flash del servidor
     document.addEventListener('DOMContentLoaded', function() {
-        // Mensaje de éxito
         const mensaje = /*[[${mensaje}]]*/ null;
         const tipoMensaje = /*[[${tipoMensaje}]]*/ null;
         const error = /*[[${error}]]*/ null;
@@ -633,18 +615,6 @@
             showToast(error, 'error');
         }
     });
-
-    // === Event listeners para botones de reseñar ===
-document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-reseñar').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            const id = this.dataset.peliculaId;
-            const titulo = this.dataset.peliculaTitulo;
-            abrirModalResena(id, titulo);
-        });
-    });
-});
 </script>
 </body>
 </html>

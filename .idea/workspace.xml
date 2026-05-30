@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9afa2d3a-1f5e-49a4-8473-f243b7ec3263" name="Changes" comment="Initial commit: NetPelis - Spring Boot + MySQL + Security">
+    <list default="true" id="9afa2d3a-1f5e-49a4-8473-f243b7ec3263" name="Changes" comment="Initial commit: NetPelis - Spring Boot + MySQL + Security&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java&#10;#&#9;src/main/resources/templates/admin/Peliculas.html&#10;#&#9;src/main/resources/templates/admin/favoritos.html&#10;#&#9;src/main/resources/templates/admin/usuarios.html">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/Peliculas.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/peliculas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/cliente-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/cliente-dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/cliente-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/cliente-dashboard.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -186,12 +191,21 @@
       <option name="project" value="LOCAL" />
       <updated>1780040471744</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Initial commit: NetPelis - Spring Boot + MySQL + Security&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java&#10;#&#9;src/main/resources/templates/admin/Peliculas.html&#10;#&#9;src/main/resources/templates/admin/favoritos.html&#10;#&#9;src/main/resources/templates/admin/usuarios.html">
+      <option name="closed" value="true" />
+      <created>1780099342148</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1780099342148</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="guardado de miercoles" />
     <MESSAGE value="Initial commit: NetPelis - Spring Boot + MySQL + Security" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: NetPelis - Spring Boot + MySQL + Security" />
+    <MESSAGE value="Initial commit: NetPelis - Spring Boot + MySQL + Security&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java&#10;#&#9;src/main/resources/templates/admin/Peliculas.html&#10;#&#9;src/main/resources/templates/admin/favoritos.html&#10;#&#9;src/main/resources/templates/admin/usuarios.html" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: NetPelis - Spring Boot + MySQL + Security&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java&#10;#&#9;src/main/resources/templates/admin/Peliculas.html&#10;#&#9;src/main/resources/templates/admin/favoritos.html&#10;#&#9;src/main/resources/templates/admin/usuarios.html" />
   </component>
 </project>

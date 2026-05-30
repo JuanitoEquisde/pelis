@@ -33,53 +33,56 @@ public class ClienteDashboardController {
     @GetMapping("/dashboard")
     public String dashboardCliente(Model model) {
         try {
-            // Obtener usuario autenticado
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             String email = auth.getName();
 
-            // Buscar usuario por email
             Usuario usuario = repositorioUsuario.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + email));
 
-            // Estadísticas del cliente
-            long totalFavoritos = repositorioFavorito.countByUsuarioId(usuario.getId());
-            long totalResenasUsuario = repositorioResena.countByUsuarioId(usuario.getId());
+            // Estadísticas
+            long misFavoritos = repositorioFavorito.countByUsuarioId(usuario.getId());
+            long misResenas = repositorioResena.countByUsuarioId(usuario.getId());
             long totalPeliculasDisponibles = repositorioPelicula.countByEstado(EstadoPelicula.PUBLICADO);
 
-            // Películas publicadas disponibles
-            List<com.NetPelis.netPelis.entity.Pelicula> peliculasDisponibles =
+            // ✅ Listas de datos
+            List<com.NetPelis.netPelis.entity.Pelicula> peliculas =
                     repositorioPelicula.findByEstado(EstadoPelicula.PUBLICADO);
+            if (peliculas == null) peliculas = List.of();  // Nunca null
 
-            // Películas favoritas del usuario
-            List<com.NetPelis.netPelis.entity.Favorito> misFavoritos =
+            List<com.NetPelis.netPelis.entity.Favorito> misFavoritosList =
                     repositorioFavorito.findByUsuarioId(usuario.getId());
-
-            // Últimas reseñas del usuario
-            List<com.NetPelis.netPelis.entity.Resena> misResenas =
+            List<com.NetPelis.netPelis.entity.Resena> misResenasList =
                     repositorioResena.findByUsuarioIdOrderByFechaCreacionDesc(usuario.getId());
 
-            // Agregar atributos al modelo
+            // ✅ ATRIBUTOS CON NOMBRES QUE COINCIDEN CON EL HTML:
             model.addAttribute("usuario", usuario);
-            model.addAttribute("totalFavoritos", totalFavoritos);
-            model.addAttribute("totalResenasUsuario", totalResenasUsuario);
-            model.addAttribute("totalPeliculasDisponibles", totalPeliculasDisponibles);
-            model.addAttribute("peliculasDisponibles", peliculasDisponibles);
-            model.addAttribute("misFavoritos", misFavoritos);
-            model.addAttribute("misResenas", misResenas);
+            model.addAttribute("peliculas", peliculas);              // ← ← ← ¡CAMBIO CLAVE!
+            model.addAttribute("totalFavoritos", misFavoritos);      // ← ← ← Coincide con HTML
+            model.addAttribute("totalResenas", misResenas);          // ← ← ← Coincide con HTML
+            model.addAttribute("totalPeliculas", totalPeliculasDisponibles); // ← Para sidebar
+
+            // Opcional: si necesitas las listas completas en otro lugar del HTML
+            model.addAttribute("misFavoritos", misFavoritosList);
+            model.addAttribute("misResenas", misResenasList);
 
             System.out.println("✅ Dashboard Cliente cargado:");
             System.out.println("   - Usuario: " + usuario.getNombreCompleto());
-            System.out.println("   - Películas disponibles: " + totalPeliculasDisponibles);
-            System.out.println("   - Favoritos: " + totalFavoritos);
-            System.out.println("   - Reseñas: " + totalResenasUsuario);
+            System.out.println("   - Películas: " + peliculas.size());
+            System.out.println("   - Favoritos: " + misFavoritos);
+            System.out.println("   - Reseñas: " + misResenas);
+
+            return "cliente-dashboard";
 
         } catch (Exception e) {
-            System.err.println("❌ Error cargando dashboard cliente: " + e.getMessage());
+            System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
-            model.addAttribute("error", "No se pudo cargar el dashboard");
+            // ✅ En caso de error, pasar valores seguros
+            model.addAttribute("peliculas", List.of());
+            model.addAttribute("totalFavoritos", 0);
+            model.addAttribute("totalResenas", 0);
+            model.addAttribute("totalPeliculas", 0);
+            return "cliente-dashboard";
         }
-
-        return "cliente-dashboard";
     }
 
     /**
@@ -122,7 +125,7 @@ public class ClienteDashboardController {
             return "cliente/favoritos"; // Vista: cliente/favoritos.html
         } catch (Exception e) {
             System.err.println("Error cargando favoritos: " + e.getMessage());
-            return "redirect:/cliente/dashboard";
+            return "cliente-dashboard";
         }
     }
 
