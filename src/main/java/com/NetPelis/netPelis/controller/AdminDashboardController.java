@@ -73,50 +73,7 @@ public class AdminDashboardController {
      * - email: String (búsqueda parcial, case-insensitive)
      * - rol: RolUsuario (ADMIN o CLIENTE)
      */
-    @GetMapping("/usuarios")
-    public String gestionarUsuarios(
-            @RequestParam(value = "id", required = false) Long id,
-            @RequestParam(value = "nombre", required = false) String nombre,
-            @RequestParam(value = "email", required = false) String email,
-            @RequestParam(value = "rol", required = false) RolUsuario rol,
-            Model model) {
 
-        try {
-            // ✅ Buscar usuarios con filtros usando el service
-            List<Usuario> usuarios = usuarioService.buscarUsuarios(id, nombre, email, rol, null);
-
-            // ✅ Mantener valores de filtros en el modelo para que persistan en el formulario HTML
-            model.addAttribute("filtroId", id);
-            model.addAttribute("filtroNombre", nombre);
-            model.addAttribute("filtroEmail", email);
-            model.addAttribute("filtroRol", rol != null ? rol.name() : null);
-
-            // Stats para el sidebar (mismo que dashboard)
-            model.addAttribute("totalPeliculas", repositorioPelicula.count());
-            model.addAttribute("totalUsuarios", repositorioUsuario.countByActivoTrue());
-            model.addAttribute("totalResenas", 0L);
-            model.addAttribute("totalFavoritos", 0L);
-
-            // ✅ Lista de usuarios (filtrada o todos si no hay filtros)
-            model.addAttribute("usuarios", usuarios);
-
-            System.out.println("✅ Página de usuarios cargada con filtros:");
-            System.out.println("   - id=" + id + ", nombre=" + nombre + ", email=" + email + ", rol=" + rol);
-            System.out.println("   - Resultados: " + usuarios.size() + " usuarios");
-
-        } catch (Exception e) {
-            System.err.println("❌ Error cargando usuarios: " + e.getMessage());
-            e.printStackTrace();
-            // Fallback: lista vacía en caso de error
-            model.addAttribute("usuarios", List.of());
-            model.addAttribute("filtroId", null);
-            model.addAttribute("filtroNombre", null);
-            model.addAttribute("filtroEmail", null);
-            model.addAttribute("filtroRol", null);
-        }
-
-        return "admin/usuarios";  // ✅ Busca: templates/admin/usuarios.html
-    }
 
     // ❌ NO agregar @GetMapping("/peliculas") aquí - Eso es de PeliculaController
 
