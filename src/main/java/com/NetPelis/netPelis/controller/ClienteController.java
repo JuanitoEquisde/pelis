@@ -121,14 +121,13 @@ public class ClienteController {
 
     /**
      * Crear o actualizar reseña
-     * ✅ CORREGIDO: BigDecimal para puntuación
      */
     @PostMapping("/resenas/crear")
     public String crearResena(
             @RequestParam Long peliculaId,
             @RequestParam String titulo,
             @RequestParam String texto,
-            @RequestParam String puntuacion,  // ✅ Recibir como String para convertir a BigDecimal
+            @RequestParam String puntuacion,
             @RequestParam(required = false) Boolean esRecomendada,
             RedirectAttributes redirectAttributes) {
 
@@ -149,7 +148,6 @@ public class ClienteController {
                 return "cliente-dashboard";
             }
 
-            // ✅ Convertir String a BigDecimal
             BigDecimal puntuacionDecimal = new BigDecimal(puntuacion);
             if (puntuacionDecimal.compareTo(BigDecimal.ZERO) < 0 || puntuacionDecimal.compareTo(new BigDecimal("10")) > 0) {
                 redirectAttributes.addFlashAttribute("error", "La puntuación debe estar entre 0 y 10");
@@ -166,7 +164,7 @@ public class ClienteController {
                 resena = resenaExistente.get();
                 resena.setTitulo(titulo);
                 resena.setTexto(texto);
-                resena.setPuntuacion(puntuacionDecimal);  // ✅ BigDecimal
+                resena.setPuntuacion(puntuacionDecimal);
                 resena.setEsRecomendada(esRecomendada != null ? esRecomendada : true);
                 resena.setFechaActualizacion(LocalDateTime.now());
             } else {
@@ -176,7 +174,7 @@ public class ClienteController {
                 resena.setPelicula(peliculaOpt.get());
                 resena.setTitulo(titulo);
                 resena.setTexto(texto);
-                resena.setPuntuacion(puntuacionDecimal);  // ✅ BigDecimal
+                resena.setPuntuacion(puntuacionDecimal);
                 resena.setEsRecomendada(esRecomendada != null ? esRecomendada : true);
                 resena.setFechaCreacion(LocalDateTime.now());
             }

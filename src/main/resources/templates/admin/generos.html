@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Géneros - NetPelis Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #080810; --bg-secondary: #0f0f1a; --bg-sidebar: #0a0a14;
+            --bg-card: #12121e; --bg-card-hover: #16162a; --bg-glass: rgba(255,255,255,0.03);
+            --accent-red: #dc2626; --accent-red-glow: rgba(220,38,38,0.18);
+            --accent-red-soft: rgba(220,38,38,0.08); --accent-gold: #f59e0b;
+            --accent-gold-soft: rgba(245,158,11,0.08); --text-primary: #f1f1f8;
+            --text-secondary: rgba(241,241,248,0.65); --text-muted: rgba(241,241,248,0.38);
+            --border: rgba(255,255,255,0.07); --border-red: rgba(220,38,38,0.22);
+            --radius-sm: 10px; --radius-md: 14px; --radius-lg: 20px;
+            --sidebar-w: 260px;
+        }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse 70% 50% at 10% 0%, rgba(220,38,38,0.08) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 90% 100%, rgba(245,158,11,0.05) 0%, transparent 55%); z-index: -1; pointer-events: none; }
+        ::-webkit-scrollbar { width: 5px; height: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(220,38,38,0.35); border-radius: 99px; } ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+        .sidebar { width: var(--sidebar-w); background: var(--bg-sidebar); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; height: 100vh; padding: 0; z-index: 1000; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+        .sidebar-brand { padding: 1.5rem 1.25rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .brand-logo { display: flex; align-items: center; gap: 10px; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: var(--text-primary); text-decoration: none; letter-spacing: 0.3px; }
+        .brand-logo .logo-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-red); display: flex; align-items: center; justify-content: center; }
+        .brand-logo .logo-icon .material-icons { font-size: 17px; color: white; }
+        .brand-logo .logo-text span { color: var(--accent-red); }
+        .menu-toggle { display: none; background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 0.3rem; border-radius: 7px; transition: all 0.2s; line-height: 1; }
+        .menu-toggle:hover { background: var(--accent-red-soft); color: var(--text-primary); }
+        .menu-toggle .material-icons { font-size: 20px; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 1.25rem 0.875rem; display: flex; flex-direction: column; gap: 0.125rem; }
+        .nav-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 0.75rem 0.875rem 0.4rem; margin-top: 0.375rem; }
+        .nav-link { display: flex; align-items: center; gap: 10px; color: var(--text-muted); text-decoration: none; padding: 0.7rem 0.875rem; border-radius: var(--radius-sm); font-weight: 500; font-size: 13.5px; transition: all 0.22s; position: relative; }
+        .nav-link .material-icons { font-size: 18px; flex-shrink: 0; }
+        .nav-link:hover { color: var(--text-primary); background: var(--bg-glass); transform: translateX(3px); }
+        .nav-link.active { background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(220,38,38,0.06)); color: var(--text-primary); border: 1px solid var(--border-red); box-shadow: 0 2px 12px rgba(220,38,38,0.1); }
+        .nav-link.active .material-icons { color: var(--accent-red); }
+        .nav-badge { margin-left: auto; background: var(--accent-red); color: white; font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 99px; flex-shrink: 0; }
+        .sidebar-divider { height: 1px; background: var(--border); margin: 0.75rem 0.5rem; }
+        .sidebar-footer { padding: 1rem 0.875rem 1.25rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+        .user-info-row { display: flex; align-items: center; gap: 10px; padding: 0.75rem; border-radius: var(--radius-sm); background: var(--bg-glass); border: 1px solid var(--border); margin-bottom: 0.75rem; }
+        .user-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-red), var(--accent-gold)); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: white; flex-shrink: 0; }
+        .user-details { overflow: hidden; }
+        .user-details h6 { margin: 0; font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .user-details small { color: var(--text-muted); font-size: 11px; }
+        .btn-logout { width: 100%; background: transparent; font-family: inherit; border: 1px solid var(--border-red); color: var(--accent-red); padding: 0.55rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .btn-logout:hover { background: var(--accent-red); color: white; border-color: var(--accent-red); }
+        .btn-logout .material-icons { font-size: 16px; }
+        .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; }
+        .sidebar-overlay.active { display: block; }
+        .main-content { margin-left: var(--sidebar-w); min-height: 100vh; padding: 2rem 2.25rem 3rem; transition: margin-left 0.3s ease; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+        .topbar-left { display: flex; align-items: center; gap: 1rem; }
+        .page-title { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-new { display: inline-flex; align-items: center; gap: 7px; background: linear-gradient(135deg, var(--accent-red), #991b1b); color: white; border: none; font-family: inherit; padding: 0.65rem 1.25rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 13.5px; cursor: pointer; transition: all 0.25s; box-shadow: 0 4px 18px rgba(220,38,38,0.3); }
+        .btn-new:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(220,38,38,0.4); color: white; }
+        .btn-new .material-icons { font-size: 17px; }
+        .content-card { background: var(--bg-card); border-radius: var(--radius-md); box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0,0,0,0.4); margin-bottom: 1.5rem; overflow: hidden; }
+        .cc-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+        .cc-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+        .cc-title .material-icons { font-size: 18px; color: var(--accent-red); }
+        .table-wrap { overflow-x: auto; }
+        .tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
+        .tbl thead th { background: rgba(220,38,38,0.06); color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
+        .tbl tbody td { padding: 0.875rem 1.25rem; vertical-align: middle; font-size: 13.5px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .tbl tbody tr:last-child td { border-bottom: none; }
+        .tbl tbody tr { transition: background 0.18s; }
+        .tbl tbody tr:hover { background: rgba(220,38,38,0.04); }
+        .badge-np { padding: 4px 10px; border-radius: 7px; font-weight: 700; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-np.success { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
+        .badge-np.warning { background: rgba(245,158,11,0.15); color: var(--accent-gold); border: 1px solid rgba(245,158,11,0.25); }
+        .badge-np.danger { background: rgba(220,38,38,0.15); color: var(--accent-red); border: 1px solid rgba(220,38,38,0.25); }
+        .tbl-btn { background: transparent; border: none; color: var(--text-muted); padding: 5px 7px; border-radius: 7px; cursor: pointer; transition: all 0.18s; line-height: 1; }
+        .tbl-btn:hover { background: var(--accent-red-soft); color: var(--accent-red); }
+        .tbl-btn .material-icons { font-size: 17px; vertical-align: middle; }
+        .form-label-np { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 5px; }
+        .form-ctrl { width: 100%; background: var(--bg-secondary) !important; border: 1px solid var(--border) !important; border-radius: var(--radius-sm) !important; color: var(--text-primary) !important; padding: 0.575rem 0.875rem; font-size: 13.5px; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-ctrl:focus { outline: none; border-color: var(--accent-red) !important; box-shadow: 0 0 0 3px rgba(220,38,38,0.14) !important; }
+        .btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: inherit; padding: 0.575rem 1.25rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; }
+        .btn-cancel:hover { background: var(--bg-glass); color: var(--text-primary); }
+        .btn-save { background: linear-gradient(135deg, var(--accent-red), #991b1b); border: none; color: white; font-family: inherit; padding: 0.575rem 1.375rem; border-radius: var(--radius-sm); font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s; box-shadow: 0 4px 16px rgba(220,38,38,0.28); }
+        .btn-save:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(220,38,38,0.38); }
+        .btn-save .material-icons { font-size: 15px; }
+
+        /* Pagination */
+        .pagination-container { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; background: var(--bg-secondary); border-top: 1px solid var(--border); }
+        .pagination-info { font-size: 12px; color: var(--text-muted); }
+        .pagination-info strong { color: var(--text-primary); }
+        .pagination-controls { display: flex; gap: 0.5rem; }
+        .page-link { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; height: 32px; padding: 0 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .page-link:hover:not(.disabled) { background: var(--accent-red-soft); border-color: var(--border-red); }
+        .page-link.active { background: var(--accent-red); border-color: var(--accent-red); color: white; font-weight: 700; }
+        .page-link.disabled { opacity: 0.4; cursor: not-allowed; }
+
+        /* Modal */
+        .modal-content-np { background: var(--bg-card) !important; border: 1px solid var(--border) !important; border-radius: var(--radius-lg) !important; color: var(--text-primary); }
+        .modal-header-np { border-bottom: 1px solid var(--border); padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+        .modal-title-np { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .modal-title-np .material-icons { color: var(--accent-gold); font-size: 18px; }
+        .btn-close-np { background: transparent; border: none; color: var(--text-muted); font-size: 24px; cursor: pointer; padding: 0; line-height: 1; }
+        .btn-close-np:hover { color: var(--text-primary); }
+        .modal-body-np { padding: 1.5rem; }
+        .modal-footer-np { border-top: 1px solid var(--border); padding: 1rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.75rem; }
+
+        /* Toast */
+        .toast-wrap { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; }
+        .toast-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 0.875rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 8px 32px rgba(0,0,0,0.5); min-width: 280px; animation: slideUp 0.3s ease; margin-bottom: 0.5rem; }
+        .toast-item .material-icons { font-size: 20px; }
+        .toast-item.success .material-icons { color: #10b981; }
+        .toast-item.error .material-icons { color: var(--accent-red); }
+        .toast-item.info .material-icons { color: #3b82f6; }
+        .toast-msg { font-size: 13.5px; font-weight: 500; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .sidebar.active { transform: translateX(0); } .main-content { margin-left: 0; } .menu-toggle { display: flex; align-items: center; } }
+    </style>
+</head>
+<body>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <a href="/admin/dashboard" class="brand-logo">
+            <span class="logo-icon"><span class="material-icons">movie</span></span>
+            <span class="logo-text">NET<span>PELIS</span></span>
+        </a>
+        <button class="menu-toggle" id="menuClose"><span class="material-icons">close</span></button>
+    </div>
+    <div class="sidebar-nav">
+        <span class="nav-section-label">Principal</span>
+        <a href="/admin/dashboard" class="nav-link"><span class="material-icons">dashboard</span>Dashboard</a>
+        <a href="/admin/peliculas" class="nav-link"><span class="material-icons">movie</span>Películas</a>
+        <a href="/admin/usuarios" class="nav-link"><span class="material-icons">people</span>Usuarios</a>
+        <a href="/admin/generos" class="nav-link active"><span class="material-icons">category</span>Géneros</a>
+        <a href="/admin/favoritos" class="nav-link"><span class="material-icons">favorite</span>Favoritos</a>
+        <a href="/admin/resenas" class="nav-link"><span class="material-icons">rate_review</span>Reseñas</a>
+    </div>
+    <div class="sidebar-footer">
+        <div class="user-info-row">
+            <div class="user-avatar">A</div>
+            <div class="user-details"><h6>Administrador</h6><small>admin@netpelis.com</small></div>
+        </div>
+        <form th:action="@{/auth/logout}" method="post">
+            <button type="submit" class="btn-logout"><span class="material-icons">logout</span>Cerrar Sesión</button>
+        </form>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="topbar">
+        <div class="topbar-left">
+            <button class="menu-toggle d-lg-none" id="menuOpen"><span class="material-icons">menu</span></button>
+            <h1 class="page-title">Gestión de Géneros</h1>
+        </div>
+        <button type="button" class="btn-new" onclick="abrirModalCrear()">
+            <span class="material-icons">add</span>Nuevo Género
+        </button>
+    </div>
+
+    <div class="content-card">
+        <div class="cc-header">
+            <span class="cc-title"><span class="material-icons">category</span>Lista de Géneros</span>
+        </div>
+
+        <div class="table-wrap">
+            <table class="tbl">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th style="width: 150px;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="genero : ${generos}">
+                    <td style="font-family: monospace; font-size: 12px; color: var(--text-muted);" th:text="'#' + ${genero.id}">#1</td>
+                    <td style="font-weight: 600;" th:text="${genero.nombre}">ACCIÓN</td>
+                    <td>
+                        <button class="tbl-btn" th:onclick="'abrirModalEditar(' + ${genero.id} + ', \'' + ${genero.nombre} + '\')'" title="Editar">
+                            <span class="material-icons">edit</span>
+                        </button>
+                        <button class="tbl-btn" th:onclick="'abrirModalEliminar(' + ${genero.id} + ', \'' + ${genero.nombre} + '\')'" title="Eliminar">
+                            <span class="material-icons" style="color: var(--accent-red);">delete</span>
+                        </button>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(generos)}">
+                    <td colspan="3" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                        <span class="material-icons" style="font-size: 40px; opacity: 0.25; display: block; margin-bottom: 0.75rem;">category</span>
+                        No hay géneros registrados
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-container" th:if="${totalPages > 0}">
+            <div class="pagination-info">
+                Mostrando <strong th:text="${totalElements}">0</strong> géneros
+            </div>
+            <div class="pagination-controls">
+                <a th:href="@{/admin/generos(page=${currentPage - 1}, size=${pageSize}, sortBy=${sortBy})}"
+                   class="page-link"
+                   th:classappend="${currentPage == 0} ? 'disabled'"
+                   th:if="${currentPage > 0}">
+                    <span class="material-icons" style="font-size: 16px;">chevron_left</span>
+                </a>
+
+                <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                    <a th:href="@{/admin/generos(page=${i}, size=${pageSize}, sortBy=${sortBy})}"
+                       class="page-link"
+                       th:classappend="${i == currentPage} ? 'active'"
+                       th:text="${i + 1}">1</a>
+                </span>
+
+                <a th:href="@{/admin/generos(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy})}"
+                   class="page-link"
+                   th:classappend="${currentPage == totalPages - 1} ? 'disabled'"
+                   th:if="${currentPage < totalPages - 1}">
+                    <span class="material-icons" style="font-size: 16px;">chevron_right</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="modalGenero" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-np">
+            <div class="modal-header-np">
+                <div class="modal-title-np">
+                    <span class="material-icons">category</span>
+                    <span id="modalTitulo">Nuevo Género</span>
+                </div>
+                <button type="button" class="btn-close-np" data-bs-dismiss="modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="formGenero" method="post">
+                <div class="modal-body-np">
+                    <input type="hidden" id="generoId" name="id">
+                    <div class="mb-3">
+                        <label class="form-label-np">Nombre del Género</label>
+                        <input type="text" class="form-ctrl" id="generoNombre" name="nombre" required placeholder="Ej: ACCIÓN, DRAMA, COMEDIA..." maxlength="50">
+                    </div>
+                </div>
+                <div class="modal-footer-np">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-save">
+                        <span class="material-icons">save</span>
+                        <span id="btnGuardarTexto">Guardar</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmar Eliminar -->
+<div class="modal fade" id="modalEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-np" style="text-align: center;">
+            <div class="modal-body-np">
+                <div style="width: 64px; height: 64px; border-radius: 50%; background: rgba(220,38,38,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                    <span class="material-icons" style="font-size: 32px; color: var(--accent-red);">delete_outline</span>
+                </div>
+                <h5 style="font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 18px; margin-bottom: 0.5rem;">¿Eliminar género?</h5>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 1.5rem;">
+                    ¿Estás seguro de eliminar "<strong id="eliminarNombre">Género</strong>"? Esta acción no se puede deshacer.
+                </p>
+                <input type="hidden" id="eliminarId">
+                <form id="formEliminar" method="post" style="display: flex; justify-content: center; gap: 0.75rem;">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-save" style="background: var(--accent-red);">
+                        <span class="material-icons">delete</span>Eliminar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Sidebar
+    const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
+    function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
+    function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
+    menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
+
+    // Toast
+    function showToast(msg, type='success') {
+        const icons = { success: 'check_circle', error: 'error', info: 'info' };
+        const wrap = document.getElementById('toastWrap');
+        const el = document.createElement('div');
+        el.className = 'toast-item ' + type;
+        el.innerHTML = '<span class="material-icons">' + icons[type] + '</span><span class="toast-msg">' + msg + '</span>';
+        wrap.appendChild(el);
+        setTimeout(() => el.remove(), 3500);
+    }
+
+    // Modal Crear
+    function abrirModalCrear() {
+        document.getElementById('modalTitulo').textContent = 'Nuevo Género';
+        document.getElementById('formGenero').action = '/admin/generos/crear';
+        document.getElementById('generoId').value = '';
+        document.getElementById('generoNombre').value = '';
+        document.getElementById('btnGuardarTexto').textContent = 'Guardar';
+        new bootstrap.Modal(document.getElementById('modalGenero')).show();
+    }
+
+    // Modal Editar
+    function abrirModalEditar(id, nombre) {
+        document.getElementById('modalTitulo').textContent = 'Editar Género';
+        document.getElementById('formGenero').action = '/admin/generos/actualizar/' + id;
+        document.getElementById('generoId').value = id;
+        document.getElementById('generoNombre').value = nombre;
+        document.getElementById('btnGuardarTexto').textContent = 'Actualizar';
+        new bootstrap.Modal(document.getElementById('modalGenero')).show();
+    }
+
+    // Modal Eliminar
+    function abrirModalEliminar(id, nombre) {
+        document.getElementById('eliminarId').value = id;
+        document.getElementById('eliminarNombre').textContent = nombre;
+        document.getElementById('formEliminar').action = '/admin/generos/eliminar/' + id;
+        new bootstrap.Modal(document.getElementById('modalEliminar')).show();
+    }
+
+    // Mostrar mensajes flash
+    document.addEventListener('DOMContentLoaded', function() {
+        const mensaje = /*[[${mensaje}]]*/ null;
+        const error = /*[[${error}]]*/ null;
+        const tipoMensaje = /*[[${tipoMensaje}]]*/ null;
+
+        if (mensaje && tipoMensaje) showToast(mensaje, tipoMensaje);
+        if (error) showToast(error, 'error');
+    });
+</script>
+</body>
+</html>
