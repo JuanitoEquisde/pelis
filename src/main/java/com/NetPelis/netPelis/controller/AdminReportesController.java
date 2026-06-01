@@ -36,7 +36,6 @@ public class AdminReportesController {
 
         return "admin/reportes-dashboard";
     }
-
     /**
      * Reporte: Usuarios con más reseñas
      * ✅ CORREGIDO: Aplicar límite en Java en lugar de JPQL
