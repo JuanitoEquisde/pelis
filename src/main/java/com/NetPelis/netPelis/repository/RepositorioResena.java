@@ -1,5 +1,6 @@
 package com.NetPelis.netPelis.repository;
 
+import com.NetPelis.netPelis.dto.UsuarioResenaDTO;
 import com.NetPelis.netPelis.entity.Resena;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,39 +25,47 @@ public interface RepositorioResena extends JpaRepository<Resena, Long> {
 
     List<Resena> findByPeliculaIdOrderByFechaCreacionDesc(Long peliculaId);
 
-    // ✅ MÉTODOS FALTANTES - AGREGA ESTOS:
-
-    /**
-     * Obtener todas las reseñas con usuario y película (JOIN FETCH)
-     */
     @Query("SELECT r FROM Resena r JOIN FETCH r.usuario JOIN FETCH r.pelicula ORDER BY r.fechaCreacion DESC")
     List<Resena> findAllWithUsuarioAndPelicula();
 
-    /**
-     * Obtener una reseña específica con usuario y película
-     */
     @Query("SELECT r FROM Resena r JOIN FETCH r.usuario JOIN FETCH r.pelicula WHERE r.id = :id")
     Optional<Resena> findByIdWithUsuarioAndPelicula(@Param("id") Long id);
 
-    /**
-     * Buscar reseñas por email de usuario
-     */
     @Query("SELECT r FROM Resena r JOIN r.usuario u WHERE LOWER(u.email) LIKE LOWER(CONCAT('%', :email, '%')) ORDER BY r.fechaCreacion DESC")
     List<Resena> findByUsuarioEmailContaining(@Param("email") String email);
 
-    /**
-     * Buscar reseñas por título de película
-     */
     @Query("SELECT r FROM Resena r JOIN r.pelicula p WHERE LOWER(p.titulo) LIKE LOWER(CONCAT('%', :titulo, '%')) ORDER BY r.fechaCreacion DESC")
     List<Resena> findByPeliculaTituloContaining(@Param("titulo") String titulo);
 
-    /**
-     * Contar reseñas recomendadas
-     */
     long countByEsRecomendadaTrue();
 
-    /**
-     * Obtener reseña por usuario y película
-     */
     Optional<Resena> findByUsuarioIdAndPeliculaId(Long usuarioId, Long peliculaId);
+
+    // ══════════════════════════════════════
+    // 📊 MÉTODOS PARA REPORTE - CORREGIDOS
+    // ══════════════════════════════════════
+
+    /**
+     * Obtener usuarios con más reseñas (TOP N)
+     * ✅ CORREGIDO: AVG directo sobre BigDecimal + sin LIMIT en constructor expression
+     */
+    @Query("SELECT new com.NetPelis.netPelis.dto.UsuarioResenaDTO(" +
+            "u.id, u.nombreCompleto, u.email, COUNT(r.id), AVG(r.puntuacion)) " +
+            "FROM Resena r " +
+            "JOIN r.usuario u " +
+            "GROUP BY u.id, u.nombreCompleto, u.email " +
+            "ORDER BY COUNT(r.id) DESC")
+    List<UsuarioResenaDTO> findUsuariosConMasResenas();
+
+    /**
+     * Obtener TOP N usuarios con más reseñas
+     * ✅ CORREGIDO: Usar Pageable para limitar resultados
+     */
+    @Query("SELECT new com.NetPelis.netPelis.dto.UsuarioResenaDTO(" +
+            "u.id, u.nombreCompleto, u.email, COUNT(r.id), AVG(r.puntuacion)) " +
+            "FROM Resena r " +
+            "JOIN r.usuario u " +
+            "GROUP BY u.id, u.nombreCompleto, u.email " +
+            "ORDER BY COUNT(r.id) DESC")
+    List<UsuarioResenaDTO> findTopUsuariosConMasResenas(@Param("limit") int limit);
 }

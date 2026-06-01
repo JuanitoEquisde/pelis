@@ -5,14 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9afa2d3a-1f5e-49a4-8473-f243b7ec3263" name="Changes" comment="Initial commit: NetPelis - Spring Boot + MySQL + Security&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/AdminFavoritoController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/ClienteDashboardController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/controller/PeliculaController.java&#10;#&#9;src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java&#10;#&#9;src/main/resources/templates/admin/Peliculas.html&#10;#&#9;src/main/resources/templates/admin/favoritos.html&#10;#&#9;src/main/resources/templates/admin/usuarios.html">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminGeneroController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/generos.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/AdminReportesController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/dto/UsuarioResenaDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/reportes-dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/usuarios-activos.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/controller/ClienteController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioGenero.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioGenero.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/favoritos.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/favoritos.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/cliente-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/cliente-dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/cliente-dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/cliente-dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/NetPelis/netPelis/repository/RepositorioResena.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/admin/peliculas.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/admin/peliculas.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +25,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
         <option value="HTML File" />
       </list>
     </option>
@@ -60,21 +62,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.GeneradorInsertsSQL.executor&quot;: &quot;Run&quot;,
-    &quot;Application.NetPelisApplication.executor&quot;: &quot;Run&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/ASU/Downloads/netPelis/netPelis&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.GeneradorInsertsSQL.executor": "Run",
+    "Application.NetPelisApplication.executor": "Run",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.NetPelisApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/ASU/Downloads/netPelis/netPelis",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "configurable.group.language"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\SpringBootProyects\pelis\src\main\resources\templates" />
@@ -86,7 +99,7 @@
       <recent name="com.NetPelis.netPelis" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.NetPelisApplication">
+  <component name="RunManager" selected="Spring Boot.NetPelisApplication">
     <configuration name="GeneradorInsertsSQL" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.NetPelis.netPelis.GeneradorInsertsSQL" />
       <module name="netPelis" />
@@ -113,8 +126,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="NetPelisApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UnknownPolicyInFreeMode" />
+      <module name="netPelis" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.NetPelis.netPelis.NetPelisApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.NetPelis.netPelis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Spring Boot.NetPelisApplication" />
         <item itemvalue="Application.NetPelisApplication" />
         <item itemvalue="Application.GeneradorInsertsSQL" />
       </list>
@@ -123,7 +151,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
+        <option value="bundled-jdk-30f59d01ecdd-37e91769500f-intellij.indexing.shared.core-IU-261.24374.151" />
+        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-IU-261.24374.151" />
       </set>
     </attachedChunks>
   </component>
@@ -241,6 +270,9 @@
     </task>
     <option name="localTasksCounter" value="14" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="guardado de miercoles" />
