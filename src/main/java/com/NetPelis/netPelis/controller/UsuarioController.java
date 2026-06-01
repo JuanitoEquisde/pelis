@@ -8,11 +8,13 @@ import com.NetPelis.netPelis.repository.RepositorioResena;
 import com.NetPelis.netPelis.repository.RepositorioUsuario;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ public class UsuarioController {
     private final RepositorioPelicula repositorioPelicula;
     private final RepositorioFavorito repositorioFavorito;
     private final RepositorioResena repositorioResena;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping
     public String listarUsuarios(
@@ -175,6 +178,47 @@ public class UsuarioController {
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("mensaje", "Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipoMensaje", "danger");
+        }
+
+        return "redirect:/admin/usuarios";
+    }
+    /**
+     * Crear nuevo usuario desde formulario
+     */
+    @PostMapping("/crear")
+    public String crearUsuario(
+            @RequestParam String nombreCompleto,
+            @RequestParam String email,
+            @RequestParam String contrasena,
+            @RequestParam String rol,
+            @RequestParam Boolean activo,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            // Verificar si el email ya existe
+            if (repositorioUsuario.existsByEmail(email)) {
+                redirectAttributes.addFlashAttribute("mensaje", "El email ya está registrado");
+                redirectAttributes.addFlashAttribute("tipoMensaje", "danger");
+                return "redirect:/admin/usuarios";
+            }
+
+            // Crear nuevo usuario
+            Usuario nuevoUsuario = new Usuario();
+            nuevoUsuario.setNombreCompleto(nombreCompleto);
+            nuevoUsuario.setEmail(email);
+            // ⚠️ IMPORTANTE: Hashear la contraseña antes de guardar
+            nuevoUsuario.setContrasenaHash(passwordEncoder.encode(contrasena));
+            nuevoUsuario.setRol(RolUsuario.valueOf(rol));
+            nuevoUsuario.setActivo(activo != null ? activo : true);
+            nuevoUsuario.setFechaRegistro(LocalDateTime.now());
+
+            repositorioUsuario.save(nuevoUsuario);
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario creado exitosamente");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensaje", "Error al crear usuario: " + e.getMessage());
             redirectAttributes.addFlashAttribute("tipoMensaje", "danger");
         }
 

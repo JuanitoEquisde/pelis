@@ -1,16 +1,22 @@
 package com.NetPelis.netPelis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
 @Entity
 @Table(name = "pelicula")
-@EqualsAndHashCode(exclude = {"generos"}) // ✅ Excluir relación bidireccional
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "favoritos", "resenas", "generos"})  // ← ← ← AGREGAR ESTO
 public class Pelicula {
 
     @Id

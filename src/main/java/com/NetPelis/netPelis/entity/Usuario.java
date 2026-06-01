@@ -1,14 +1,19 @@
 package com.NetPelis.netPelis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
-@Data
 @Entity
 @Table(name = "usuario")
-// ✅ Usuario NO tiene colecciones bidireccionales definidas,
-// pero si las agregas en el futuro, usa: @EqualsAndHashCode(exclude = {"resenas", "favoritos", ...})
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "favoritos", "resenas"})  // ← ← ← AGREGAR ESTO
 public class Usuario {
 
     @Id

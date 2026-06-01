@@ -122,32 +122,33 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ══════════════════════════════════════
-           🎬 MODALES - ESTILO NETPELIS
+           🎬 MODALES - ESTILO NETPELIS (SIN BRILLO ROJO PARA USUARIOS)
         ══════════════════════════════════════ */
         .modal-content-np {
             background: var(--bg-card) !important;
             border: 1px solid var(--border) !important;
             border-radius: var(--radius-lg) !important;
             color: var(--text-primary);
-            box-shadow: 0 0 0 1px var(--border-red), 0 32px 80px rgba(220,38,38,0.2) !important;
+            /* ✅ SIN BRILLO ROJO: solo sombra normal */
+            box-shadow: 0 0 0 1px var(--border), 0 32px 80px rgba(0,0,0,0.4) !important;
         }
         .modal-header-np {
             display: flex; align-items: center; justify-content: space-between;
             padding: 1.25rem 1.5rem;
-            background: linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04));
-            border-bottom: 1px solid var(--border-red);
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
         }
         .modal-title-np {
             font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px;
             display: flex; align-items: center; gap: 8px;
         }
-        .modal-title-np .material-icons { color: var(--accent-red); font-size: 18px; }
+        .modal-title-np .material-icons { color: var(--accent-gold); font-size: 18px; }
         .btn-close-np {
             background: transparent; border: none; color: var(--text-muted);
             cursor: pointer; padding: 0.3rem; border-radius: 6px;
             transition: all 0.2s; line-height: 1;
         }
-        .btn-close-np:hover { background: var(--accent-red-soft); color: var(--text-primary); }
+        .btn-close-np:hover { background: var(--bg-glass); color: var(--text-primary); }
         .modal-body-np { padding: 1.5rem; background: var(--bg-card); }
         .modal-footer-np {
             display: flex; align-items: center; justify-content: flex-end;
@@ -408,6 +409,63 @@
     </div>
 </main>
 
+<!-- ══ MODAL NUEVO USUARIO (ESTILO NORMAL, SIN BRILLO ROJO) ══ -->
+<div class="modal fade" id="modalNuevoUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-np">
+            <div class="modal-header-np">
+                <div class="modal-title-np">
+                    <span class="material-icons">person_add</span>
+                    <span>Nuevo Usuario</span>
+                </div>
+                <button type="button" class="btn-close-np" data-bs-dismiss="modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="formNuevoUsuario" th:action="@{/admin/usuarios/crear}" method="post">
+                <div class="modal-body-np">
+                    <div class="mb-3">
+                        <label class="form-label-np">Nombre Completo <span style="color:var(--accent-red)">*</span></label>
+                        <input type="text" class="form-ctrl" name="nombreCompleto" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-np">Email <span style="color:var(--accent-red)">*</span></label>
+                        <input type="email" class="form-ctrl" name="email" required placeholder="usuario@ejemplo.com">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-np">Contraseña <span style="color:var(--accent-red)">*</span></label>
+                        <input type="password" class="form-ctrl" name="contrasena" required minlength="6" placeholder="Mínimo 6 caracteres">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-np">Confirmar Contraseña <span style="color:var(--accent-red)">*</span></label>
+                        <input type="password" class="form-ctrl" name="confirmarContrasena" required minlength="6" placeholder="Repite la contraseña">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label-np">Rol</label>
+                        <select class="form-ctrl" name="rol" required>
+                            <option value="CLIENTE">Cliente</option>
+                            <option value="ADMIN">Administrador</option>
+                        </select>
+                    </div>
+                    <div class="mb-0">
+                        <label class="form-label-np">Estado</label>
+                        <select class="form-ctrl" name="activo" required>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer-np">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-save">
+                        <span class="material-icons">person_add</span>Crear Usuario
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- ══ MODAL EDITAR USUARIO ══ -->
 <div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -543,6 +601,45 @@
     document.addEventListener('keydown', function(e) { if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; const total = usuariosTotales.length; const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina)); if (e.key === 'ArrowLeft' && paginaActual > 1) { e.preventDefault(); cambiarPagina(paginaActual - 1); } else if (e.key === 'ArrowRight' && paginaActual < totalPaginas) { e.preventDefault(); cambiarPagina(paginaActual + 1); } });
 
     // ══════════════════════════════════════
+    // ➕ NUEVO USUARIO
+    // ══════════════════════════════════════
+    function abrirModalNuevoUsuario() {
+        document.getElementById('formNuevoUsuario').reset();
+        const modal = new bootstrap.Modal(document.getElementById('modalNuevoUsuario'));
+        modal.show();
+    }
+
+    // Submit del formulario de nuevo usuario
+    document.getElementById('formNuevoUsuario').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const contrasena = document.querySelector('input[name="contrasena"]').value;
+        const confirmar = document.querySelector('input[name="confirmarContrasena"]').value;
+
+        if (contrasena !== confirmar) {
+            showToast('Las contraseñas no coinciden', 'error');
+            return;
+        }
+
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+
+        fetch(this.action, { method: 'POST', body: new FormData(this) })
+            .then(r => {
+                if (r.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalNuevoUsuario'))?.hide();
+                    showToast('Usuario creado correctamente', 'success');
+                    setTimeout(() => location.reload(), 1400);
+                } else {
+                    return r.text().then(t => { throw new Error(t); });
+                }
+            })
+            .catch(e => {
+                showToast('Error: ' + e.message, 'error');
+                btn.disabled = false;
+            });
+    });
+
+    // ══════════════════════════════════════
     // ✏️ EDITAR USUARIO
     // ══════════════════════════════════════
     function editarUsuario(id) {
@@ -612,10 +709,6 @@
                 }
             })
             .catch(e => showToast(e.message, 'error'));
-    }
-
-    function abrirModalNuevoUsuario() {
-        showToast('Función de nuevo usuario - Implementar modal', 'info');
     }
 </script>
 </body>

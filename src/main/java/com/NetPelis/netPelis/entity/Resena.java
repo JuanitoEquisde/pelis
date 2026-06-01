@@ -1,5 +1,6 @@
 package com.NetPelis.netPelis.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "resena", uniqueConstraints = {
         @UniqueConstraint(name = "uk_resena_usuario_pelicula", columnNames = {"usuario_id", "pelicula_id"})
 })
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "usuario", "pelicula"})  // ← ← ← AGREGAR ESTO
+
 @EqualsAndHashCode(exclude = {"usuario", "pelicula"}) // ✅ Evitar bucle infinito
 public class Resena {
 
