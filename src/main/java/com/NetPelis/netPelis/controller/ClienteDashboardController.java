@@ -76,7 +76,7 @@ public class ClienteDashboardController {
         } catch (Exception e) {
             System.err.println("❌ Error: " + e.getMessage());
             e.printStackTrace();
-            // ✅ En caso de error, pasar valores seguros
+            // En caso de error, pasar valores seguros
             model.addAttribute("peliculas", List.of());
             model.addAttribute("totalFavoritos", 0);
             model.addAttribute("totalResenas", 0);

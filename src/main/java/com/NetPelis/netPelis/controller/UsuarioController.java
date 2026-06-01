@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -113,5 +114,70 @@ public class UsuarioController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
+    }
+    /**
+     * Actualizar usuario completo
+     */
+    @PutMapping("/{id}/actualizar")
+    @ResponseBody
+    public ResponseEntity<?> actualizarUsuario(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> datos) {
+        try {
+            Usuario usuario = repositorioUsuario.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            // Actualizar campos
+            if (datos.containsKey("nombreCompleto")) {
+                usuario.setNombreCompleto((String) datos.get("nombreCompleto"));
+            }
+            if (datos.containsKey("email")) {
+                usuario.setEmail((String) datos.get("email"));
+            }
+            if (datos.containsKey("rol")) {
+                usuario.setRol(RolUsuario.valueOf((String) datos.get("rol")));
+            }
+            if (datos.containsKey("activo")) {
+                usuario.setActivo((Boolean) datos.get("activo"));
+            }
+
+            repositorioUsuario.save(usuario);
+            return ResponseEntity.ok(Map.of("success", true, "message", "Usuario actualizado"));
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    /**
+     * Formulario de actualización (para Thymeleaf)
+     */
+    @PostMapping("/{id}/actualizar-form")
+    public String actualizarUsuarioForm(
+            @PathVariable Long id,
+            @RequestParam String nombreCompleto,
+            @RequestParam String email,
+            @RequestParam String rol,
+            @RequestParam Boolean activo,
+            RedirectAttributes   redirectAttributes) {
+        try {
+            Usuario usuario = repositorioUsuario.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            usuario.setNombreCompleto(nombreCompleto);
+            usuario.setEmail(email);
+            usuario.setRol(RolUsuario.valueOf(rol));
+            usuario.setActivo(activo);
+
+            repositorioUsuario.save(usuario);
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario actualizado correctamente");
+            redirectAttributes.addFlashAttribute("tipoMensaje", "success");
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensaje", "Error: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("tipoMensaje", "danger");
+        }
+
+        return "redirect:/admin/usuarios";
     }
 }

@@ -13,20 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth")
 public class LoginController {
 
-    /**
-     * Muestra la página de login
-     * RUTA: GET /auth/login
-     * TEMPLATE: templates/login.html
-     */
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
     }
 
-    /**
-     * Procesa el logout (Spring Security maneja la lógica)
-     * RUTA: POST /auth/logout
-     */
+
     @PostMapping("/logout")
     public String logout() {
         return "redirect:/auth/login?logout=true";

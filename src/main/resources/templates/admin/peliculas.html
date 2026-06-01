@@ -179,6 +179,112 @@
         .per-page-select:focus { outline: none; border-color: var(--accent-red); }
         .per-page-select option { background: var(--bg-secondary); }
 
+        /* ══════════════════════════════════════
+           🎬 MODALES - CORRECCIÓN DE LÍNEA BLANCA
+        ══════════════════════════════════════ */
+        .modal-content {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius-lg) !important;
+            color: var(--text-primary);
+            /* ✅ FIX: Eliminar línea blanca superior */
+            box-shadow: 0 0 0 1px var(--border), 0 32px 80px rgba(0,0,0,0.6) !important;
+        }
+        .modal-header {
+            border-bottom: 1px solid var(--border) !important;
+            background: rgba(220,38,38,0.06) !important;
+            padding: 1.25rem 1.5rem !important;
+        }
+        .modal-header .modal-title {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-primary) !important;
+        }
+        .modal-header .btn-close {
+            filter: invert(1) !important;
+            opacity: 0.7 !important;
+        }
+        .modal-header .btn-close:hover {
+            opacity: 1 !important;
+        }
+        .modal-body {
+            padding: 1.5rem !important;
+            background: var(--bg-card) !important;
+            color: var(--text-primary) !important;
+        }
+        .modal-footer {
+            border-top: 1px solid var(--border) !important;
+            background: var(--bg-secondary) !important;
+            padding: 1rem 1.5rem !important;
+        }
+
+        /* ══════════════════════════════════════
+           🗑️ MODAL DE CONFIRMACIÓN DE ELIMINACIÓN
+        ══════════════════════════════════════ */
+        .modal-confirm {
+            text-align: center;
+        }
+        .modal-confirm .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(220,38,38,0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .modal-confirm .modal-icon .material-icons {
+            font-size: 32px;
+            color: var(--accent-red);
+        }
+        .modal-confirm .modal-title {
+            font-size: 18px !important;
+            margin-bottom: 0.5rem !important;
+        }
+        .modal-confirm .modal-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 1.5rem;
+        }
+        .modal-confirm .btn-delete {
+            background: var(--accent-red);
+            border: none;
+            color: white;
+            padding: 0.575rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .modal-confirm .btn-delete:hover {
+            background: #991b1b;
+            transform: translateY(-1px);
+        }
+        .modal-confirm .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.575rem 1.5rem;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .modal-confirm .btn-cancel:hover {
+            background: var(--bg-glass);
+            color: var(--text-primary);
+        }
+
         @media (max-width: 768px) {
             .streaming-pagination { flex-direction: column; gap: 0.75rem; padding: 0.875rem 1rem; }
             .pagination-info { width: 100%; justify-content: center; }
@@ -230,7 +336,7 @@
 
         <a href="/admin/favoritos" class="nav-link">
             <span class="material-icons">favorite</span>Favoritos
-            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>  <!-- ✅ CORREGIDO -->
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
         </a>
 
         <span class="nav-section-label">Contenido</span>
@@ -242,7 +348,6 @@
 
         <a href="/admin/comentarios" class="nav-link">
             <span class="material-icons">chat</span>Comentarios
-            <!-- Opcional: agregar badge si tienes contador -->
         </a>
 
         <a href="/admin/generos" class="nav-link">
@@ -294,19 +399,42 @@
     </div>
     <div class="content-card">
         <div class="cc-header"><span class="cc-title"><span class="material-icons">movie</span>Lista de Películas</span></div>
+
+        <!-- ✅ FILTROS MEJORADOS: Incluye búsqueda por ID -->
         <form th:action="@{/admin/peliculas}" method="get" class="card mb-3" style="background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius-sm);">
             <div class="card-body p-3">
                 <div class="row g-2">
-                    <div class="col-md-3"><label class="form-label-np">Título</label><input type="text" class="form-ctrl" name="titulo" th:value="${filtroTitulo}" placeholder="Buscar por título"></div>
-                    <div class="col-md-2"><label class="form-label-np">Año</label><input type="number" class="form-ctrl" name="anio" th:value="${filtroAnio}" placeholder="2024" min="1900" max="2030"></div>
-                    <div class="col-md-2"><label class="form-label-np">Estado</label><select class="form-ctrl" name="estado"><option value="">Todos</option><option value="PUBLICADO" th:selected="${filtroEstado} == 'PUBLICADO'">Publicado</option><option value="BORRADOR" th:selected="${filtroEstado} == 'BORRADOR'">Borrador</option><option value="OCULTO" th:selected="${filtroEstado} == 'OCULTO'">Oculto</option></select></div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">ID</label>
+                        <input type="number" class="form-ctrl" name="id" th:value="${filtroId}" placeholder="Buscar por ID">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label-np">Título</label>
+                        <input type="text" class="form-ctrl" name="titulo" th:value="${filtroTitulo}" placeholder="Buscar por título">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Año</label>
+                        <input type="number" class="form-ctrl" name="anio" th:value="${filtroAnio}" placeholder="2024" min="1900" max="2030">
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label-np">Estado</label>
+                        <select class="form-ctrl" name="estado">
+                            <option value="">Todos</option>
+                            <option value="PUBLICADO" th:selected="${filtroEstado} == 'PUBLICADO'">Publicado</option>
+                            <option value="BORRADOR" th:selected="${filtroEstado} == 'BORRADOR'">Borrador</option>
+                            <option value="OCULTO" th:selected="${filtroEstado} == 'OCULTO'">Oculto</option>
+                        </select>
+                    </div>
                     <div class="col-md-3 d-flex align-items-end gap-2">
-                        <button type="submit" class="btn-save" style="padding:0.5rem 1rem;font-size:12px;"><span class="material-icons" style="font-size:14px">search</span></button>
+                        <button type="submit" class="btn-save" style="padding:0.5rem 1rem;font-size:12px;">
+                            <span class="material-icons" style="font-size:14px">search</span>
+                        </button>
                         <a th:href="@{/admin/peliculas}" class="btn-cancel" style="padding:0.5rem 1rem;font-size:12px;">Limpiar</a>
                     </div>
                 </div>
             </div>
         </form>
+
         <div class="table-wrap">
             <table class="tbl">
                 <thead><tr><th>ID</th><th>Película</th><th>Año</th><th>Duración</th><th>Estado</th><th>Géneros</th><th>Acciones</th></tr></thead>
@@ -318,13 +446,23 @@
                     <td th:text="${pelicula.duracionMinutos != null ? pelicula.duracionMinutos + ' min' : '-'}">120 min</td>
                     <td><span th:class="'badge-np ' + (${pelicula.estado.name == 'PUBLICADO'} ? 'success' : (${pelicula.estado.name == 'BORRADOR'} ? 'warning' : 'danger'))" th:text="${pelicula.estado.name}">PUBLICADO</span></td>
                     <td><span th:each="genero, s : ${pelicula.generos}" th:if="${s.index < 2}"><span class="badge-np info" th:text="${genero.nombre}">Género</span><span th:if="${s.index == 1 and #lists.size(pelicula.generos) > 2}" class="badge-np info" th:text="'+' + ${#lists.size(pelicula.generos) - 2}">+1</span></span><span th:if="${#lists.isEmpty(pelicula.generos)}" style="color:var(--text-muted);font-size:12px">Sin género</span></td>
-                    <td><button class="tbl-btn" th:onclick="'editarPelicula(' + ${pelicula.id} + ')'" title="Editar"><span class="material-icons">edit</span></button><button class="tbl-btn" th:onclick="'eliminarPelicula(' + ${pelicula.id} + ')'" title="Eliminar"><span class="material-icons" style="color:var(--accent-red)">delete</span></button></td>
+                    <td>
+                        <!-- ✅ CORREGIDO: th:attr para onclick -->
+                        <button class="tbl-btn" th:attr="onclick='editarPelicula(' + ${pelicula.id} + ')'" title="Editar">
+                            <span class="material-icons">edit</span>
+                        </button>
+                        <!-- ✅ CORREGIDO: th:attr + abre modal de confirmación -->
+                        <button class="tbl-btn" th:attr="onclick='abrirModalConfirmarEliminar(' + ${pelicula.id} + ', \'' + ${pelicula.titulo} + '\')'" title="Eliminar">
+                            <span class="material-icons" style="color:var(--accent-red)">delete</span>
+                        </button>
+                    </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(peliculas)}"><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);"><span class="material-icons" style="font-size:40px;opacity:.25;display:block;margin-bottom:.75rem;">movie</span>No se encontraron películas con esos filtros</td></tr>
                 </tbody>
             </table>
         </div>
-        <!-- ✅ PAGINACIÓN CORREGIDA: "Mostrando X de Y" -->
+
+        <!-- ✅ PAGINACIÓN -->
         <div class="streaming-pagination" id="streamingPagination">
             <div class="pagination-info">
                 <span>Mostrando</span><strong id="cantidadPagina">0</strong><span>de</span><strong id="totalRegistros">0</strong><span>películas</span>
@@ -343,15 +481,21 @@
         </div>
     </div>
 </main>
+
+<!-- ══ MODAL NUEVA/EDITAR PELÍCULA ══ -->
 <div class="modal fade" id="modalPelicula" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header-np" style="display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;background:rgba(220,38,38,0.06);border-bottom:1px solid var(--border);">
-                <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;"><span class="material-icons" style="color:var(--accent-red);font-size:18px">movie</span><span id="modalTitleText">Nueva Película</span></div>
-                <button type="button" class="btn-close-dark" data-bs-dismiss="modal" style="background:transparent;border:none;color:var(--text-muted);cursor:pointer;padding:0.3rem;border-radius:6px;transition:all 0.2s;"><span class="material-icons">close</span></button>
+        <!-- ✅ FIX: Eliminar línea blanca con border y background correctos -->
+        <div class="modal-content" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);">
+            <div class="modal-header" style="border-bottom:1px solid var(--border);padding:1.25rem 1.5rem;display:flex;align-items:center;justify-content:space-between;">
+                <h5 class="modal-title" style="font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;display:flex;align-items:center;gap:8px;">
+                    <span class="material-icons" style="color:var(--accent-red);font-size:18px">movie</span>
+                    <span id="modalTitleText">Nueva Película</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" style="filter:invert(1);background:transparent;border:none;color:var(--text-muted);font-size:24px;cursor:pointer;"></button>
             </div>
             <form id="formPelicula" th:action="@{/admin/peliculas/guardar}" method="post" enctype="multipart/form-data">
-                <div class="modal-body-np" style="padding:1.5rem;background:var(--bg-card);overflow-y:auto;flex:1 1 auto;min-height:0;">
+                <div class="modal-body" style="padding:1.5rem;background:var(--bg-card);overflow-y:auto;max-height:70vh;">
                     <input type="hidden" id="peliculaId" name="peliculaId">
                     <div class="row g-3">
                         <div class="col-lg-8">
@@ -372,7 +516,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer-np" style="display:flex!important;align-items:center;justify-content:flex-end;gap:0.5rem;padding:1rem 1.5rem;flex-shrink:0!important;background:var(--bg-secondary);border-top:1px solid var(--border);">
+                <div class="modal-footer" style="border-top:1px solid var(--border);padding:1rem 1.5rem;display:flex;justify-content:flex-end;gap:0.75rem;">
                     <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn-save" id="btnGuardar"><span class="material-icons">save</span><span id="btnGuardarText">Guardar Película</span></button>
                 </div>
@@ -380,17 +524,44 @@
         </div>
     </div>
 </div>
+
+<!-- ✅ NUEVO: MODAL DE CONFIRMACIÓN PARA ELIMINAR -->
+<div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-confirm" style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);color:var(--text-primary);text-align:center;">
+            <div class="modal-body" style="padding:2rem 1.5rem 1.5rem;">
+                <div class="modal-icon">
+                    <span class="material-icons">delete_outline</span>
+                </div>
+                <h5 class="modal-title" style="font-family:'Outfit',sans-serif;font-weight:700;font-size:18px;margin-bottom:0.5rem;">¿Eliminar película?</h5>
+                <p class="modal-text" id="modalEliminarTexto">¿Estás seguro de que deseas eliminar "<strong id="modalEliminarTitulo">Título</strong>"? Esta acción no se puede deshacer.</p>
+                <input type="hidden" id="eliminarPeliculaId">
+                <div style="display:flex;justify-content:center;gap:0.75rem;margin-top:1rem;">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn-delete" onclick="confirmarEliminarPelicula()">
+                        <span class="material-icons">delete</span>Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // === Sidebar ===
     const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
+
+    // === Toast ===
     function showToast(msg,type='success'){const icons={success:'check_circle',error:'error',info:'info'},w=document.getElementById('toastWrap'),el=document.createElement('div');el.className='toast-item '+type;el.innerHTML=`<span class="material-icons">${icons[type]||'info'}</span><span class="toast-msg">${msg}</span>`;w.appendChild(el);setTimeout(()=>el.remove(),3500);}
 
     // ══════════════════════════════════════
-    // 🎬 PAGINACIÓN ESTILO STREAMING - CORREGIDA
+    // 🎬 PAGINACIÓN ESTILO STREAMING
     // ══════════════════════════════════════
     let paginaActual = 1; let itemsPorPagina = 10; let peliculasTotales = [];
     document.addEventListener('DOMContentLoaded', function() {
@@ -410,7 +581,6 @@
         document.getElementById('streamingPagination').style.display = 'flex';
     }
     function actualizarInfoPaginacion(total, totalPaginas) {
-        // ✅ CORREGIDO: Mostrar cantidad real en página actual
         const inicio = (paginaActual - 1) * itemsPorPagina;
         const fin = Math.min(paginaActual * itemsPorPagina, total);
         const cantidadEnPaginaActual = fin - inicio;
@@ -435,16 +605,123 @@
     function mostrarPaginaStreaming(numPagina) { const inicio = (numPagina - 1) * itemsPorPagina; const fin = inicio + itemsPorPagina; peliculasTotales.forEach((fila, index) => { fila.style.display = (index >= inicio && index < fin) ? '' : 'none'; }); }
     function cambiarItemsPorPagina(nuevoValor) { itemsPorPagina = parseInt(nuevoValor); paginaActual = 1; inicializarPaginacionStreaming(); }
 
-    // === Modal helpers ===
-    function prepararModalNueva() { document.getElementById('formPelicula').reset(); document.getElementById('peliculaId').value = ''; document.getElementById('modalTitleText').textContent = 'Nueva Película'; document.getElementById('btnGuardarText').textContent = 'Guardar Película'; removePoster(); document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = false); }
+    // ══════════════════════════════════════
+    // 🎬 MODALES - FUNCIONES
+    // ══════════════════════════════════════
+
+    // === Preparar modal para nueva película ===
+    function prepararModalNueva() {
+        document.getElementById('formPelicula').reset();
+        document.getElementById('peliculaId').value = '';
+        document.getElementById('modalTitleText').textContent = 'Nueva Película';
+        document.getElementById('btnGuardarText').textContent = 'Guardar Película';
+        removePoster();
+        document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = false);
+    }
+
+    // === Upload de imagen ===
     document.getElementById('uploadZone').addEventListener('click', function() { document.getElementById('posterFile').click(); });
-    document.getElementById('posterFile').addEventListener('change', function() { if (!this.files || !this.files[0]) return; const reader = new FileReader(); reader.onload = e => showPreview(e.target.result); reader.readAsDataURL(this.files[0]); document.getElementById('posterUrl').value = ''; });
-    document.getElementById('posterUrl').addEventListener('blur', function() { if (this.value.trim()) { showPreview(this.value.trim()); document.getElementById('posterFile').value = ''; } });
+    document.getElementById('posterFile').addEventListener('change', function() {
+        if (!this.files || !this.files[0]) return;
+        const reader = new FileReader();
+        reader.onload = e => showPreview(e.target.result);
+        reader.readAsDataURL(this.files[0]);
+        document.getElementById('posterUrl').value = '';
+    });
+    document.getElementById('posterUrl').addEventListener('blur', function() {
+        if (this.value.trim()) { showPreview(this.value.trim()); document.getElementById('posterFile').value = ''; }
+    });
     function showPreview(src) { document.getElementById('posterPreview').src = src; document.getElementById('posterPreviewContainer').style.display = 'block'; document.getElementById('uploadZone').style.display = 'none'; }
     function removePoster() { document.getElementById('posterPreview').src = ''; document.getElementById('posterPreviewContainer').style.display = 'none'; document.getElementById('uploadZone').style.display = 'block'; document.getElementById('posterFile').value = ''; document.getElementById('posterUrl').value = ''; }
-    function editarPelicula(id) { fetch('/admin/peliculas/api/' + id).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }).then(d => { prepararModalNueva(); document.getElementById('modalTitleText').textContent = 'Editar Película'; document.getElementById('btnGuardarText').textContent = 'Actualizar'; document.getElementById('peliculaId').value = d.id; document.getElementById('titulo').value = d.titulo || ''; document.getElementById('sinopsis').value = d.sinopsis || ''; document.getElementById('anioLanzamiento').value = d.anioLanzamiento || ''; document.getElementById('duracionMinutos').value = d.duracionMinutos || ''; document.getElementById('clasificacion').value = d.clasificacion || ''; document.getElementById('director').value = d.director || ''; document.getElementById('trailerUrl').value = d.trailerUrl || ''; document.getElementById('estado').value = d.estado || 'PUBLICADO'; if (d.posterUrl) { document.getElementById('posterUrl').value = d.posterUrl; showPreview(d.posterUrl); } if (d.generos) { const ids = d.generos.map(g => g.id); document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = ids.includes(parseInt(c.value))); } bootstrap.Modal.getOrCreateInstance(document.getElementById('modalPelicula')).show(); }).catch(e => showToast('No se pudo cargar la película: ' + e.message, 'error')); }
-    function eliminarPelicula(id) { if (!confirm('¿Eliminar esta película? Esta acción no se puede deshacer.')) return; fetch('/admin/peliculas/' + id + '/eliminar', { method: 'POST' }).then(r => r.ok ? (showToast('Película eliminada', 'success'), setTimeout(() => location.reload(), 1400)) : showToast('No se pudo eliminar', 'error')).catch(() => showToast('Error de conexión', 'error')); }
-    document.getElementById('formPelicula').addEventListener('submit', function(e) { e.preventDefault(); const btn = document.getElementById('btnGuardar'); btn.disabled = true; document.getElementById('btnGuardarText').textContent = 'Guardando...'; fetch(this.action, { method: 'POST', body: new FormData(this) }).then(r => { if (r.ok) { bootstrap.Modal.getInstance(document.getElementById('modalPelicula'))?.hide(); showToast('Película guardada correctamente', 'success'); setTimeout(() => location.reload(), 1400); } else { return r.text().then(t => { throw new Error(t); }); } }).catch(e => { showToast('Error: ' + e.message, 'error'); btn.disabled = false; document.getElementById('btnGuardarText').textContent = 'Guardar Película'; }); });
+
+    // === ✅ EDITAR PELÍCULA - CORREGIDO ===
+    function editarPelicula(id) {
+        console.log('🔍 Editando película ID:', id);
+        fetch('/admin/peliculas/api/' + id)
+            .then(r => {
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json();
+            })
+            .then(d => {
+                console.log('✅ Datos recibidos:', d);
+                prepararModalNueva();
+                document.getElementById('modalTitleText').textContent = 'Editar Película';
+                document.getElementById('btnGuardarText').textContent = 'Actualizar';
+                document.getElementById('peliculaId').value = d.id;
+                document.getElementById('titulo').value = d.titulo || '';
+                document.getElementById('sinopsis').value = d.sinopsis || '';
+                document.getElementById('anioLanzamiento').value = d.anioLanzamiento || '';
+                document.getElementById('duracionMinutos').value = d.duracionMinutos || '';
+                document.getElementById('clasificacion').value = d.clasificacion || '';
+                document.getElementById('director').value = d.director || '';
+                document.getElementById('trailerUrl').value = d.trailerUrl || '';
+                document.getElementById('estado').value = d.estado || 'PUBLICADO';
+                if (d.posterUrl) { document.getElementById('posterUrl').value = d.posterUrl; showPreview(d.posterUrl); }
+                if (d.generos) {
+                    const ids = d.generos.map(g => g.id);
+                    document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = ids.includes(parseInt(c.value)));
+                }
+                const modal = new bootstrap.Modal(document.getElementById('modalPelicula'));
+                modal.show();
+            })
+            .catch(e => {
+                console.error('❌ Error cargando película:', e);
+                showToast('No se pudo cargar la película: ' + e.message, 'error');
+            });
+    }
+
+    // === ✅ NUEVO: ABRIR MODAL DE CONFIRMACIÓN PARA ELIMINAR ===
+    function abrirModalConfirmarEliminar(id, titulo) {
+        document.getElementById('eliminarPeliculaId').value = id;
+        document.getElementById('modalEliminarTitulo').textContent = titulo;
+        const modal = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
+        modal.show();
+    }
+
+    // === ✅ CONFIRMAR Y ELIMINAR PELÍCULA ===
+    function confirmarEliminarPelicula() {
+        const id = document.getElementById('eliminarPeliculaId').value;
+        const titulo = document.getElementById('modalEliminarTitulo').textContent;
+
+        fetch('/admin/peliculas/' + id + '/eliminar', { method: 'POST' })
+            .then(r => {
+                if (r.ok) {
+                    showToast('Película "' + titulo + '" eliminada', 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('modalConfirmarEliminar'))?.hide();
+                    setTimeout(() => location.reload(), 1400);
+                } else {
+                    return r.text().then(t => { throw new Error(t); });
+                }
+            })
+            .catch(e => {
+                console.error('Error eliminando:', e);
+                showToast('Error al eliminar: ' + e.message, 'error');
+            });
+    }
+
+    // === FORMULARIO DE GUARDADO ===
+    document.getElementById('formPelicula').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = document.getElementById('btnGuardar');
+        btn.disabled = true;
+        document.getElementById('btnGuardarText').textContent = 'Guardando...';
+        fetch(this.action, { method: 'POST', body: new FormData(this) })
+            .then(r => {
+                if (r.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalPelicula'))?.hide();
+                    showToast('Película guardada correctamente', 'success');
+                    setTimeout(() => location.reload(), 1400);
+                } else {
+                    return r.text().then(t => { throw new Error(t); });
+                }
+            })
+            .catch(e => {
+                console.error('Error guardando:', e);
+                showToast('Error: ' + e.message, 'error');
+                btn.disabled = false;
+                document.getElementById('btnGuardarText').textContent = 'Guardar Película';
+            });
+    });
 </script>
 </body>
 </html>

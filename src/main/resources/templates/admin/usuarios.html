@@ -122,6 +122,67 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ══════════════════════════════════════
+           🎬 MODALES - ESTILO NETPELIS
+        ══════════════════════════════════════ */
+        .modal-content-np {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius-lg) !important;
+            color: var(--text-primary);
+            box-shadow: 0 0 0 1px var(--border-red), 0 32px 80px rgba(220,38,38,0.2) !important;
+        }
+        .modal-header-np {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04));
+            border-bottom: 1px solid var(--border-red);
+        }
+        .modal-title-np {
+            font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .modal-title-np .material-icons { color: var(--accent-red); font-size: 18px; }
+        .btn-close-np {
+            background: transparent; border: none; color: var(--text-muted);
+            cursor: pointer; padding: 0.3rem; border-radius: 6px;
+            transition: all 0.2s; line-height: 1;
+        }
+        .btn-close-np:hover { background: var(--accent-red-soft); color: var(--text-primary); }
+        .modal-body-np { padding: 1.5rem; background: var(--bg-card); }
+        .modal-footer-np {
+            display: flex; align-items: center; justify-content: flex-end;
+            gap: 0.75rem; padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Modal de confirmación */
+        .modal-confirm { text-align: center; }
+        .modal-confirm .modal-icon {
+            width: 64px; height: 64px; border-radius: 50%;
+            background: rgba(220,38,38,0.12);
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem;
+        }
+        .modal-confirm .modal-icon .material-icons {
+            font-size: 32px; color: var(--accent-red);
+        }
+        .modal-confirm .modal-title {
+            font-size: 18px !important; margin-bottom: 0.5rem !important;
+        }
+        .modal-confirm .modal-text {
+            color: var(--text-secondary); font-size: 14px; margin-bottom: 1.5rem;
+        }
+        .btn-delete {
+            background: var(--accent-red); border: none; color: white;
+            padding: 0.575rem 1.5rem; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 13px; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-delete:hover { background: #991b1b; transform: translateY(-1px); }
+
+        /* ══════════════════════════════════════
            🎬 PAGINACIÓN ESTILO STREAMING
         ══════════════════════════════════════ */
         .streaming-pagination {
@@ -230,7 +291,7 @@
 
         <a href="/admin/favoritos" class="nav-link">
             <span class="material-icons">favorite</span>Favoritos
-            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>  <!-- ✅ CORREGIDO -->
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
         </a>
 
         <span class="nav-section-label">Contenido</span>
@@ -242,7 +303,6 @@
 
         <a href="/admin/comentarios" class="nav-link">
             <span class="material-icons">chat</span>Comentarios
-            <!-- Opcional: agregar badge si tienes contador -->
         </a>
 
         <a href="/admin/generos" class="nav-link">
@@ -319,7 +379,10 @@
                     <td><span class="badge-np" th:classappend="${usuario.rol.name == 'ADMIN' ? 'danger' : 'warning'}" th:text="${usuario.rol.name}">CLIENTE</span></td>
                     <td><span class="badge-np" th:classappend="${usuario.activo ? 'success' : 'danger'}" th:text="${usuario.activo ? 'Activo' : 'Inactivo'}">Activo</span></td>
                     <td style="color:var(--text-muted);font-size:12px" th:text="${#temporals.format(usuario.fechaRegistro, 'dd/MM/yyyy')}">01/01/2024</td>
-                    <td><button class="tbl-btn" title="Editar"><span class="material-icons">edit</span></button><button class="tbl-btn" title="Eliminar"><span class="material-icons" style="color:var(--accent-red)">delete</span></button></td>
+                    <td>
+                        <button class="tbl-btn" th:attr="onclick='editarUsuario(' + ${usuario.id} + ')'" title="Editar"><span class="material-icons">edit</span></button>
+                        <button class="tbl-btn" th:attr="onclick='abrirModalConfirmarEliminar(' + ${usuario.id} + ', \'' + ${usuario.nombreCompleto} + '\')'" title="Eliminar"><span class="material-icons" style="color:var(--accent-red)">delete</span></button>
+                    </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(usuarios)}"><td colspan="7" style="text-align:center; padding:3rem; color:var(--text-muted);"><span class="material-icons" style="font-size:40px;opacity:.25;display:block;margin-bottom:.75rem;">people</span>No se encontraron usuarios con esos filtros</td></tr>
                 </tbody>
@@ -344,7 +407,87 @@
         </div>
     </div>
 </main>
+
+<!-- ══ MODAL EDITAR USUARIO ══ -->
+<div class="modal fade" id="modalEditarUsuario" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-np">
+            <div class="modal-header-np">
+                <div class="modal-title-np">
+                    <span class="material-icons">person</span>
+                    <span id="modalEditarTitulo">Editar Usuario</span>
+                </div>
+                <button type="button" class="btn-close-np" data-bs-dismiss="modal">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <form id="formEditarUsuario">
+                <div class="modal-body-np">
+                    <input type="hidden" id="editarUsuarioId">
+
+                    <div class="mb-3">
+                        <label class="form-label-np">Nombre Completo</label>
+                        <input type="text" class="form-ctrl" id="editarNombre" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label-np">Email</label>
+                        <input type="email" class="form-ctrl" id="editarEmail" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label-np">Rol</label>
+                        <select class="form-ctrl" id="editarRol" required>
+                            <option value="ADMIN">Administrador</option>
+                            <option value="CLIENTE">Cliente</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label-np">Estado</label>
+                        <select class="form-ctrl" id="editarActivo" required>
+                            <option value="true">Activo</option>
+                            <option value="false">Inactivo</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer-np">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn-save">
+                        <span class="material-icons">save</span>Guardar Cambios
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ══ MODAL CONFIRMAR ELIMINAR ══ -->
+<div class="modal fade" id="modalConfirmarEliminar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-np modal-confirm">
+            <div class="modal-body-np">
+                <div class="modal-icon">
+                    <span class="material-icons">delete_outline</span>
+                </div>
+                <h5 class="modal-title">¿Eliminar usuario?</h5>
+                <p class="modal-text" id="modalEliminarTexto">
+                    ¿Estás seguro de que deseas eliminar a "<strong id="modalEliminarNombre">Usuario</strong>"? Esta acción no se puede deshacer.
+                </p>
+                <input type="hidden" id="eliminarUsuarioId">
+                <div style="display:flex;justify-content:center;gap:0.75rem;margin-top:1rem;">
+                    <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn-delete" onclick="confirmarEliminarUsuario()">
+                        <span class="material-icons">delete</span>Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="toast-wrap" id="toastWrap"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
@@ -354,7 +497,7 @@
     function showToast(msg,type='success'){const icons={success:'check_circle',error:'error',info:'info'},w=document.getElementById('toastWrap'),el=document.createElement('div');el.className='toast-item '+type;el.innerHTML=`<span class="material-icons">${icons[type]||'info'}</span><span class="toast-msg">${msg}</span>`;w.appendChild(el);setTimeout(()=>el.remove(),3500);}
 
     // ══════════════════════════════════════
-    // 🎬 PAGINACIÓN ESTILO STREAMING - CORREGIDA
+    // 🎬 PAGINACIÓN ESTILO STREAMING
     // ══════════════════════════════════════
     let paginaActual = 1; let itemsPorPagina = 10; let usuariosTotales = [];
     document.addEventListener('DOMContentLoaded', function() {
@@ -374,7 +517,6 @@
         document.getElementById('streamingPagination').style.display = 'flex';
     }
     function actualizarInfoPaginacion(total, totalPaginas) {
-        // ✅ CORREGIDO: Mostrar cantidad real en página actual
         const inicio = (paginaActual - 1) * itemsPorPagina;
         const fin = Math.min(paginaActual * itemsPorPagina, total);
         const cantidadEnPaginaActual = fin - inicio;
@@ -399,7 +541,82 @@
     function mostrarPaginaStreaming(numPagina) { const inicio = (numPagina - 1) * itemsPorPagina; const fin = inicio + itemsPorPagina; usuariosTotales.forEach((fila, index) => { fila.style.display = (index >= inicio && index < fin) ? '' : 'none'; }); }
     function cambiarItemsPorPagina(nuevoValor) { itemsPorPagina = parseInt(nuevoValor); paginaActual = 1; inicializarPaginacionStreaming(); }
     document.addEventListener('keydown', function(e) { if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return; const total = usuariosTotales.length; const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina)); if (e.key === 'ArrowLeft' && paginaActual > 1) { e.preventDefault(); cambiarPagina(paginaActual - 1); } else if (e.key === 'ArrowRight' && paginaActual < totalPaginas) { e.preventDefault(); cambiarPagina(paginaActual + 1); } });
-    function abrirModalNuevoUsuario() { showToast('Función de nuevo usuario - Implementar modal', 'info'); }
+
+    // ══════════════════════════════════════
+    // ✏️ EDITAR USUARIO
+    // ══════════════════════════════════════
+    function editarUsuario(id) {
+        fetch('/admin/usuarios/api/' + id)
+            .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            .then(d => {
+                document.getElementById('editarUsuarioId').value = d.id;
+                document.getElementById('editarNombre').value = d.nombreCompleto || '';
+                document.getElementById('editarEmail').value = d.email || '';
+                document.getElementById('editarRol').value = d.rol || 'CLIENTE';
+                document.getElementById('editarActivo').value = d.activo ? 'true' : 'false';
+
+                const modal = new bootstrap.Modal(document.getElementById('modalEditarUsuario'));
+                modal.show();
+            })
+            .catch(e => showToast('Error cargando usuario: ' + e.message, 'error'));
+    }
+
+    // Submit del formulario de edición
+    document.getElementById('formEditarUsuario').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const id = document.getElementById('editarUsuarioId').value;
+        const datos = {
+            nombreCompleto: document.getElementById('editarNombre').value,
+            email: document.getElementById('editarEmail').value,
+            rol: document.getElementById('editarRol').value,
+            activo: document.getElementById('editarActivo').value === 'true'
+        };
+
+        fetch('/admin/usuarios/' + id + '/actualizar', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        })
+        .then(r => {
+            if (r.ok) {
+                bootstrap.Modal.getInstance(document.getElementById('modalEditarUsuario')).hide();
+                showToast('Usuario actualizado correctamente', 'success');
+                setTimeout(() => location.reload(), 1400);
+            } else {
+                return r.json().then(d => { throw new Error(d.error || 'Error al actualizar'); });
+            }
+        })
+        .catch(e => showToast(e.message, 'error'));
+    });
+
+    // ══════════════════════════════════════
+    // 🗑️ ELIMINAR USUARIO
+    // ══════════════════════════════════════
+    function abrirModalConfirmarEliminar(id, nombre) {
+        document.getElementById('eliminarUsuarioId').value = id;
+        document.getElementById('modalEliminarNombre').textContent = nombre;
+        const modal = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
+        modal.show();
+    }
+
+    function confirmarEliminarUsuario() {
+        const id = document.getElementById('eliminarUsuarioId').value;
+        fetch('/admin/usuarios/' + id + '/eliminar', { method: 'POST' })
+            .then(r => {
+                if (r.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('modalConfirmarEliminar')).hide();
+                    showToast('Usuario eliminado', 'success');
+                    setTimeout(() => location.reload(), 1400);
+                } else {
+                    return r.json().then(d => { throw new Error(d.error || 'Error al eliminar'); });
+                }
+            })
+            .catch(e => showToast(e.message, 'error'));
+    }
+
+    function abrirModalNuevoUsuario() {
+        showToast('Función de nuevo usuario - Implementar modal', 'info');
+    }
 </script>
 </body>
 </html>

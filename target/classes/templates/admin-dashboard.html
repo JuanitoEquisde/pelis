@@ -66,7 +66,7 @@
             border-right: 1px solid var(--border);
             position: fixed; top: 0; left: 0; height: 100vh;
             padding: 0; z-index: 1000; display: flex; flex-direction: column;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .sidebar-brand {
@@ -168,13 +168,14 @@
         .sidebar-overlay {
             display: none; position: fixed; inset: 0;
             background: rgba(0,0,0,0.6); z-index: 999;
+            backdrop-filter: blur(4px);
         }
         .sidebar-overlay.active { display: block; }
 
         .main-content {
             margin-left: var(--sidebar-w); min-height: 100vh;
             padding: 2rem 2.25rem 3rem;
-            transition: margin-left 0.3s ease;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* ══════════════════════════════════════
@@ -190,7 +191,6 @@
             background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        /* ✅ FIX: botón usa data-bs-toggle para abrir modal de forma nativa */
         .btn-new {
             display: inline-flex; align-items: center; gap: 7px;
             background: linear-gradient(135deg, var(--accent-red), #991b1b);
@@ -203,7 +203,7 @@
         .btn-new .material-icons { font-size: 17px; }
 
         /* ══════════════════════════════════════
-           STATS
+           🎨 STATS CARDS - ESTILO DIFERENCIADO DEL MODAL
         ══════════════════════════════════════ */
         .stats-grid {
             display: grid;
@@ -211,12 +211,26 @@
             gap: 1rem; margin-bottom: 1.75rem;
         }
         .stat-card {
-            background: var(--bg-card); border-radius: var(--radius-md);
-            box-shadow: var(--shadow-card); padding: 1.375rem 1.25rem;
+            /* ✅ DIFERENCIADO DEL MODAL: fondo más oscuro, borde sutil */
+            background: linear-gradient(145deg, var(--bg-card), #0d0d16);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.375rem 1.25rem;
             transition: transform 0.25s, box-shadow 0.25s;
             position: relative; overflow: hidden;
+            /* ✅ Efecto de brillo sutil diferente al modal */
+            box-shadow: 0 0 0 1px var(--border), 0 4px 20px rgba(0,0,0,0.3);
         }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .stat-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--border-red);
+        }
         .stat-card::after {
             content: ''; position: absolute; inset: 0 auto 0 0;
             width: 3px; border-radius: 99px 0 0 99px; opacity: 0;
@@ -333,19 +347,21 @@
         .act-empty { text-align: center; padding: 2.5rem; color: var(--text-muted); grid-column: 1/-1; }
 
         /* ══════════════════════════════════════
-           MODAL
+           MODAL - ESTILO DIFERENCIADO DE LAS CARDS
         ══════════════════════════════════════ */
         .modal-content {
-            background: var(--bg-card) !important;
-            border: 1px solid var(--border) !important;
+            /* ✅ MODAL: fondo más claro, borde más pronunciado */
+            background: linear-gradient(145deg, #1a1a2e, var(--bg-card)) !important;
+            border: 1px solid var(--border-red) !important;
             border-radius: var(--radius-lg) !important;
             color: var(--text-primary);
+            box-shadow: 0 0 0 1px var(--border-red), 0 32px 80px rgba(220,38,38,0.2) !important;
         }
         .modal-header-np {
             display: flex; align-items: center; justify-content: space-between;
             padding: 1.25rem 1.5rem;
-            background: rgba(220,38,38,0.06);
-            border-bottom: 1px solid var(--border);
+            background: linear-gradient(135deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04));
+            border-bottom: 1px solid var(--border-red);
         }
         .modal-header-np .modal-title-np {
             font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 16px;
@@ -360,7 +376,6 @@
         .btn-close-dark:hover { background: var(--accent-red-soft); color: var(--text-primary); }
         .btn-close-dark .material-icons { font-size: 18px; }
 
-        /* ✅ MODAL FIX: cadena flex completa para que footer siempre sea visible */
         #modalPelicula .modal-dialog {
             max-height: 90vh;
             margin-top: 5vh;
@@ -416,7 +431,6 @@
         }
         .form-ctrl option { background: #1a1a2e; }
 
-        /* ✅ FIX: área de imagen — pointer-events correctos */
         .upload-zone {
             border: 2px dashed var(--border);
             background: var(--bg-secondary); border-radius: var(--radius-sm);
@@ -427,7 +441,6 @@
         .upload-zone .material-icons { font-size: 36px; color: var(--accent-red); display: block; margin-bottom: 0.5rem; }
         .upload-zone p { font-size: 13px; color: var(--text-secondary); margin: 0; }
         .upload-zone small { color: var(--text-muted); font-size: 11px; }
-        /* ✅ input oculto SIN pointer-events none — se activa por JS en click del zone */
         #posterFile { display: none; }
 
         .poster-preview-img {
@@ -491,23 +504,32 @@
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ══════════════════════════════════════
-           RESPONSIVE
+           RESPONSIVE - MENÚ HAMBURGUESA FUNCIONAL
         ══════════════════════════════════════ */
         @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+
         @media (max-width: 1024px) {
+            /* ✅ Sidebar oculto por defecto en móvil */
             .sidebar { transform: translateX(-100%); }
-            .sidebar.active { transform: translateX(0); }
+            .sidebar.active { transform: translateX(0); box-shadow: 0 0 40px rgba(0,0,0,0.5); }
+
             .main-content { margin-left: 0; }
+
+            /* ✅ Mostrar botón hamburguesa */
             .menu-toggle { display: flex; align-items: center; }
+
             .activity-grid { grid-template-columns: 1fr; }
         }
+
         @media (max-width: 768px) {
             .main-content { padding: 1.25rem; }
             .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
             .topbar { flex-wrap: wrap; gap: 0.75rem; }
         }
+
         @media (max-width: 480px) {
             .stats-grid { grid-template-columns: 1fr; }
+            .btn-new { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -522,7 +544,7 @@
             <span class="logo-icon"><span class="material-icons">movie</span></span>
             <span class="logo-text">NET<span>PELIS</span></span>
         </a>
-        <button class="menu-toggle" id="menuClose">
+        <button class="menu-toggle" id="menuClose" aria-label="Cerrar menú">
             <span class="material-icons">close</span>
         </button>
     </div>
@@ -543,12 +565,10 @@
             <span class="material-icons">people</span>Usuarios
             <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
         </a>
-        <a href="/admin/favoritos" class="nav-link"><span class="material-icons">favorite</span>Favoritos<span class="nav-badge">●</span></a>
-
 
         <a href="/admin/favoritos" class="nav-link">
             <span class="material-icons">favorite</span>Favoritos
-            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>  <!-- ✅ CORREGIDO -->
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
         </a>
 
         <span class="nav-section-label">Contenido</span>
@@ -560,7 +580,6 @@
 
         <a href="/admin/comentarios" class="nav-link">
             <span class="material-icons">chat</span>Comentarios
-            <!-- Opcional: agregar badge si tienes contador -->
         </a>
 
         <a href="/admin/generos" class="nav-link">
@@ -594,21 +613,19 @@
         </form>
     </div>
 </nav>
+
 <!-- ══ MAIN ══ -->
 <main class="main-content">
 
     <!-- Top Bar -->
     <div class="topbar">
         <div class="topbar-left">
-            <button class="menu-toggle d-lg-none" id="menuOpen">
+            <!-- ✅ Botón hamburguesa visible solo en móvil -->
+            <button class="menu-toggle d-lg-none" id="menuOpen" aria-label="Abrir menú">
                 <span class="material-icons">menu</span>
             </button>
             <h1 class="page-title">Panel de Control</h1>
         </div>
-        <!--
-          ✅ FIX MODAL: data-bs-toggle="modal" + data-bs-target es el método más robusto
-          en Thymeleaf/Spring porque no depende de JS ejecutándose después del renderizado.
-        -->
         <button type="button" class="btn-new"
                 data-bs-toggle="modal" data-bs-target="#modalPelicula"
                 onclick="prepararModalNueva()">
@@ -652,7 +669,7 @@
         </div>
     </div>
 
-    <!-- Películas Recientes -->
+    <!-- Películas Recientes - LIMITADO A 4 PELÍCULAS -->
     <div class="content-card">
         <div class="cc-header">
             <span class="cc-title"><span class="material-icons">movie</span>Películas Recientes</span>
@@ -662,11 +679,17 @@
             <table class="tbl">
                 <thead>
                 <tr>
-                    <th>Película</th><th>Año</th><th>Género</th><th>Estado</th><th>Fecha</th><th>Acciones</th>
+                    <th>Película</th>
+                    <th>Año</th>
+                    <th>Género</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="pelicula : ${peliculasRecientes}" th:if="${peliculasRecientes != null and !#lists.isEmpty(peliculasRecientes)}">
+                <!-- ✅ CORRECCIÓN: Limitar a 4 usando status.index < 4 (compatible con Thymeleaf) -->
+                <tr th:each="pelicula, status : ${peliculasRecientes}"
+                    th:if="${peliculasRecientes != null and !#lists.isEmpty(peliculasRecientes) and status.index < 4}">
                     <td>
                         <div class="movie-cell">
                             <img th:src="${pelicula.posterUrl != null and !pelicula.posterUrl.isEmpty() ? pelicula.posterUrl : 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 38 56%22%3E%3Crect fill=%22%231a1a2e%22 width=%2238%22 height=%2256%22/%3E%3C/svg%3E'}"
@@ -690,17 +713,9 @@
                               th:text="${pelicula.estado.name}"></span>
                     </td>
                     <td th:text="${#temporals.format(pelicula.fechaCreacion, 'dd/MM/yyyy')}">01/01/2024</td>
-                    <td>
-                        <button class="tbl-btn" th:onclick="'editarPelicula(' + ${pelicula.id} + ')'">
-                            <span class="material-icons">edit</span>
-                        </button>
-                        <button class="tbl-btn" th:onclick="'eliminarPelicula(' + ${pelicula.id} + ')'">
-                            <span class="material-icons" style="color:var(--accent-red)">delete</span>
-                        </button>
-                    </td>
                 </tr>
                 <tr th:if="${peliculasRecientes == null or #lists.isEmpty(peliculasRecientes)}">
-                    <td colspan="6" style="text-align:center; padding:3rem; color:var(--text-muted);">
+                    <td colspan="5" style="text-align:center; padding:3rem; color:var(--text-muted);">
                         <span class="material-icons" style="font-size:40px;opacity:.25;display:block;margin-bottom:.75rem;">movie</span>
                         No hay películas registradas
                     </td>
@@ -736,23 +751,19 @@
 <div class="modal fade" id="modalPelicula" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
-
             <div class="modal-header-np">
                 <div class="modal-title-np">
                     <span class="material-icons">movie</span>
                     <span id="modalTitleText">Nueva Película</span>
                 </div>
-                <button type="button" class="btn-close-dark" data-bs-dismiss="modal">
+                <button type="button" class="btn-close-dark" data-bs-dismiss="modal" aria-label="Cerrar">
                     <span class="material-icons">close</span>
                 </button>
             </div>
-
             <form id="formPelicula" th:action="@{/admin/peliculas/guardar}" method="post" enctype="multipart/form-data">
                 <div class="modal-body-np">
                     <input type="hidden" id="peliculaId" name="peliculaId">
                     <div class="row g-3">
-
-                        <!-- Col izquierda -->
                         <div class="col-lg-8">
                             <div class="mb-3">
                                 <label class="form-label-np">Título <span style="color:var(--accent-red)">*</span></label>
@@ -804,30 +815,20 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Col derecha — poster -->
                         <div class="col-lg-4">
                             <label class="form-label-np">Portada</label>
-
-                            <!--
-                              ✅ FIX IMAGEN: el click del zone dispara el input file via JS.
-                              input#posterFile está oculto con display:none (no pointer-events:none)
-                              para que el FileReader pueda leerlo normalmente.
-                            -->
                             <div class="upload-zone" id="uploadZone">
                                 <span class="material-icons">add_photo_alternate</span>
                                 <p>Haz clic para subir imagen</p>
                                 <small>JPG, PNG — Máx 10MB</small>
                             </div>
                             <input type="file" id="posterFile" name="posterFile" accept="image/*">
-
                             <div id="posterPreviewContainer" style="display:none; margin-top:0.75rem;">
                                 <img id="posterPreview" class="poster-preview-img" alt="Preview">
                                 <button type="button" class="btn-remove-img" onclick="removePoster()">
                                     <span class="material-icons">close</span>Eliminar
                                 </button>
                             </div>
-
                             <div style="margin-top:1rem;">
                                 <label class="form-label-np">O pega una URL de imagen</label>
                                 <input type="url" class="form-ctrl" id="posterUrl" name="posterUrl" placeholder="https://.../poster.jpg">
@@ -836,7 +837,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer-np">
                     <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn-save" id="btnGuardar">
@@ -854,28 +854,47 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    /* ── Sidebar ── */
+    /* ── Sidebar Responsive - CORREGIDO ── */
     const sidebar  = document.getElementById('sidebar');
     const overlay  = document.getElementById('sidebarOverlay');
     const menuOpen = document.getElementById('menuOpen');
     const menuClose= document.getElementById('menuClose');
-    function openSidebar()  { sidebar.classList.add('active');    overlay.classList.add('active');    document.body.style.overflow='hidden'; }
-    function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
-    menuOpen?.addEventListener('click', openSidebar);
-    menuClose?.addEventListener('click', closeSidebar);
-    overlay.addEventListener('click', closeSidebar);
+
+    function openSidebar() {
+        sidebar.classList.add('active');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // ✅ Eventos con verificación de null
+    if (menuOpen) menuOpen.addEventListener('click', openSidebar);
+    if (menuClose) menuClose.addEventListener('click', closeSidebar);
+    if (overlay) overlay.addEventListener('click', closeSidebar);
+
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+            closeSidebar();
+        }
+    });
 
     /* ── Modal helpers ── */
     function prepararModalNueva() {
         document.getElementById('formPelicula').reset();
         document.getElementById('peliculaId').value = '';
         document.getElementById('modalTitleText').textContent = 'Nueva Película';
-        document.getElementById('btnGuardarText').textContent  = 'Guardar Película';
+        document.getElementById('btnGuardarText').textContent = 'Guardar Película';
         removePoster();
         document.querySelectorAll('input[name="generos"]').forEach(c => c.checked = false);
     }
 
-    /* ── ✅ FIX IMAGEN: click en zone → dispara input file ── */
+    /* ── Upload de imagen ── */
     document.getElementById('uploadZone').addEventListener('click', function() {
         document.getElementById('posterFile').click();
     });
@@ -906,26 +925,26 @@
         document.getElementById('posterPreviewContainer').style.display = 'none';
         document.getElementById('uploadZone').style.display = 'block';
         document.getElementById('posterFile').value = '';
-        document.getElementById('posterUrl').value  = '';
+        document.getElementById('posterUrl').value = '';
     }
 
-    /* ── Editar ── */
+    /* ── Editar película ── */
     function editarPelicula(id) {
         fetch('/admin/api/peliculas/' + id)
             .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
             .then(d => {
                 prepararModalNueva();
                 document.getElementById('modalTitleText').textContent = 'Editar Película';
-                document.getElementById('btnGuardarText').textContent  = 'Actualizar';
-                document.getElementById('peliculaId').value        = d.id;
-                document.getElementById('titulo').value            = d.titulo           || '';
-                document.getElementById('sinopsis').value          = d.sinopsis         || '';
-                document.getElementById('anioLanzamiento').value   = d.anioLanzamiento  || '';
-                document.getElementById('duracionMinutos').value   = d.duracionMinutos  || '';
-                document.getElementById('clasificacion').value     = d.clasificacion    || '';
-                document.getElementById('director').value          = d.director         || '';
-                document.getElementById('trailerUrl').value        = d.trailerUrl       || '';
-                document.getElementById('estado').value            = d.estado           || 'PUBLICADO';
+                document.getElementById('btnGuardarText').textContent = 'Actualizar';
+                document.getElementById('peliculaId').value = d.id;
+                document.getElementById('titulo').value = d.titulo || '';
+                document.getElementById('sinopsis').value = d.sinopsis || '';
+                document.getElementById('anioLanzamiento').value = d.anioLanzamiento || '';
+                document.getElementById('duracionMinutos').value = d.duracionMinutos || '';
+                document.getElementById('clasificacion').value = d.clasificacion || '';
+                document.getElementById('director').value = d.director || '';
+                document.getElementById('trailerUrl').value = d.trailerUrl || '';
+                document.getElementById('estado').value = d.estado || 'PUBLICADO';
                 if (d.posterUrl) { document.getElementById('posterUrl').value = d.posterUrl; showPreview(d.posterUrl); }
                 if (d.generos) {
                     const ids = d.generos.map(g => g.id);
@@ -936,7 +955,7 @@
             .catch(e => showToast('No se pudo cargar la película: ' + e.message, 'error'));
     }
 
-    /* ── Eliminar ── */
+    /* ── Eliminar película ── */
     function eliminarPelicula(id) {
         if (!confirm('¿Eliminar esta película? Esta acción no se puede deshacer.')) return;
         fetch('/admin/peliculas/' + id + '/eliminar', { method: 'POST' })
@@ -944,7 +963,7 @@
             .catch(() => showToast('Error de conexión', 'error'));
     }
 
-    /* ── Formulario ── */
+    /* ── Formulario submit ── */
     document.getElementById('formPelicula').addEventListener('submit', function(e) {
         e.preventDefault();
         const btn = document.getElementById('btnGuardar');
@@ -967,7 +986,7 @@
             });
     });
 
-    /* ── Toast ── */
+    /* ── Toast notifications ── */
     function showToast(msg, type = 'success') {
         const icons = { success: 'check_circle', error: 'error', info: 'info' };
         const wrap = document.getElementById('toastWrap');
