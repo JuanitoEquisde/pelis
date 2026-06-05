@@ -5,6 +5,7 @@ import com.NetPelis.netPelis.entity.Usuario;
 import com.NetPelis.netPelis.repository.*;
 import com.NetPelis.netPelis.service.impl.UsuarioService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +30,6 @@ public class AdminDashboardController {
     private final RepositorioResena repositorioResena;
     private final RepositorioFavorito repositorioFavorito;
     private final RepositorioGenero repositorioGenero;
-
-    // ✅ Inyectar servicio de usuarios para búsqueda con filtros
     private final UsuarioService usuarioService;
 
     /**
@@ -41,41 +40,38 @@ public class AdminDashboardController {
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
         try {
+            // Estadísticas generales
             model.addAttribute("totalPeliculas", repositorioPelicula.count());
             model.addAttribute("totalUsuarios", repositorioUsuario.countByActivoTrue());
             model.addAttribute("totalResenas", contarResenasEsteMes());
             model.addAttribute("totalFavoritos", repositorioFavorito.count());
+
+            // Películas recientes con géneros
             model.addAttribute("peliculasRecientes", repositorioPelicula.findRecientesConGeneros());
-            model.addAttribute("resenasRecientes", repositorioResena.findRecientesConUsuario(5));
+
+            // ✅ CORREGIDO: Pasar PageRequest con límite de 5 reseñas recientes
+            model.addAttribute("resenasRecientes",
+                    repositorioResena.findRecientesConUsuario(PageRequest.of(0, 5)));
+
+            // Todos los géneros para filtros
             model.addAttribute("todosLosGeneros", repositorioGenero.findAll());
+
+            // Para el sidebar activo
+            model.addAttribute("currentPage", "dashboard");
 
             System.out.println("✅ Dashboard cargado:");
             System.out.println("   - Películas: " + repositorioPelicula.count());
             System.out.println("   - Usuarios: " + repositorioUsuario.countByActivoTrue());
             System.out.println("   - Reseñas este mes: " + contarResenasEsteMes());
+            System.out.println("   - Favoritos: " + repositorioFavorito.count());
 
         } catch (Exception e) {
             System.err.println("❌ Error cargando dashboard: " + e.getMessage());
             e.printStackTrace();
         }
 
-        return "admin-dashboard";  // ✅ Busca: templates/admin-dashboard.html
+        return "admin-dashboard";
     }
-
-    /**
-     * ✅ Página de gestión de usuarios CON BÚSQUEDA Y FILTROS
-     * RUTA: GET /admin/usuarios
-     * TEMPLATE: templates/admin/usuarios.html
-     *
-     * Parámetros de filtro (opcionales):
-     * - id: Long
-     * - nombre: String (búsqueda parcial, case-insensitive)
-     * - email: String (búsqueda parcial, case-insensitive)
-     * - rol: RolUsuario (ADMIN o CLIENTE)
-     */
-
-
-    // ❌ NO agregar @GetMapping("/peliculas") aquí - Eso es de PeliculaController
 
     /**
      * Utilidad: Contar reseñas del mes actual

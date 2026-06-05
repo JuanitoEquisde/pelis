@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios Más Activos - NetPelis Admin</title>
+    <title>Usuarios Activos - NetPelis Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -17,12 +17,14 @@
             --text-secondary: rgba(241,241,248,0.65); --text-muted: rgba(241,241,248,0.38);
             --border: rgba(255,255,255,0.07); --border-red: rgba(220,38,38,0.22);
             --radius-sm: 10px; --radius-md: 14px; --radius-lg: 20px;
+            --shadow-card: 0 0 0 1px var(--border), 0 8px 32px rgba(0,0,0,0.4);
             --sidebar-w: 260px;
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(ellipse 70% 50% at 10% 0%, rgba(220,38,38,0.08) 0%, transparent 55%), radial-gradient(ellipse 50% 40% at 90% 100%, rgba(245,158,11,0.05) 0%, transparent 55%); z-index: -1; pointer-events: none; }
         ::-webkit-scrollbar { width: 5px; height: 5px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(220,38,38,0.35); border-radius: 99px; } ::-webkit-scrollbar-thumb:hover { background: var(--accent-red); }
+
         .sidebar { width: var(--sidebar-w); background: var(--bg-sidebar); border-right: 1px solid var(--border); position: fixed; top: 0; left: 0; height: 100vh; padding: 0; z-index: 1000; display: flex; flex-direction: column; transition: transform 0.3s ease; }
         .sidebar-brand { padding: 1.5rem 1.25rem 1.25rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); flex-shrink: 0; }
         .brand-logo { display: flex; align-items: center; gap: 10px; font-family: 'Outfit', sans-serif; font-size: 20px; font-weight: 800; color: var(--text-primary); text-decoration: none; letter-spacing: 0.3px; }
@@ -53,75 +55,39 @@
         .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 999; }
         .sidebar-overlay.active { display: block; }
         .main-content { margin-left: var(--sidebar-w); min-height: 100vh; padding: 2rem 2.25rem 3rem; transition: margin-left 0.3s ease; }
+
         .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
         .topbar-left { display: flex; align-items: center; gap: 1rem; }
-        .page-title { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
-        .stat-card { background: var(--bg-card); border-radius: var(--radius-md); box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0,0,0,0.4); padding: 1.375rem 1.25rem; transition: transform 0.25s, box-shadow 0.25s; position: relative; overflow: hidden; }
-        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 0 0 1px var(--border-red), 0 20px 48px rgba(220,38,38,0.12); }
-        .stat-card::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 3px; border-radius: 99px 0 0 99px; opacity: 0; transition: opacity 0.25s; }
-        .stat-card:hover::after { opacity: 1; }
-        .stat-card.c1::after { background: var(--accent-red); } .stat-card.c2::after { background: var(--accent-gold); } .stat-card.c3::after { background: #10b981; } .stat-card.c4::after { background: #3b82f6; }
-        .stat-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
-        .stat-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
-        .stat-icon .material-icons { font-size: 21px; }
-        .stat-icon.red { background: rgba(220,38,38,0.1); } .stat-icon.red .material-icons { color: var(--accent-red); }
-        .stat-icon.gold { background: rgba(245,158,11,0.1); } .stat-icon.gold .material-icons { color: var(--accent-gold); }
-        .stat-icon.green { background: rgba(16,185,129,0.1); } .stat-icon.green .material-icons { color: #10b981; }
-        .stat-icon.blue { background: rgba(59,130,246,0.1); } .stat-icon.blue .material-icons { color: #3b82f6; }
-        .stat-value { font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
-        .stat-label { font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
-        .content-card { background: var(--bg-card); border-radius: var(--radius-md); box-shadow: 0 0 0 1px var(--border), 0 8px 32px rgba(0,0,0,0.4); margin-bottom: 1.5rem; overflow: hidden; }
-        .cc-header { display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
-        .cc-title { font-family: 'Outfit', sans-serif; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
-        .cc-title .material-icons { font-size: 18px; color: var(--accent-red); }
-        .table-wrap { overflow-x: auto; }
-        .tbl { width: 100%; border-collapse: separate; border-spacing: 0; }
-        .tbl thead th { background: rgba(220,38,38,0.06); color: var(--text-muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.07em; padding: 0.875rem 1.25rem; border-bottom: 1px solid var(--border); white-space: nowrap; }
-        .tbl tbody td { padding: 0.875rem 1.25rem; vertical-align: middle; font-size: 13.5px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-        .tbl tbody tr:last-child td { border-bottom: none; }
-        .tbl tbody tr { transition: background 0.18s; }
-        .tbl tbody tr:hover { background: rgba(220,38,38,0.04); }
-        .user-cell { display: flex; align-items: center; gap: 12px; }
-        .user-avatar-small { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-red), var(--accent-gold)); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: white; flex-shrink: 0; }
-        .user-info h6 { margin: 0; font-weight: 600; font-size: 14px; margin-bottom: 2px; }
-        .user-info small { font-size: 12px; color: var(--text-muted); }
-        .badge-np { padding: 4px 10px; border-radius: 7px; font-weight: 700; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .badge-np.success { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.25); }
-        .badge-np.warning { background: rgba(245,158,11,0.15); color: var(--accent-gold); border: 1px solid rgba(245,158,11,0.25); }
-        .badge-np.danger { background: rgba(220,38,38,0.15); color: var(--accent-red); border: 1px solid rgba(220,38,38,0.25); }
-        .badge-np.info { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.25); }
-        .ranking-badge {
-            width: 32px; height: 32px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 13px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-        }
-        .ranking-badge.gold { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #000; border-color: #fbbf24; }
-        .ranking-badge.silver { background: linear-gradient(135deg, #94a3b8, #64748b); color: white; border-color: #94a3b8; }
-        .ranking-badge.bronze { background: linear-gradient(135deg, #b45309, #92400e); color: white; border-color: #b45309; }
-        .form-select-np {
-            background: var(--bg-secondary) !important;
-            border: 1px solid var(--border) !important;
-            border-radius: var(--radius-sm) !important;
-            color: var(--text-primary) !important;
-            padding: 0.5rem 2rem 0.5rem 0.875rem !important;
-            font-size: 13px;
-            cursor: pointer;
-        }
-        .form-select-np:focus {
-            outline: none;
-            border-color: var(--accent-red) !important;
-            box-shadow: 0 0 0 3px rgba(220,38,38,0.14) !important;
-        }
+        .back-btn { display: inline-flex; align-items: center; gap: 8px; padding: 0.6rem 1.2rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; font-weight: 600; font-size: 13px; transition: all 0.25s; }
+        .back-btn:hover { background: var(--accent-red); border-color: var(--accent-red); color: white; transform: translateX(-3px); }
+        .back-btn .material-icons { font-size: 18px; }
+        .page-title { font-family: 'Outfit', sans-serif; font-size: 24px; font-weight: 800; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; text-align: center; }
+        .stat-value { font-size: 32px; font-weight: 800; color: var(--accent-red); }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 0.5rem; }
+        .content-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem; }
+        .tbl { width: 100%; border-collapse: collapse; }
+        .tbl th { background: rgba(220,38,38,0.1); padding: 1rem; text-align: left; font-weight: 700; font-size: 13px; }
+        .tbl td { padding: 1rem; border-bottom: 1px solid var(--border); }
+        .ranking-1 { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; font-weight: 800; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; }
+        .ranking-2 { background: linear-gradient(135deg, #c0c0c0, #e0e0e0); color: #000; font-weight: 800; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; }
+        .ranking-3 { background: linear-gradient(135deg, #cd7f32, #e8a87c); color: #000; font-weight: 800; padding: 0.5rem 1rem; border-radius: 8px; display: inline-block; }
+        .pagination-container { display: flex; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .page-link { padding: 0.5rem 1rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; font-size: 13px; transition: all 0.2s; }
+        .page-link.active { background: var(--accent-red); border-color: var(--accent-red); }
+        .page-link:hover:not(.active) { background: rgba(220,38,38,0.1); border-color: var(--accent-red); }
+
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); } .sidebar.active { transform: translateX(0); }
             .main-content { margin-left: 0; } .menu-toggle { display: flex; align-items: center; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 768px) {
-            .main-content { padding: 1.25rem; } .stats-grid { grid-template-columns: 1fr; }
+            .main-content { padding: 1.25rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .tbl { display: block; overflow-x: auto; }
         }
     </style>
 </head>
@@ -134,28 +100,83 @@
             <span class="logo-icon"><span class="material-icons">movie</span></span>
             <span class="logo-text">NET<span>PELIS</span></span>
         </a>
-        <button class="menu-toggle" id="menuClose"><span class="material-icons">close</span></button>
+        <button class="menu-toggle" id="menuClose">
+            <span class="material-icons">close</span>
+        </button>
     </div>
+
     <div class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
-        <a href="/admin/dashboard" class="nav-link"><span class="material-icons">dashboard</span>Dashboard</a>
-        <a href="/admin/peliculas" class="nav-link"><span class="material-icons">movie</span>Películas</a>
-        <a href="/admin/usuarios" class="nav-link"><span class="material-icons">people</span>Usuarios</a>
-        <a href="/admin/generos" class="nav-link"><span class="material-icons">category</span>Géneros</a>
-        <a href="/admin/favoritos" class="nav-link"><span class="material-icons">favorite</span>Favoritos</a>
-        <a href="/admin/resenas" class="nav-link"><span class="material-icons">rate_review</span>Reseñas</a>
+
+        <a href="/admin/dashboard" class="nav-link">
+            <span class="material-icons">dashboard</span>Dashboard
+        </a>
+
+        <a href="/admin/peliculas" class="nav-link">
+            <span class="material-icons">movie</span>Películas
+            <span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/usuarios" class="nav-link">
+            <span class="material-icons">people</span>Usuarios
+            <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/favoritos" class="nav-link">
+            <span class="material-icons">favorite</span>Favoritos
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
+        </a>
+
+        <span class="nav-section-label">Análisis</span>
+
+        <a href="/admin/reportes" class="nav-link">
+            <span class="material-icons">assessment</span>menú reportes
+        </a>
+
+        <a href="/admin/reportes/usuarios-activos" class="nav-link ">
+            <span class="material-icons">analytics</span>Usuarios Activos
+        </a>
+
         <div class="sidebar-divider"></div>
-        <span class="nav-section-label">Reportes</span>
-        <a href="/admin/reportes" class="nav-link"><span class="material-icons">analytics</span>Dashboard Reportes</a>
-        <a href="/admin/reportes/usuarios-activos" class="nav-link active"><span class="material-icons">leaderboard</span>Usuarios Activos</a>
+        <span class="nav-section-label">Contenido</span>
+
+        <a href="/admin/resenas" class="nav-link">
+            <span class="material-icons">rate_review</span>Reseñas
+            <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
+        </a>
+
+        <a href="/admin/comentarios" class="nav-link">
+            <span class="material-icons">chat</span>Comentarios
+        </a>
+
+        <a href="/admin/generos" class="nav-link">
+            <span class="material-icons">category</span>Géneros
+        </a>
+
+        <div class="sidebar-divider"></div>
+        <span class="nav-section-label">Sistema</span>
+
+        <a href="/admin/configuracion" class="nav-link">
+            <span class="material-icons">settings</span>Configuración
+        </a>
+
+        <a href="/admin/logs" class="nav-link">
+            <span class="material-icons">receipt_long</span>Logs
+        </a>
     </div>
+
     <div class="sidebar-footer">
         <div class="user-info-row">
             <div class="user-avatar">A</div>
-            <div class="user-details"><h6>Administrador</h6><small>admin@netpelis.com</small></div>
+            <div class="user-details">
+                <h6>Administrador</h6>
+                <small>admin@netpelis.com</small>
+            </div>
         </div>
         <form th:action="@{/auth/logout}" method="post">
-            <button type="submit" class="btn-logout"><span class="material-icons">logout</span>Cerrar Sesión</button>
+            <button type="submit" class="btn-logout">
+                <span class="material-icons">logout</span>Cerrar Sesión
+            </button>
         </form>
     </div>
 </nav>
@@ -164,124 +185,111 @@
     <div class="topbar">
         <div class="topbar-left">
             <button class="menu-toggle d-lg-none" id="menuOpen"><span class="material-icons">menu</span></button>
-            <h1 class="page-title">🏆 Usuarios Más Activos</h1>
+            <a href="/admin/reportes" class="back-btn">
+                <span class="material-icons">arrow_back</span>
+                Volver a Reportes
+            </a>
         </div>
     </div>
 
-    <!-- Stats -->
+    <h1 class="page-title" style="margin-bottom: 2rem;">🏆 Reporte: Usuarios Más Activos</h1>
+
+    <!-- Stats Resumen -->
     <div class="stats-grid">
-        <div class="stat-card c1">
-            <div class="stat-top">
-                <div class="stat-icon red"><span class="material-icons">movie</span></div>
-            </div>
-            <div class="stat-value" th:text="${totalPeliculas}">0</div>
-            <div class="stat-label">Total Películas</div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${totalPeliculas ?: 0}">0</div>
+            <div class="stat-label">Películas</div>
         </div>
-        <div class="stat-card c2">
-            <div class="stat-top">
-                <div class="stat-icon gold"><span class="material-icons">people</span></div>
-            </div>
-            <div class="stat-value" th:text="${totalUsuarios}">0</div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${totalUsuarios ?: 0}">0</div>
             <div class="stat-label">Usuarios</div>
         </div>
-        <div class="stat-card c3">
-            <div class="stat-top">
-                <div class="stat-icon green"><span class="material-icons">rate_review</span></div>
-            </div>
-            <div class="stat-value" th:text="${totalResenas}">0</div>
-            <div class="stat-label">Reseñas Totales</div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${totalResenas ?: 0}">0</div>
+            <div class="stat-label">Reseñas</div>
         </div>
-        <div class="stat-card c4">
-            <div class="stat-top">
-                <div class="stat-icon blue"><span class="material-icons">favorite</span></div>
-            </div>
-            <div class="stat-value" th:text="${totalFavoritos}">0</div>
+        <div class="stat-card">
+            <div class="stat-value" th:text="${totalFavoritos ?: 0}">0</div>
             <div class="stat-label">Favoritos</div>
         </div>
     </div>
 
     <!-- Tabla de Reporte -->
     <div class="content-card">
-        <div class="cc-header">
-            <span class="cc-title"><span class="material-icons">leaderboard</span>Top Usuarios por Reseñas</span>
-            <div style="display: flex; align-items: center; gap: 0.75rem;">
-                <label style="font-size: 12px; color: var(--text-muted);">Mostrar:</label>
-                <select class="form-select-np" id="limitSelect" onchange="cambiarLimite(this.value)">
-                    <option value="5" th:selected="${limit == 5}">5</option>
-                    <option value="10" th:selected="${limit == 10}">10</option>
-                    <option value="20" th:selected="${limit == 20}">20</option>
-                    <option value="50" th:selected="${limit == 50}">50</option>
-                </select>
-            </div>
+        <h2 style="font-family: 'Outfit'; font-size: 20px; margin-bottom: 1.5rem;">
+            📊 Ranking de Usuarios por Cantidad de Reseñas
+        </h2>
+
+        <div th:if="${error}" style="background: rgba(220,38,38,0.1); border: 1px solid var(--accent-red); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
+            <span style="color: var(--accent-red);" th:text="${error}">Error</span>
         </div>
 
-        <div class="table-wrap">
-            <table class="tbl">
-                <thead>
-                <tr>
-                    <th style="width: 60px;">Rank</th>
-                    <th>Usuario</th>
-                    <th>Email</th>
-                    <th style="width: 120px;">Total Reseñas</th>
-                    <th style="width: 150px;">Puntuación Promedio</th>
-                    <th style="width: 100px;">Nivel</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="usuario, iterStat : ${reporteUsuarios}">
-                    <td>
-                        <div class="ranking-badge"
-                             th:classappend="${iterStat.index == 0} ? 'gold' : (${iterStat.index == 1} ? 'silver' : (${iterStat.index == 2} ? 'bronze' : ''))"
-                             th:text="${iterStat.index + 1}">1</div>
-                    </td>
-                    <td>
-                        <div class="user-cell">
-                            <div class="user-avatar-small" th:text="${#strings.substring(usuario.nombreCompleto, 0, 1)}">U</div>
-                            <div class="user-info">
-                                <h6 th:text="${usuario.nombreCompleto}">Usuario</h6>
-                                <small th:text="'ID: ' + ${usuario.usuarioId}">ID: 1</small>
-                            </div>
-                        </div>
-                    </td>
-                    <td style="color: var(--text-secondary); font-size: 13px;" th:text="${usuario.email}">email@ejemplo.com</td>
-                    <td>
-                        <span class="badge-np success" th:text="${usuario.totalResenas}">0</span>
-                    </td>
-                    <td>
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <span class="material-icons" style="font-size: 16px; color: var(--accent-gold);">star</span>
-                            <span th:text="${#numbers.formatDecimal(usuario.puntuacionPromedio, 1, 1)}">0.0</span>
-                            <span style="color: var(--text-muted); font-size: 11px;">/10</span>
-                        </div>
-                    </td>
-                    <td>
-                            <span class="badge-np"
-                                  th:classappend="${usuario.totalResenas >= 20} ? 'danger' : (${usuario.totalResenas >= 10} ? 'warning' : 'info')"
-                                  th:text="${usuario.totalResenas >= 20} ? 'Experto' : (${usuario.totalResenas >= 10} ? 'Activo' : 'Novato')">Novato</span>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(reporteUsuarios)}">
-                    <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                        <span class="material-icons" style="font-size: 40px; opacity: 0.25; display: block; margin-bottom: 0.75rem;">leaderboard</span>
-                        No hay reseñas registradas aún
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <table class="tbl">
+            <thead>
+            <tr>
+                <th style="width: 100px;">Ranking</th>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th style="text-align: center;">Total Reseñas</th>
+                <th style="text-align: center;">Promedio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="usuario, stat : ${reporteUsuarios}">
+                <td style="text-align: center;">
+                    <span th:if="${stat.index == 0}" class="ranking-1">🥇 #1</span>
+                    <span th:if="${stat.index == 1}" class="ranking-2">🥈 #2</span>
+                    <span th:if="${stat.index == 2}" class="ranking-3">🥉 #3</span>
+                    <span th:if="${stat.index > 2}" style="font-weight: 600; color: var(--text-muted);"
+                          th:text="'#' + (${currentPage * size + stat.index + 1})">#4</span>
+                </td>
+                <td>
+                    <div style="font-weight: 600;" th:text="${usuario.nombreCompleto}">Nombre</div>
+                </td>
+                <td style="color: var(--text-muted);" th:text="${usuario.email}">email@ejemplo.com</td>
+                <td style="text-align: center;">
+                        <span style="background: var(--accent-red); color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; font-size: 13px;"
+                              th:text="${usuario.totalResenas}">0</span>
+                </td>
+                <td style="text-align: center;">
+                        <span style="color: var(--accent-gold); font-weight: 700;"
+                              th:text="${usuario.puntuacionPromedio != null ? #numbers.formatDecimal(usuario.puntuacionPromedio, 1, 1) : '0.0'}">0.0</span>
+                    <span style="color: var(--text-muted); font-size: 13px;">/10</span>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(reporteUsuarios)}">
+                <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    No hay datos disponibles
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Paginación -->
+        <div class="pagination-container" th:if="${totalPages > 1}">
+            <a th:if="${currentPage > 0}"
+               th:href="@{/admin/reportes/usuarios-activos(page=${currentPage - 1}, size=${size})}"
+               class="page-link">← Anterior</a>
+
+            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{/admin/reportes/usuarios-activos(page=${i}, size=${size})}"
+                   th:class="${i == currentPage} ? 'page-link active' : 'page-link'"
+                   th:text="${i + 1}">1</a>
+            </span>
+
+            <a th:if="${currentPage < totalPages - 1}"
+               th:href="@{/admin/reportes/usuarios-activos(page=${currentPage + 1}, size=${size})}"
+               class="page-link">Siguiente →</a>
         </div>
     </div>
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Sidebar
     const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
-
-    function cambiarLimite(limit) {
-        window.location.href = '/admin/reportes/usuarios-activos?limit=' + limit;
-    }
 </script>
 </body>
 </html>

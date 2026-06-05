@@ -5,13 +5,21 @@ import com.NetPelis.netPelis.repository.RepositorioFavorito;
 import com.NetPelis.netPelis.repository.RepositorioPelicula;
 import com.NetPelis.netPelis.repository.RepositorioResena;
 import com.NetPelis.netPelis.repository.RepositorioUsuario;
+import com.NetPelis.netPelis.service.impl.ReporteService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -23,6 +31,7 @@ public class AdminReportesController {
     private final RepositorioUsuario repositorioUsuario;
     private final RepositorioPelicula repositorioPelicula;
     private final RepositorioFavorito repositorioFavorito;
+    private final ReporteService reporteService;
 
     /**
      * Dashboard de reportes
@@ -33,35 +42,61 @@ public class AdminReportesController {
         model.addAttribute("totalUsuarios", repositorioUsuario.count());
         model.addAttribute("totalResenas", repositorioResena.count());
         model.addAttribute("totalFavoritos", repositorioFavorito.count());
-
         return "admin/reportes-dashboard";
     }
+
     /**
      * Reporte: Usuarios con más reseñas
-     * ✅ CORREGIDO: Aplicar límite en Java en lugar de JPQL
      */
     @GetMapping("/usuarios-activos")
     public String usuariosConMasResenas(
-            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
 
-        // ✅ Obtener todos los usuarios con reseñas y aplicar límite en Java
-        // (Hibernate 6 no soporta LIMIT con constructor expressions en JPQL)
-        List<UsuarioResenaDTO> todos = repositorioResena.findUsuariosConMasResenas();
-        List<UsuarioResenaDTO> reporte = todos.stream()
-                .limit(limit)
-                .toList();
+        try {
+            Page<UsuarioResenaDTO> pagina = reporteService.getUsuariosConMasResenas(page, size);
 
-        model.addAttribute("reporteUsuarios", reporte);
-        model.addAttribute("totalRegistros", reporte.size());
-        model.addAttribute("limit", limit);
+            model.addAttribute("reporteUsuarios", pagina.getContent());
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", pagina.getTotalPages());
+            model.addAttribute("totalElements", pagina.getTotalElements());
+            model.addAttribute("size", size);
 
-        // Stats adicionales
-        model.addAttribute("totalPeliculas", repositorioPelicula.count());
-        model.addAttribute("totalUsuarios", repositorioUsuario.count());
-        model.addAttribute("totalResenas", repositorioResena.count());
-        model.addAttribute("totalFavoritos", repositorioFavorito.count());
+            // Stats adicionales
+            model.addAttribute("totalPeliculas", repositorioPelicula.count());
+            model.addAttribute("totalUsuarios", repositorioUsuario.count());
+            model.addAttribute("totalResenas", repositorioResena.count());
+            model.addAttribute("totalFavoritos", repositorioFavorito.count());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Error al cargar reporte: " + e.getMessage());
+            model.addAttribute("reporteUsuarios", List.of());
+        }
 
         return "admin/usuarios-activos";
+    }
+
+    /**
+     * Exportar reporte a Excel
+     */
+    @GetMapping("/usuarios-activos/exportar")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportarReporteExcel() {
+        try {
+            byte[] excelData = reporteService.exportarAExcel();
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment",
+                    "usuarios_activos_" + System.currentTimeMillis() + ".xlsx");
+
+            return new ResponseEntity<>(excelData, headers, HttpStatus.OK);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

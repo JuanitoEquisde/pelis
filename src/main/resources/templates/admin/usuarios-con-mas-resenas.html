@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Usuarios con Más Reseñas - NetPelis Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e50914;
+            --secondary-color: #564d4d;
+            --dark-bg: #141414;
+            --card-bg: #1f1f1f;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: #fff;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 0, 0.95) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .navbar-brand {
+            color: var(--primary-color) !important;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+        }
+
+        .sidebar .nav-link {
+            color: #b3b3b3;
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .page-title {
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .stats-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stats-label {
+            color: #b3b3b3;
+            font-size: 0.9rem;
+        }
+
+        .table-container {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .table {
+            color: #fff;
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-weight: 600;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-color: #333;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(229, 9, 20, 0.1);
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box .input-group {
+            max-width: 400px;
+        }
+
+        .btn-netflix {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-netflix:hover {
+            background-color: #f40612;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .pagination .page-link {
+            background-color: var(--card-bg);
+            border-color: #333;
+            color: #fff;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .pagination .page-link:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: white;
+        }
+
+        .badge-resenas {
+            background-color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .rating-stars {
+            color: #ffd700;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #b3b3b3;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/admin/dashboard}">
+            <i class="fas fa-film me-2"></i>NETPELIS ADMIN
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user-circle me-2"></i>Administrador
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" th:href="@{/logout}"><i class="fas fa-sign-out-alt me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse pt-5">
+            <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/dashboard}">
+                            <i class="fas fa-tachometer-alt"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/peliculas}">
+                            <i class="fas fa-film"></i>Películas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/usuarios}">
+                            <i class="fas fa-users"></i>Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/resenas}">
+                            <i class="fas fa-star"></i>Reseñas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/favoritos}">
+                            <i class="fas fa-heart"></i>Favoritos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/admin/reportes}">
+                            <i class="fas fa-chart-bar"></i>Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/generos}">
+                            <i class="fas fa-tags"></i>Géneros
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content pt-5">
+            <div class="page-header d-flex justify-content-between align-items-center">
+                <h1 class="page-title">
+                    <i class="fas fa-users me-3"></i>Usuarios con Más Reseñas
+                </h1>
+                <a th:href="@{/admin/reportes}" class="btn btn-netflix">
+                    <i class="fas fa-arrow-left me-2"></i>Volver a Reportes
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="stats-card text-center">
+                        <div class="stats-number" th:text="${totalElementos}">0</div>
+                        <div class="stats-label">Total Usuarios Activos</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card text-center">
+                        <div class="stats-number" th:text="${totalPaginas}">0</div>
+                        <div class="stats-label">Total Páginas</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card text-center">
+                        <div class="stats-number" th:text="${tamanoPagina}">10</div>
+                        <div class="stats-label">Registros por Página</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="table-container">
+                <!-- Search Box -->
+                <div class="search-box d-flex justify-content-between align-items-center mb-4">
+                    <form th:action="@{/admin/reportes/usuarios-resenas}" method="get" class="d-flex">
+                        <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary text-white">
+                                    <i class="fas fa-search"></i>
+                                </span>
+                            <input type="text" name="busqueda" class="form-control bg-dark border-secondary text-white"
+                                   placeholder="Buscar por nombre o email..."
+                                   th:value="${busqueda}"
+                                   aria-label="Buscar">
+                            <button class="btn btn-netflix" type="submit">Buscar</button>
+                            <a th:href="@{/admin/reportes/usuarios-resenas}" class="btn btn-outline-secondary"
+                               th:if="${busqueda != null and not #strings.isEmpty(busqueda)}">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Table -->
+                <div th:if="${usuarios.totalElements > 0}">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre Completo</th>
+                                <th>Email</th>
+                                <th>Total Reseñas</th>
+                                <th>Puntuación Promedio</th>
+                                <th>Última Reseña</th>
+                                <th>Fecha Registro</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="usuario : ${usuarios.content}">
+                                <td th:text="${usuario.id}">1</td>
+                                <td>
+                                    <strong th:text="${usuario.nombreCompleto}">Nombre Usuario</strong>
+                                </td>
+                                <td th:text="${usuario.email}">email@ejemplo.com</td>
+                                <td>
+                                    <span class="badge-resenas" th:text="${usuario.totalResenas}">0</span>
+                                </td>
+                                <td>
+                                    <div th:if="${usuario.totalResenas > 0}">
+                                                <span class="rating-stars">
+                                                    <i class="fas fa-star"></i>
+                                                </span>
+                                        <span th:text="${#numbers.formatDecimal(usuario.puntuacionPromedio, 1, 1)}">0.0</span>
+                                        <small class="text-muted">/10</small>
+                                    </div>
+                                    <span th:unless="${usuario.totalResenas > 0}" class="text-muted">Sin reseñas</span>
+                                </td>
+                                <td>
+                                    <span th:if="${usuario.ultimaResena != null}"
+                                          th:text="${usuario.ultimaResena.toLocalDateTime().format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy HH:mm'))}">
+                                        -
+                                    </span>
+                                    <span th:unless="${usuario.ultimaResena != null}" class="text-muted">Nunca</span>
+                                </td>
+                                <td>
+                                    <span th:if="${usuario.fechaRegistro != null}"
+                                          th:text="${usuario.fechaRegistro.toLocalDateTime().format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy'))}">
+                                        -
+                                    </span>
+                                    <span th:unless="${usuario.fechaRegistro != null}" class="text-muted">N/A</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${paginaActual == 0} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/reportes/usuarios-resenas(pagina=${paginaActual - 1}, tamano=${tamanoPagina}, busqueda=${busqueda})}"
+                                   th:unless="${paginaActual == 0}">
+                                    <i class="fas fa-chevron-left"></i> Anterior
+                                </a>
+                                <span class="page-link" th:if="${paginaActual == 0}">
+                                        <i class="fas fa-chevron-left"></i> Anterior
+                                    </span>
+                            </li>
+
+                            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPaginas - 1)}"
+                                th:classappend="${i == paginaActual} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/admin/reportes/usuarios-resenas(pagina=${i}, tamano=${tamanoPagina}, busqueda=${busqueda})}"
+                                   th:text="${i + 1}">1</a>
+                            </li>
+
+                            <li class="page-item" th:classappend="${paginaActual == totalPaginas - 1} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/reportes/usuarios-resenas(pagina=${paginaActual + 1}, tamano=${tamanoPagina}, busqueda=${busqueda})}"
+                                   th:unless="${paginaActual == totalPaginas - 1}">
+                                    Siguiente <i class="fas fa-chevron-right"></i>
+                                </a>
+                                <span class="page-link" th:if="${paginaActual == totalPaginas - 1}">
+                                        Siguiente <i class="fas fa-chevron-right"></i>
+                                    </span>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <div class="text-center mt-3 text-muted">
+                        Mostrando <strong th:text="${usuarios.numberOfElements}">0</strong> de
+                        <strong th:text="${totalElementos}">0</strong> registros
+                    </div>
+                </div>
+
+                <!-- No Results -->
+                <div th:unless="${usuarios.totalElements > 0}" class="no-results">
+                    <i class="fas fa-users-slash"></i>
+                    <h3>No se encontraron usuarios</h3>
+                    <p th:if="${busqueda != null and not #strings.isEmpty(busqueda)}">
+                        No hay usuarios que coincidan con "<strong th:text="${busqueda}"></strong>"
+                    </p>
+                    <p th:unless="${busqueda != null and not #strings.isEmpty(busqueda)}">
+                        No hay usuarios activos con reseñas en el sistema.
+                    </p>
+                    <a th:href="@{/admin/reportes/usuarios-resenas}" class="btn btn-netflix mt-3">
+                        <i class="fas fa-sync-alt me-2"></i>Ver todos los usuarios
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -4,33 +4,32 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioResenaDTO {
-    private Long usuarioId;
+public class UsuariosConMasResenasDTO {
+    private Long id;
     private String nombreCompleto;
     private String email;
     private Long totalResenas;
-    private Double puntuacionPromedio;
-    private LocalDateTime ultimaResena;
-    private LocalDateTime fechaRegistro;
-    private Boolean activo;
+    private BigDecimal puntuacionPromedio;
+    private Timestamp ultimaResena;
+    private Timestamp fechaRegistro;
 
     /**
-     * Constructor corto (5 parámetros) para queries simples
+     * Constructor corto (5 parámetros)
      */
-    public UsuarioResenaDTO(Long usuarioId, String nombreCompleto, String email,
-                            Long totalResenas, Double puntuacionPromedio) {
-        this.usuarioId = usuarioId;
+    public UsuariosConMasResenasDTO(Long id, String nombreCompleto, String email,
+                                    Long totalResenas, BigDecimal puntuacionPromedio) {
+        this.id = id;
         this.nombreCompleto = nombreCompleto;
         this.email = email;
         this.totalResenas = totalResenas;
         this.puntuacionPromedio = puntuacionPromedio;
         this.ultimaResena = null;
         this.fechaRegistro = null;
-        this.activo = true;
     }
 }
