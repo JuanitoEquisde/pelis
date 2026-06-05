@@ -18,6 +18,7 @@
             --border: rgba(255,255,255,0.07); --border-red: rgba(220,38,38,0.22);
             --radius-sm: 10px; --radius-md: 14px; --radius-lg: 20px;
             --shadow-card: 0 0 0 1px var(--border), 0 8px 32px rgba(0,0,0,0.4);
+            --shadow-hover: 0 0 0 1px var(--border-red), 0 20px 48px rgba(220,38,38,0.12);
             --sidebar-w: 260px;
         }
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -130,14 +131,17 @@
         <span class="nav-section-label">Análisis</span>
 
         <a href="/admin/reportes" class="nav-link">
-            <span class="material-icons">assessment</span>menú reportes
+            <span class="material-icons">analytics</span>Menú Reportes
         </a>
 
-        <a href="/admin/reportes/usuarios-activos" class="nav-link ">
-            <span class="material-icons">analytics</span>Usuarios Activos
+        <a href="/admin/reportes/usuarios-activos" class="nav-link active">
+            <span class="material-icons">leaderboard</span>Usuarios Activos
         </a>
 
-        <div class="sidebar-divider"></div>
+        <a href="/admin/reportes/usuarios-resenas" class="nav-link">
+            <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
+        </a>
+
         <span class="nav-section-label">Contenido</span>
 
         <a href="/admin/resenas" class="nav-link">

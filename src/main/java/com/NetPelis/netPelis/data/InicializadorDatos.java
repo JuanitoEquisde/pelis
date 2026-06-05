@@ -26,7 +26,7 @@ public class InicializadorDatos implements CommandLineRunner {
             admin.setRol(RolUsuario.ADMIN);
             admin.setActivo(true);
             repositorioUsuario.save(admin);
-            System.out.println("✅ Usuario ADMIN creado: admin@netpelis.com / admin123");
+            System.out.println(" Usuario ADMIN creado: admin@netpelis.com / admin123");
         }
 
         // Crear CLIENTE si no existe
