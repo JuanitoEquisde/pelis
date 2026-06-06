@@ -61,99 +61,42 @@
         .page-title { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 800; background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
         /* Reports Grid */
-        .reports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .report-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 2rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .report-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-red);
-            box-shadow: 0 8px 32px rgba(220,38,38,0.15);
-        }
-
-        .report-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, var(--accent-red), var(--accent-gold));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .report-icon .material-icons {
-            font-size: 28px;
-            color: white;
-        }
-
-        .report-title {
-            font-family: 'Outfit', sans-serif;
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .report-desc {
-            font-size: 13px;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
+        .reports-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .report-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
+        .report-card:hover { transform: translateY(-4px); border-color: var(--accent-red); box-shadow: 0 8px 32px rgba(220,38,38,0.15); }
+        .report-icon { width: 56px; height: 56px; border-radius: 12px; background: linear-gradient(135deg, var(--accent-red), var(--accent-gold)); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+        .report-icon .material-icons { font-size: 28px; color: white; }
+        .report-title { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 0.5rem; }
+        .report-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
         /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 3rem;
-        }
-
-        .stat-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 800;
-        }
-
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 3rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; text-align: center; }
+        .stat-value { font-size: 32px; font-weight: 800; }
         .stat-value.red { color: var(--accent-red); }
         .stat-value.gold { color: var(--accent-gold); }
         .stat-value.green { color: #10b981; }
         .stat-value.blue { color: #3b82f6; }
+        .stat-label { font-size: 13px; color: var(--text-muted); margin-top: 0.5rem; }
 
-        .stat-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-        }
+        /* ===== DROPDOWN MENU ===== */
+        .nav-dropdown { margin-bottom: 0.125rem; }
+        .nav-dropdown .dropdown-toggle { cursor: pointer; position: relative; }
+        .nav-dropdown .dropdown-toggle .dropdown-arrow { margin-left: auto; transition: transform 0.3s ease; font-size: 18px; }
+        .nav-dropdown .dropdown-toggle.open .dropdown-arrow { transform: rotate(180deg); }
+        .dropdown-menu-custom { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); margin: 0.25rem 0 0.25rem 0; }
+        .dropdown-menu-custom.show { max-height: 300px; }
+        .dropdown-item-custom { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.875rem 0.6rem 2.5rem; color: var(--text-muted); text-decoration: none; font-size: 13px; transition: all 0.2s; border-left: 2px solid transparent; margin: 2px 0.5rem; border-radius: 6px; }
+        .dropdown-item-custom .material-icons { font-size: 16px; flex-shrink: 0; }
+        .dropdown-item-custom:hover { color: var(--text-primary); background: var(--bg-glass); border-left-color: var(--accent-red); }
+        .dropdown-item-custom.active { color: var(--text-primary); background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(220,38,38,0.06)); border-left-color: var(--accent-red); }
+        .dropdown-item-custom.active .material-icons { color: var(--accent-red); }
 
-        /* Responsive */
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); } .sidebar.active { transform: translateX(0); }
             .main-content { margin-left: 0; } .menu-toggle { display: flex; align-items: center; }
         }
-        @media (max-width: 768px) {
-            .main-content { padding: 1.25rem; }
-        }
+        @media (max-width: 768px) { .main-content { padding: 1.25rem; } }
     </style>
 </head>
 <body>
@@ -165,86 +108,54 @@
             <span class="logo-icon"><span class="material-icons">movie</span></span>
             <span class="logo-text">NET<span>PELIS</span></span>
         </a>
-        <button class="menu-toggle" id="menuClose">
-            <span class="material-icons">close</span>
-        </button>
+        <button class="menu-toggle" id="menuClose"><span class="material-icons">close</span></button>
     </div>
 
     <div class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
-
-        <a href="/admin/dashboard" class="nav-link">
-            <span class="material-icons">dashboard</span>Dashboard
-        </a>
-
-        <a href="/admin/peliculas" class="nav-link">
-            <span class="material-icons">movie</span>Películas
-            <span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span>
-        </a>
-
-        <a href="/admin/usuarios" class="nav-link">
-            <span class="material-icons">people</span>Usuarios
-            <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
-        </a>
-
-        <a href="/admin/favoritos" class="nav-link">
-            <span class="material-icons">favorite</span>Favoritos
-            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
-        </a>
+        <a href="/admin/dashboard" class="nav-link"><span class="material-icons">dashboard</span>Dashboard</a>
+        <a href="/admin/peliculas" class="nav-link"><span class="material-icons">movie</span>Películas<span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span></a>
+        <a href="/admin/usuarios" class="nav-link"><span class="material-icons">people</span>Usuarios<span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span></a>
+        <a href="/admin/favoritos" class="nav-link"><span class="material-icons">favorite</span>Favoritos<span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span></a>
 
         <span class="nav-section-label">Análisis</span>
-
-        <a href="/admin/reportes" class="nav-link active">
-            <span class="material-icons">analytics</span>Menú Reportes
-        </a>
-
-        <a href="/admin/reportes/usuarios-activos" class="nav-link">
-            <span class="material-icons">leaderboard</span>Usuarios Activos
-        </a>
-
-        <a href="/admin/reportes/usuarios-resenas" class="nav-link">
-            <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
-        </a>
+        <div class="nav-dropdown">
+            <div class="nav-link dropdown-toggle open" onclick="toggleDropdown(this)">
+                <span class="material-icons">analytics</span>
+                <span>Reportes</span>
+                <span class="material-icons dropdown-arrow">expand_more</span>
+            </div>
+            <div class="dropdown-menu-custom show" id="analisisDropdown">
+                <a href="/admin/reportes" class="dropdown-item-custom active">
+                    <span class="material-icons">dashboard</span>Menú Reportes
+                </a>
+                <a href="/admin/reportes/usuarios-activos" class="dropdown-item-custom">
+                    <span class="material-icons">leaderboard</span>Usuarios Activos
+                </a>
+                <a href="/admin/reportes/usuarios-resenas" class="dropdown-item-custom">
+                    <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
+                </a>
+            </div>
+        </div>
 
         <span class="nav-section-label">Contenido</span>
-
-        <a href="/admin/resenas" class="nav-link">
-            <span class="material-icons">rate_review</span>Reseñas
-            <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
-        </a>
-
-        <a href="/admin/comentarios" class="nav-link">
-            <span class="material-icons">chat</span>Comentarios
-        </a>
-
-        <a href="/admin/generos" class="nav-link">
-            <span class="material-icons">category</span>Géneros
-        </a>
+        <a href="/admin/resenas" class="nav-link"><span class="material-icons">rate_review</span>Reseñas<span class="nav-badge" th:text="${totalResenas ?: 0}">0</span></a>
+        <a href="/admin/comentarios" class="nav-link"><span class="material-icons">chat</span>Comentarios</a>
+        <a href="/admin/generos" class="nav-link"><span class="material-icons">category</span>Géneros</a>
 
         <div class="sidebar-divider"></div>
         <span class="nav-section-label">Sistema</span>
-
-        <a href="/admin/configuracion" class="nav-link">
-            <span class="material-icons">settings</span>Configuración
-        </a>
-
-        <a href="/admin/logs" class="nav-link">
-            <span class="material-icons">receipt_long</span>Logs
-        </a>
+        <a href="/admin/configuracion" class="nav-link"><span class="material-icons">settings</span>Configuración</a>
+        <a href="/admin/logs" class="nav-link"><span class="material-icons">receipt_long</span>Logs</a>
     </div>
 
     <div class="sidebar-footer">
         <div class="user-info-row">
             <div class="user-avatar">A</div>
-            <div class="user-details">
-                <h6>Administrador</h6>
-                <small>admin@netpelis.com</small>
-            </div>
+            <div class="user-details"><h6>Administrador</h6><small>admin@netpelis.com</small></div>
         </div>
         <form th:action="@{/auth/logout}" method="post">
-            <button type="submit" class="btn-logout">
-                <span class="material-icons">logout</span>Cerrar Sesión
-            </button>
+            <button type="submit" class="btn-logout"><span class="material-icons">logout</span>Cerrar Sesión</button>
         </form>
     </div>
 </nav>
@@ -258,109 +169,33 @@
     </div>
 
     <div class="reports-grid">
-        <!-- Reporte: Usuarios Más Activos -->
         <a href="/admin/reportes/usuarios-activos" class="report-card">
-            <div class="report-icon">
-                <span class="material-icons">leaderboard</span>
-            </div>
+            <div class="report-icon"><span class="material-icons">leaderboard</span></div>
             <div class="report-title">Usuarios Más Activos</div>
-            <div class="report-desc">
-                Ranking de usuarios ordenados por cantidad de reseñas realizadas.
-                Incluye puntuación promedio y nivel de actividad.
-            </div>
+            <div class="report-desc">Ranking de usuarios ordenados por cantidad de reseñas realizadas. Incluye puntuación promedio y nivel de actividad.</div>
         </a>
-
-        <!-- Reporte: Usuarios con Más Reseñas -->
         <a href="/admin/reportes/usuarios-resenas" class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                <span class="material-icons">rate_review</span>
-            </div>
+            <div class="report-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);"><span class="material-icons">rate_review</span></div>
             <div class="report-title">Usuarios con Más Reseñas</div>
-            <div class="report-desc">
-                Visualiza los usuarios más activos ordenados por cantidad de reseñas realizadas.
-                Incluye filtros de búsqueda y exportación.
-            </div>
+            <div class="report-desc">Visualiza los usuarios más activos ordenados por cantidad de reseñas realizadas. Incluye filtros de búsqueda y exportación.</div>
         </a>
-
-        <!-- Reporte: Reseñas Recientes -->
         <a href="/admin/resenas" class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #10b981, #3b82f6);">
-                <span class="material-icons">rate_review</span>
-            </div>
+            <div class="report-icon" style="background: linear-gradient(135deg, #10b981, #3b82f6);"><span class="material-icons">rate_review</span></div>
             <div class="report-title">Reseñas Recientes</div>
-            <div class="report-desc">
-                Lista completa de todas las reseñas con filtros por película,
-                usuario y fecha. Exportable a CSV.
-            </div>
+            <div class="report-desc">Lista completa de todas las reseñas con filtros por película, usuario y fecha. Exportable a CSV.</div>
         </a>
-
-        <!-- Reporte: Películas Populares -->
         <a href="/admin/peliculas" class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #f59e0b, #dc2626);">
-                <span class="material-icons">movie</span>
-            </div>
+            <div class="report-icon" style="background: linear-gradient(135deg, #f59e0b, #dc2626);"><span class="material-icons">movie</span></div>
             <div class="report-title">Películas Populares</div>
-            <div class="report-desc">
-                Películas con más favoritos y mejores puntuaciones.
-                Análisis de tendencias por género y año.
-            </div>
-        </a>
-
-        <!-- Reporte: Estadísticas Mensuales -->
-        <a href="/admin/reportes/estadisticas-mensuales" class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #8b5cf6, #3b82f6);">
-                <span class="material-icons">trending_up</span>
-            </div>
-            <div class="report-title">Estadísticas Mensuales</div>
-            <div class="report-desc">
-                Gráficos de crecimiento de usuarios, reseñas y favoritos
-                mes a mes. Comparativas históricas.
-            </div>
-        </a>
-
-        <!-- Reporte: Películas por Género -->
-        <a href="/admin/reportes/peliculas-genero" class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #ec4899, #f59e0b);">
-                <span class="material-icons">category</span>
-            </div>
-            <div class="report-title">Películas por Género</div>
-            <div class="report-desc">
-                Distribución del catálogo por géneros.
-                Identificación de categorías con más demanda.
-            </div>
-        </a>
-
-        <!-- Reporte: Exportar Datos -->
-        <a href="/admin/reportes/exportar" class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #06b6d4, #10b981);">
-                <span class="material-icons">download</span>
-            </div>
-            <div class="report-title">Exportar Datos</div>
-            <div class="report-desc">
-                Descarga completa de la base de datos en formatos
-                CSV, Excel o JSON. Incluye todas las entidades.
-            </div>
+            <div class="report-desc">Películas con más favoritos y mejores puntuaciones. Análisis de tendencias por género y año.</div>
         </a>
     </div>
 
-    <!-- Stats Resumen -->
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-value red" th:text="${totalUsuarios ?: 0}">0</div>
-            <div class="stat-label">Usuarios Totales</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value gold" th:text="${totalPeliculas ?: 0}">0</div>
-            <div class="stat-label">Películas</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value green" th:text="${totalResenas ?: 0}">0</div>
-            <div class="stat-label">Reseñas</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value blue" th:text="${totalFavoritos ?: 0}">0</div>
-            <div class="stat-label">Favoritos</div>
-        </div>
+        <div class="stat-card"><div class="stat-value red" th:text="${totalUsuarios ?: 0}">0</div><div class="stat-label">Usuarios Totales</div></div>
+        <div class="stat-card"><div class="stat-value gold" th:text="${totalPeliculas ?: 0}">0</div><div class="stat-label">Películas</div></div>
+        <div class="stat-card"><div class="stat-value green" th:text="${totalResenas ?: 0}">0</div><div class="stat-label">Reseñas</div></div>
+        <div class="stat-card"><div class="stat-value blue" th:text="${totalFavoritos ?: 0}">0</div><div class="stat-label">Favoritos</div></div>
     </div>
 </main>
 
@@ -370,6 +205,23 @@
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
+
+    function toggleDropdown(element) {
+        const dropdown = element.nextElementSibling;
+        element.classList.toggle('open');
+        dropdown.classList.toggle('show');
+        localStorage.setItem('analisisDropdown', dropdown.classList.contains('show'));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.getElementById('analisisDropdown');
+        const toggle = dropdown.previousElementSibling;
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('/admin/reportes')) {
+            dropdown.classList.add('show');
+            toggle.classList.add('open');
+        }
+    });
 </script>
 </body>
 </html>

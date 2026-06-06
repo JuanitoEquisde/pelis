@@ -38,7 +38,7 @@ public class InicializadorDatos implements CommandLineRunner {
             cliente.setRol(RolUsuario.CLIENTE);
             cliente.setActivo(true);
             repositorioUsuario.save(cliente);
-            System.out.println("✅ Usuario CLIENTE creado: cliente@netpelis.com / cliente123");
+            System.out.println(" Usuario CLIENTE creado: cliente@netpelis.com / cliente123");
         }
     }
 }

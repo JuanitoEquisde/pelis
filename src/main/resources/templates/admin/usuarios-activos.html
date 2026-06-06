@@ -80,6 +80,19 @@
         .page-link.active { background: var(--accent-red); border-color: var(--accent-red); }
         .page-link:hover:not(.active) { background: rgba(220,38,38,0.1); border-color: var(--accent-red); }
 
+        /* ===== DROPDOWN MENU ===== */
+        .nav-dropdown { margin-bottom: 0.125rem; }
+        .nav-dropdown .dropdown-toggle { cursor: pointer; position: relative; }
+        .nav-dropdown .dropdown-toggle .dropdown-arrow { margin-left: auto; transition: transform 0.3s ease; font-size: 18px; }
+        .nav-dropdown .dropdown-toggle.open .dropdown-arrow { transform: rotate(180deg); }
+        .dropdown-menu-custom { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); margin: 0.25rem 0 0.25rem 0; }
+        .dropdown-menu-custom.show { max-height: 300px; }
+        .dropdown-item-custom { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.875rem 0.6rem 2.5rem; color: var(--text-muted); text-decoration: none; font-size: 13px; transition: all 0.2s; border-left: 2px solid transparent; margin: 2px 0.5rem; border-radius: 6px; }
+        .dropdown-item-custom .material-icons { font-size: 16px; flex-shrink: 0; }
+        .dropdown-item-custom:hover { color: var(--text-primary); background: var(--bg-glass); border-left-color: var(--accent-red); }
+        .dropdown-item-custom.active { color: var(--text-primary); background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(220,38,38,0.06)); border-left-color: var(--accent-red); }
+        .dropdown-item-custom.active .material-icons { color: var(--accent-red); }
+
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); } .sidebar.active { transform: translateX(0); }
             .main-content { margin-left: 0; } .menu-toggle { display: flex; align-items: center; }
@@ -101,86 +114,54 @@
             <span class="logo-icon"><span class="material-icons">movie</span></span>
             <span class="logo-text">NET<span>PELIS</span></span>
         </a>
-        <button class="menu-toggle" id="menuClose">
-            <span class="material-icons">close</span>
-        </button>
+        <button class="menu-toggle" id="menuClose"><span class="material-icons">close</span></button>
     </div>
 
     <div class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
-
-        <a href="/admin/dashboard" class="nav-link">
-            <span class="material-icons">dashboard</span>Dashboard
-        </a>
-
-        <a href="/admin/peliculas" class="nav-link">
-            <span class="material-icons">movie</span>Películas
-            <span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span>
-        </a>
-
-        <a href="/admin/usuarios" class="nav-link">
-            <span class="material-icons">people</span>Usuarios
-            <span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span>
-        </a>
-
-        <a href="/admin/favoritos" class="nav-link">
-            <span class="material-icons">favorite</span>Favoritos
-            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
-        </a>
+        <a href="/admin/dashboard" class="nav-link"><span class="material-icons">dashboard</span>Dashboard</a>
+        <a href="/admin/peliculas" class="nav-link"><span class="material-icons">movie</span>Películas<span class="nav-badge" th:text="${totalPeliculas ?: 0}">0</span></a>
+        <a href="/admin/usuarios" class="nav-link"><span class="material-icons">people</span>Usuarios<span class="nav-badge" th:text="${totalUsuarios ?: 0}">0</span></a>
+        <a href="/admin/favoritos" class="nav-link"><span class="material-icons">favorite</span>Favoritos<span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span></a>
 
         <span class="nav-section-label">Análisis</span>
-
-        <a href="/admin/reportes" class="nav-link">
-            <span class="material-icons">analytics</span>Menú Reportes
-        </a>
-
-        <a href="/admin/reportes/usuarios-activos" class="nav-link active">
-            <span class="material-icons">leaderboard</span>Usuarios Activos
-        </a>
-
-        <a href="/admin/reportes/usuarios-resenas" class="nav-link">
-            <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
-        </a>
+        <div class="nav-dropdown">
+            <div class="nav-link dropdown-toggle open" onclick="toggleDropdown(this)">
+                <span class="material-icons">analytics</span>
+                <span>Reportes</span>
+                <span class="material-icons dropdown-arrow">expand_more</span>
+            </div>
+            <div class="dropdown-menu-custom show" id="analisisDropdown">
+                <a href="/admin/reportes" class="dropdown-item-custom">
+                    <span class="material-icons">dashboard</span>Menú Reportes
+                </a>
+                <a href="/admin/reportes/usuarios-activos" class="dropdown-item-custom active">
+                    <span class="material-icons">leaderboard</span>Usuarios Activos
+                </a>
+                <a href="/admin/reportes/usuarios-resenas" class="dropdown-item-custom">
+                    <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
+                </a>
+            </div>
+        </div>
 
         <span class="nav-section-label">Contenido</span>
-
-        <a href="/admin/resenas" class="nav-link">
-            <span class="material-icons">rate_review</span>Reseñas
-            <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
-        </a>
-
-        <a href="/admin/comentarios" class="nav-link">
-            <span class="material-icons">chat</span>Comentarios
-        </a>
-
-        <a href="/admin/generos" class="nav-link">
-            <span class="material-icons">category</span>Géneros
-        </a>
+        <a href="/admin/resenas" class="nav-link"><span class="material-icons">rate_review</span>Reseñas<span class="nav-badge" th:text="${totalResenas ?: 0}">0</span></a>
+        <a href="/admin/comentarios" class="nav-link"><span class="material-icons">chat</span>Comentarios</a>
+        <a href="/admin/generos" class="nav-link"><span class="material-icons">category</span>Géneros</a>
 
         <div class="sidebar-divider"></div>
         <span class="nav-section-label">Sistema</span>
-
-        <a href="/admin/configuracion" class="nav-link">
-            <span class="material-icons">settings</span>Configuración
-        </a>
-
-        <a href="/admin/logs" class="nav-link">
-            <span class="material-icons">receipt_long</span>Logs
-        </a>
+        <a href="/admin/configuracion" class="nav-link"><span class="material-icons">settings</span>Configuración</a>
+        <a href="/admin/logs" class="nav-link"><span class="material-icons">receipt_long</span>Logs</a>
     </div>
 
     <div class="sidebar-footer">
         <div class="user-info-row">
             <div class="user-avatar">A</div>
-            <div class="user-details">
-                <h6>Administrador</h6>
-                <small>admin@netpelis.com</small>
-            </div>
+            <div class="user-details"><h6>Administrador</h6><small>admin@netpelis.com</small></div>
         </div>
         <form th:action="@{/auth/logout}" method="post">
-            <button type="submit" class="btn-logout">
-                <span class="material-icons">logout</span>Cerrar Sesión
-            </button>
+            <button type="submit" class="btn-logout"><span class="material-icons">logout</span>Cerrar Sesión</button>
         </form>
     </div>
 </nav>
@@ -190,39 +171,22 @@
         <div class="topbar-left">
             <button class="menu-toggle d-lg-none" id="menuOpen"><span class="material-icons">menu</span></button>
             <a href="/admin/reportes" class="back-btn">
-                <span class="material-icons">arrow_back</span>
-                Volver a Reportes
+                <span class="material-icons">arrow_back</span>Volver a Reportes
             </a>
         </div>
     </div>
 
     <h1 class="page-title" style="margin-bottom: 2rem;">🏆 Reporte: Usuarios Más Activos</h1>
 
-    <!-- Stats Resumen -->
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-value" th:text="${totalPeliculas ?: 0}">0</div>
-            <div class="stat-label">Películas</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" th:text="${totalUsuarios ?: 0}">0</div>
-            <div class="stat-label">Usuarios</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" th:text="${totalResenas ?: 0}">0</div>
-            <div class="stat-label">Reseñas</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-value" th:text="${totalFavoritos ?: 0}">0</div>
-            <div class="stat-label">Favoritos</div>
-        </div>
+        <div class="stat-card"><div class="stat-value" th:text="${totalPeliculas ?: 0}">0</div><div class="stat-label">Películas</div></div>
+        <div class="stat-card"><div class="stat-value" th:text="${totalUsuarios ?: 0}">0</div><div class="stat-label">Usuarios</div></div>
+        <div class="stat-card"><div class="stat-value" th:text="${totalResenas ?: 0}">0</div><div class="stat-label">Reseñas</div></div>
+        <div class="stat-card"><div class="stat-value" th:text="${totalFavoritos ?: 0}">0</div><div class="stat-label">Favoritos</div></div>
     </div>
 
-    <!-- Tabla de Reporte -->
     <div class="content-card">
-        <h2 style="font-family: 'Outfit'; font-size: 20px; margin-bottom: 1.5rem;">
-            📊 Ranking de Usuarios por Cantidad de Reseñas
-        </h2>
+        <h2 style="font-family: 'Outfit'; font-size: 20px; margin-bottom: 1.5rem;">📊 Ranking de Usuarios por Cantidad de Reseñas</h2>
 
         <div th:if="${error}" style="background: rgba(220,38,38,0.1); border: 1px solid var(--accent-red); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
             <span style="color: var(--accent-red);" th:text="${error}">Error</span>
@@ -244,46 +208,30 @@
                     <span th:if="${stat.index == 0}" class="ranking-1">🥇 #1</span>
                     <span th:if="${stat.index == 1}" class="ranking-2">🥈 #2</span>
                     <span th:if="${stat.index == 2}" class="ranking-3">🥉 #3</span>
-                    <span th:if="${stat.index > 2}" style="font-weight: 600; color: var(--text-muted);"
-                          th:text="'#' + (${currentPage * size + stat.index + 1})">#4</span>
+                    <span th:if="${stat.index > 2}" style="font-weight: 600; color: var(--text-muted);" th:text="'#' + (${currentPage * size + stat.index + 1})">#4</span>
                 </td>
-                <td>
-                    <div style="font-weight: 600;" th:text="${usuario.nombreCompleto}">Nombre</div>
-                </td>
+                <td><div style="font-weight: 600;" th:text="${usuario.nombreCompleto}">Nombre</div></td>
                 <td style="color: var(--text-muted);" th:text="${usuario.email}">email@ejemplo.com</td>
                 <td style="text-align: center;">
-                        <span style="background: var(--accent-red); color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; font-size: 13px;"
-                              th:text="${usuario.totalResenas}">0</span>
+                    <span style="background: var(--accent-red); color: white; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: 700; font-size: 13px;" th:text="${usuario.totalResenas}">0</span>
                 </td>
                 <td style="text-align: center;">
-                        <span style="color: var(--accent-gold); font-weight: 700;"
-                              th:text="${usuario.puntuacionPromedio != null ? #numbers.formatDecimal(usuario.puntuacionPromedio, 1, 1) : '0.0'}">0.0</span>
+                    <span style="color: var(--accent-gold); font-weight: 700;" th:text="${usuario.puntuacionPromedio != null ? #numbers.formatDecimal(usuario.puntuacionPromedio, 1, 1) : '0.0'}">0.0</span>
                     <span style="color: var(--text-muted); font-size: 13px;">/10</span>
                 </td>
             </tr>
             <tr th:if="${#lists.isEmpty(reporteUsuarios)}">
-                <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                    No hay datos disponibles
-                </td>
+                <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-muted);">No hay datos disponibles</td>
             </tr>
             </tbody>
         </table>
 
-        <!-- Paginación -->
         <div class="pagination-container" th:if="${totalPages > 1}">
-            <a th:if="${currentPage > 0}"
-               th:href="@{/admin/reportes/usuarios-activos(page=${currentPage - 1}, size=${size})}"
-               class="page-link">← Anterior</a>
-
+            <a th:if="${currentPage > 0}" th:href="@{/admin/reportes/usuarios-activos(page=${currentPage - 1}, size=${size})}" class="page-link">← Anterior</a>
             <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:href="@{/admin/reportes/usuarios-activos(page=${i}, size=${size})}"
-                   th:class="${i == currentPage} ? 'page-link active' : 'page-link'"
-                   th:text="${i + 1}">1</a>
+                <a th:href="@{/admin/reportes/usuarios-activos(page=${i}, size=${size})}" th:class="${i == currentPage} ? 'page-link active' : 'page-link'" th:text="${i + 1}">1</a>
             </span>
-
-            <a th:if="${currentPage < totalPages - 1}"
-               th:href="@{/admin/reportes/usuarios-activos(page=${currentPage + 1}, size=${size})}"
-               class="page-link">Siguiente →</a>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/admin/reportes/usuarios-activos(page=${currentPage + 1}, size=${size})}" class="page-link">Siguiente →</a>
         </div>
     </div>
 </main>
@@ -294,6 +242,23 @@
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
+
+    function toggleDropdown(element) {
+        const dropdown = element.nextElementSibling;
+        element.classList.toggle('open');
+        dropdown.classList.toggle('show');
+        localStorage.setItem('analisisDropdown', dropdown.classList.contains('show'));
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.getElementById('analisisDropdown');
+        const toggle = dropdown.previousElementSibling;
+        const currentPath = window.location.pathname;
+        if (currentPath.includes('/admin/reportes')) {
+            dropdown.classList.add('show');
+            toggle.classList.add('open');
+        }
+    });
 </script>
 </body>
 </html>

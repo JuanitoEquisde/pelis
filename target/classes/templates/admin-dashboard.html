@@ -163,6 +163,61 @@
         .btn-logout .material-icons { font-size: 16px; }
 
         /* ══════════════════════════════════════
+           DROPDOWN MENU
+        ══════════════════════════════════════ */
+        .nav-dropdown { margin-bottom: 0.125rem; }
+        .nav-dropdown .dropdown-toggle { cursor: pointer; position: relative; }
+        .nav-dropdown .dropdown-toggle .dropdown-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 18px;
+        }
+        .nav-dropdown .dropdown-toggle.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        .dropdown-menu-custom {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+            background: rgba(0,0,0,0.2);
+            border-radius: var(--radius-sm);
+            margin: 0.25rem 0 0.25rem 0;
+        }
+        .dropdown-menu-custom.show {
+            max-height: 300px;
+        }
+        .dropdown-item-custom {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.6rem 0.875rem 0.6rem 2.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+            transition: all 0.2s;
+            border-left: 2px solid transparent;
+            margin: 2px 0.5rem;
+            border-radius: 6px;
+        }
+        .dropdown-item-custom .material-icons {
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .dropdown-item-custom:hover {
+            color: var(--text-primary);
+            background: var(--bg-glass);
+            border-left-color: var(--accent-red);
+        }
+        .dropdown-item-custom.active {
+            color: var(--text-primary);
+            background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(220,38,38,0.06));
+            border-left-color: var(--accent-red);
+        }
+        .dropdown-item-custom.active .material-icons {
+            color: var(--accent-red);
+        }
+
+        /* ══════════════════════════════════════
            LAYOUT
         ══════════════════════════════════════ */
         .sidebar-overlay {
@@ -570,11 +625,28 @@
             <span class="material-icons">favorite</span>Favoritos
             <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
         </a>
+
         <span class="nav-section-label">Análisis</span>
 
-        <a href="/admin/reportes" class="nav-link">
-            <span class="material-icons">assessment</span>menú reportes
-        </a>
+        <!-- Menú Desplegable para Análisis -->
+        <div class="nav-dropdown">
+            <div class="nav-link dropdown-toggle" onclick="toggleDropdown(this)">
+                <span class="material-icons">analytics</span>
+                <span>Reportes</span>
+                <span class="material-icons dropdown-arrow">expand_more</span>
+            </div>
+            <div class="dropdown-menu-custom" id="analisisDropdown">
+                <a href="/admin/reportes" class="dropdown-item-custom">
+                    <span class="material-icons">dashboard</span>Menú Reportes
+                </a>
+                <a href="/admin/reportes/usuarios-activos" class="dropdown-item-custom">
+                    <span class="material-icons">leaderboard</span>Usuarios Activos
+                </a>
+                <a href="/admin/reportes/usuarios-resenas" class="dropdown-item-custom">
+                    <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
+                </a>
+            </div>
+        </div>
 
         <span class="nav-section-label">Contenido</span>
 
@@ -886,6 +958,34 @@
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && sidebar.classList.contains('active')) {
             closeSidebar();
+        }
+    });
+
+    /* ── Dropdown Toggle Function ── */
+    function toggleDropdown(element) {
+        const dropdown = element.nextElementSibling;
+        element.classList.toggle('open');
+        dropdown.classList.toggle('show');
+        localStorage.setItem('analisisDropdown', dropdown.classList.contains('show'));
+    }
+
+    /* ── Auto-open dropdown if on report pages ── */
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.getElementById('analisisDropdown');
+        const toggle = dropdown.previousElementSibling;
+        const currentPath = window.location.pathname;
+
+        // Check if we're on a report page
+        if (currentPath.includes('/admin/reportes')) {
+            dropdown.classList.add('show');
+            toggle.classList.add('open');
+        }
+
+        // Restore saved state
+        const savedState = localStorage.getItem('analisisDropdown');
+        if (savedState === 'true' && !currentPath.includes('/admin/reportes')) {
+            dropdown.classList.add('show');
+            toggle.classList.add('open');
         }
     });
 

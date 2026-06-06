@@ -116,77 +116,47 @@
         .toast-msg { font-size: 13.5px; font-weight: 500; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ══════════════════════════════════════
+           🎬 DROPDOWN MENU
+        ══════════════════════════════════════ */
+        .nav-dropdown { margin-bottom: 0.125rem; }
+        .nav-dropdown .dropdown-toggle { cursor: pointer; position: relative; }
+        .nav-dropdown .dropdown-toggle .dropdown-arrow { margin-left: auto; transition: transform 0.3s ease; font-size: 18px; }
+        .nav-dropdown .dropdown-toggle.open .dropdown-arrow { transform: rotate(180deg); }
+        .dropdown-menu-custom { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm); margin: 0.25rem 0 0.25rem 0; }
+        .dropdown-menu-custom.show { max-height: 300px; }
+        .dropdown-item-custom { display: flex; align-items: center; gap: 10px; padding: 0.6rem 0.875rem 0.6rem 2.5rem; color: var(--text-muted); text-decoration: none; font-size: 13px; transition: all 0.2s; border-left: 2px solid transparent; margin: 2px 0.5rem; border-radius: 6px; }
+        .dropdown-item-custom .material-icons { font-size: 16px; flex-shrink: 0; }
+        .dropdown-item-custom:hover { color: var(--text-primary); background: var(--bg-glass); border-left-color: var(--accent-red); }
+        .dropdown-item-custom.active { color: var(--text-primary); background: linear-gradient(135deg, rgba(220,38,38,0.18), rgba(220,38,38,0.06)); border-left-color: var(--accent-red); }
+        .dropdown-item-custom.active .material-icons { color: var(--accent-red); }
+
         /* PAGINACIÓN */
-        .streaming-pagination {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1rem 1.25rem; background: var(--bg-secondary);
-            border-top: 1px solid var(--border);
-            border-radius: 0 0 var(--radius-md) var(--radius-md);
-            margin-top: -1px;
-        }
-        .pagination-info {
-            display: flex; align-items: center; gap: 0.75rem;
-            font-size: 12px; color: var(--text-muted);
-        }
+        .streaming-pagination { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; background: var(--bg-secondary); border-top: 1px solid var(--border); border-radius: 0 0 var(--radius-md) var(--radius-md); margin-top: -1px; }
+        .pagination-info { display: flex; align-items: center; gap: 0.75rem; font-size: 12px; color: var(--text-muted); }
         .pagination-info strong { color: var(--text-primary); font-weight: 600; }
         .pagination-controls { display: flex; align-items: center; gap: 0.375rem; }
-        .page-nav-btn {
-            display: flex; align-items: center; justify-content: center; gap: 4px;
-            min-width: 36px; height: 32px; padding: 0 10px;
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); color: var(--text-primary);
-            font-size: 12px; font-weight: 500; cursor: pointer;
-            transition: all 0.2s ease; text-decoration: none;
-        }
-        .page-nav-btn:hover:not(:disabled) {
-            background: var(--accent-red-soft); border-color: var(--border-red);
-            color: var(--text-primary); transform: translateY(-1px);
-        }
+        .page-nav-btn { display: flex; align-items: center; justify-content: center; gap: 4px; min-width: 36px; height: 32px; padding: 0 10px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; text-decoration: none; }
+        .page-nav-btn:hover:not(:disabled) { background: var(--accent-red-soft); border-color: var(--border-red); color: var(--text-primary); transform: translateY(-1px); }
         .page-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
         .page-nav-btn .material-icons { font-size: 16px; }
         .page-nav-btn.prev, .page-nav-btn.next { padding: 0 8px; }
         .page-numbers { display: flex; align-items: center; gap: 0.25rem; margin: 0 0.5rem; }
-        .page-number {
-            min-width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-            background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm);
-            color: var(--text-muted); font-size: 12px; font-weight: 500;
-            cursor: pointer; transition: all 0.2s ease; text-decoration: none;
-        }
+        .page-number { min-width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--text-muted); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; text-decoration: none; }
         .page-number:hover:not(.active) { background: var(--bg-glass); color: var(--text-primary); }
-        .page-number.active {
-            background: var(--accent-red); border-color: var(--accent-red);
-            color: white; font-weight: 700; box-shadow: 0 2px 12px rgba(220,38,38,0.3);
-        }
+        .page-number.active { background: var(--accent-red); border-color: var(--accent-red); color: white; font-weight: 700; box-shadow: 0 2px 12px rgba(220,38,38,0.3); }
         .page-number.ellipsis { cursor: default; color: var(--text-muted); opacity: 0.6; }
-        .per-page-selector {
-            display: flex; align-items: center; gap: 0.5rem;
-            margin-left: 1rem; padding-left: 1rem; border-left: 1px solid var(--border);
-        }
+        .per-page-selector { display: flex; align-items: center; gap: 0.5rem; margin-left: 1rem; padding-left: 1rem; border-left: 1px solid var(--border); }
         .per-page-selector label { font-size: 12px; color: var(--text-muted); }
-        .per-page-select {
-            background: var(--bg-card); border: 1px solid var(--border);
-            border-radius: var(--radius-sm); color: var(--text-primary);
-            padding: 0.3rem 0.6rem; font-size: 12px; cursor: pointer; transition: border-color 0.2s;
-        }
+        .per-page-select { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text-primary); padding: 0.3rem 0.6rem; font-size: 12px; cursor: pointer; transition: border-color 0.2s; }
         .per-page-select:focus { outline: none; border-color: var(--accent-red); }
         .per-page-select option { background: var(--bg-secondary); }
 
-        @media (max-width: 768px) {
-            .streaming-pagination { flex-direction: column; gap: 0.75rem; padding: 0.875rem 1rem; }
-            .pagination-info { width: 100%; justify-content: center; }
-            .per-page-selector { margin-left: 0; padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 0.75rem; }
-            .page-numbers { margin: 0; }
-        }
+        @media (max-width: 768px) { .streaming-pagination { flex-direction: column; gap: 0.75rem; padding: 0.875rem 1rem; } .pagination-info { width: 100%; justify-content: center; } .per-page-selector { margin-left: 0; padding-left: 0; border-left: none; border-top: 1px solid var(--border); padding-top: 0.75rem; } .page-numbers { margin: 0; } }
         @media (max-width: 480px) { .page-numbers { display: none; } .pagination-controls { gap: 0.25rem; } }
         @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 1024px) {
-            .sidebar { transform: translateX(-100%); } .sidebar.active { transform: translateX(0); }
-            .main-content { margin-left: 0; } .menu-toggle { display: flex; align-items: center; }
-        }
-        @media (max-width: 768px) {
-            .main-content { padding: 1.25rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-            .topbar { flex-wrap: wrap; gap: 0.75rem; }
-        }
+        @media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .sidebar.active { transform: translateX(0); } .main-content { margin-left: 0; } .menu-toggle { display: flex; align-items: center; } }
+        @media (max-width: 768px) { .main-content { padding: 1.25rem; } .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; } .topbar { flex-wrap: wrap; gap: 0.75rem; } }
         @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -209,7 +179,7 @@
     <div class="sidebar-nav">
         <span class="nav-section-label">Principal</span>
 
-        <a href="/admin/dashboard" class="nav-link active">
+        <a href="/admin/dashboard" class="nav-link">
             <span class="material-icons">dashboard</span>Dashboard
         </a>
 
@@ -225,25 +195,40 @@
 
         <a href="/admin/favoritos" class="nav-link">
             <span class="material-icons">favorite</span>Favoritos
-            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>  <!-- ✅ CORREGIDO -->
+            <span class="nav-badge" th:text="${totalFavoritos ?: 0}">0</span>
         </a>
 
         <span class="nav-section-label">Análisis</span>
 
-        <a href="/admin/reportes" class="nav-link">
-            <span class="material-icons">assessment</span>menú reportes
-        </a>
+        <!-- 🔽 DROPDOWN DE REPORTES -->
+        <div class="nav-dropdown">
+            <div class="nav-link dropdown-toggle" onclick="toggleDropdown(this)">
+                <span class="material-icons">analytics</span>
+                <span>Reportes</span>
+                <span class="material-icons dropdown-arrow">expand_more</span>
+            </div>
+            <div class="dropdown-menu-custom" id="analisisDropdown">
+                <a href="/admin/reportes" class="dropdown-item-custom">
+                    <span class="material-icons">dashboard</span>Menú Reportes
+                </a>
+                <a href="/admin/reportes/usuarios-activos" class="dropdown-item-custom">
+                    <span class="material-icons">leaderboard</span>Usuarios Activos
+                </a>
+                <a href="/admin/reportes/usuarios-resenas" class="dropdown-item-custom">
+                    <span class="material-icons">rate_review</span>Usuarios con Más Reseñas
+                </a>
+            </div>
+        </div>
 
         <span class="nav-section-label">Contenido</span>
 
-        <a href="/admin/resenas" class="nav-link">
+        <a href="/admin/resenas" class="nav-link active">
             <span class="material-icons">rate_review</span>Reseñas
             <span class="nav-badge" th:text="${totalResenas ?: 0}">0</span>
         </a>
 
         <a href="/admin/comentarios" class="nav-link">
             <span class="material-icons">chat</span>Comentarios
-            <!-- Opcional: agregar badge si tienes contador -->
         </a>
 
         <a href="/admin/generos" class="nav-link">
@@ -470,19 +455,43 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // Sidebar
+    // === Sidebar ===
     const sidebar = document.getElementById('sidebar'), overlay = document.getElementById('sidebarOverlay'), menuOpen = document.getElementById('menuOpen'), menuClose = document.getElementById('menuClose');
     function openSidebar() { sidebar.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow='hidden'; }
     function closeSidebar() { sidebar.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow=''; }
     menuOpen?.addEventListener('click', openSidebar); menuClose?.addEventListener('click', closeSidebar); overlay.addEventListener('click', closeSidebar);
 
-    // Toast
+    // === Dropdown Toggle ===
+    function toggleDropdown(element) {
+        const dropdown = element.nextElementSibling;
+        element.classList.toggle('open');
+        dropdown.classList.toggle('show');
+        localStorage.setItem('analisisDropdown', dropdown.classList.contains('show'));
+    }
+
+    // Auto-open dropdown si estamos en reportes
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdown = document.getElementById('analisisDropdown');
+        const toggle = dropdown?.previousElementSibling;
+        const currentPath = window.location.pathname;
+        if (dropdown && toggle && currentPath.includes('/admin/reportes')) {
+            dropdown.classList.add('show');
+            toggle.classList.add('open');
+        }
+        // Restaurar estado guardado
+        const savedState = localStorage.getItem('analisisDropdown');
+        if (dropdown && toggle && savedState === 'true') {
+            dropdown.classList.add('show');
+            toggle.classList.add('open');
+        }
+    });
+
+    // === Toast ===
     function showToast(msg,type='success'){const icons={success:'check_circle',error:'error',info:'info'},w=document.getElementById('toastWrap'),el=document.createElement('div');el.className='toast-item '+type;el.innerHTML=`<span class="material-icons">${icons[type]||'info'}</span><span class="toast-msg">${msg}</span>`;w.appendChild(el);setTimeout(()=>el.remove(),3500);}
 
-    // Paginación
+    // === Paginación ===
     let paginaActual = 1; let itemsPorPagina = 10; let resenasTotales = [];
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('✅ Página de reseñas cargada');
         const filas = document.querySelectorAll('#tablaResenasBody tr.resena-row');
         resenasTotales = Array.from(filas).filter(fila => fila.dataset.resena);
         inicializarPaginacionStreaming();
@@ -500,8 +509,7 @@
     function actualizarInfoPaginacion(total, totalPaginas) {
         const inicio = (paginaActual - 1) * itemsPorPagina;
         const fin = Math.min(paginaActual * itemsPorPagina, total);
-        const cantidadEnPaginaActual = fin - inicio;
-        document.getElementById('cantidadPagina').textContent = cantidadEnPaginaActual;
+        document.getElementById('cantidadPagina').textContent = fin - inicio;
         document.getElementById('totalRegistros').textContent = total;
     }
     function generarControlesStreaming(totalPaginas) {
@@ -516,13 +524,13 @@
         for (let i = startPage; i <= endPage; i++) container.appendChild(crearNumeroPagina(i, i === paginaActual));
         if (endPage < totalPaginas) { if (endPage < totalPaginas - 1) container.appendChild(crearEllipsis()); container.appendChild(crearNumeroPagina(totalPaginas)); }
     }
-    function crearNumeroPagina(num, isActive = false) { const btn = document.createElement('button'); btn.className = `page-number${isActive ? ' active' : ''}`; btn.textContent = num; btn.onclick = (e) => { e.preventDefault(); cambiarPagina(num); }; btn.type = 'button'; btn.setAttribute('aria-label', `Página ${num}`); return btn; }
-    function crearEllipsis() { const span = document.createElement('span'); span.className = 'page-number ellipsis'; span.textContent = '…'; span.setAttribute('aria-hidden', 'true'); return span; }
+    function crearNumeroPagina(num, isActive = false) { const btn = document.createElement('button'); btn.className = `page-number${isActive ? ' active' : ''}`; btn.textContent = num; btn.onclick = (e) => { e.preventDefault(); cambiarPagina(num); }; btn.type = 'button'; return btn; }
+    function crearEllipsis() { const span = document.createElement('span'); span.className = 'page-number ellipsis'; span.textContent = '…'; return span; }
     function cambiarPagina(numPagina) { const total = resenasTotales.length; const totalPaginas = Math.max(1, Math.ceil(total / itemsPorPagina)); if (numPagina < 1 || numPagina > totalPaginas) return; paginaActual = numPagina; mostrarPaginaStreaming(paginaActual); actualizarInfoPaginacion(total, totalPaginas); generarControlesStreaming(totalPaginas); document.querySelector('.content-card')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     function mostrarPaginaStreaming(numPagina) { const inicio = (numPagina - 1) * itemsPorPagina; const fin = inicio + itemsPorPagina; resenasTotales.forEach((fila, index) => { fila.style.display = (index >= inicio && index < fin) ? '' : 'none'; }); }
     function cambiarItemsPorPagina(nuevoValor) { itemsPorPagina = parseInt(nuevoValor); paginaActual = 1; inicializarPaginacionStreaming(); }
 
-    // Modal y funciones
+    // === Modal y funciones ===
     let resenaSeleccionadaId = null;
 
     function verDetalleResena(id) {
@@ -550,8 +558,7 @@
                 }
 
                 document.getElementById('btnEliminarModal').onclick = () => eliminarResena(id, true);
-                const modal = new bootstrap.Modal(document.getElementById('modalDetalleResena'));
-                modal.show();
+                new bootstrap.Modal(document.getElementById('modalDetalleResena')).show();
             })
             .catch(e => showToast('No se pudo cargar: ' + e.message, 'error'));
     }
